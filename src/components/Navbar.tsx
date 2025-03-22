@@ -1,9 +1,9 @@
 import Logo from "../assets/images/logo.png"
-import { MdManageAccounts } from "react-icons/md";
 import { Toggle } from "./Toggle";
 import { SearchInput } from "./SearchInput";
+import Dropdown from "./Dropdown";
 
-const isLoggedIn = false
+const isLoggedIn = true
 
 export const Navbar = () => {
   return (
@@ -14,7 +14,7 @@ export const Navbar = () => {
         <SearchInput/>
         <div className="nav__options">
             <Toggle/>
-            {isLoggedIn && <MdManageAccounts className="icon"/>}
+            {isLoggedIn && <Dropdown/>}
             {!isLoggedIn && 
             <button className="btn btn--secondary btn--md">
               Sign Up

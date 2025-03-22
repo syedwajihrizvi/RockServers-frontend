@@ -6,7 +6,9 @@
 */
 :root {
   --primary: #1E1E1E;
-  --secondary: #1E90FF
+  --secondary: #1E90FF;
+  --secondary-hover: #62acf7;
+  --secondary-text: #fff;
 }
 
 html, body, #root {
@@ -32,20 +34,43 @@ html, body, #root {
 .queries {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: start;
 }
 
 /* Filters */
-.filters {
+.filters, .sorters {
   margin-bottom: 1rem;
   display: flex;
   gap: 0.5rem;
 }
 
+.filter--games {
+  flex-direction: column;
+}
+
+.filters select, .sorters select{
+  background-color: var(--secondary);
+  outline: none;
+  border: none;
+  border-radius: 0.5rem;
+  color: white;
+  font-size: 1.6rem;
+  padding: 0.5rem 1rem;
+}
 /* Sorters */
 .sorters {
   display: flex;
   gap: 0.5rem;
+}
+
+@media screen and (min-width: 768px) {
+  .queries {
+    align-items: center;
+  }
+
+  .filter--games {
+    flex-direction: row;
+  }
 }
 
 /* Posts */
@@ -85,6 +110,7 @@ html, body, #root {
 .post-card__heading h1 {
   margin-bottom: 0;
   margin-top: 0;
+  color: var(--secondary-text)
 }
 
 .post-card__heading__title {
@@ -104,6 +130,7 @@ html, body, #root {
 .post-card__poster {
   font-size: 2rem;
   margin: 0;
+  color: var(--secondary-text)
 }
 
 .post-card__engagements {
@@ -122,16 +149,22 @@ html, body, #root {
 .post-card__engagements p {
   font-size: 1.5rem;
   margin: 0;
+  color: var(--secondary-text)
 }
 
 .post-card__engagements .icon {
   font-size: 1.5rem;
+  color: var(--secondary-text)
+}
+
+.post-card__comments .icon {
   position: relative;
-  top: 0.25rem
+  top: 0.25rem;
 }
 
 .post-card__description {
   font-size: 1.6rem;
+  color: var(--secondary-text)
 }
 
 .post-card__rating {
@@ -165,6 +198,7 @@ html, body, #root {
 .post-card__active p {
   margin: 0;
   font-size: 1.2rem;
+  color: var(--secondary-text)
 }
 
 @media screen and (min-width: 768px){
@@ -233,17 +267,29 @@ html, body, #root {
   border: none;
   outline: none;
   border-radius: 0.5rem;
-  padding: 1rem 2rem;
   white-space: nowrap;
 }
 
 .btn--secondary {
   color: white;
   background-color: var(--secondary);
+  transition: all 0.3s;
+}
+
+.btn--secondary:hover {
+  cursor: pointer;
+  background-color: var(--secondary-hover);
+
+}
+
+.btn--sm {
+  padding: 0.8rem 1.6rem;
+  font-size: 1.4rem;
 }
 
 .btn--md {
-  font-size: 1.5rem;
+  padding: 1rem 2rem;
+  font-size: 1.6rem;
 }
 
 /* Switch */
@@ -336,4 +382,17 @@ html, body, #root {
   .search-input {
     padding: 1rem;
   }
+}
+
+/* Skeleton */
+
+.skeleton {
+  width: 300px;
+  height: 400px;
+  background-color: var(--secondary);
+  border-radius: 2rem;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

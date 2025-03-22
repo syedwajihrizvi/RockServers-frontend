@@ -1,10 +1,16 @@
 import { PostCard } from './PostCard'
 import placeholder from "../assets/images/placeholder.webp"
+import usePosts from '../hooks/usePosts'
+import { Skeleton } from './Skeleton'
 
 export const Posts = () => {
+  const {data: posts, isLoading} = usePosts()
+ 
   return (
     <div className="grid">
-        {[...Array(12).keys()].map(() => <PostCard image={placeholder}/>)}
+        {isLoading && 
+        [...Array(12).keys()].map(() => <Skeleton/>)}
+        {!isLoading && posts!.map((post) => <PostCard image={placeholder} post={post}/>)}
     </div>
   )
 }

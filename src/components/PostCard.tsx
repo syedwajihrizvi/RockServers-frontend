@@ -1,6 +1,18 @@
 import { FaComment, FaThumbsUp } from "react-icons/fa";
+import { Post } from "../utils/interfaces/Interfaces";
 
-export const PostCard = ({image}: {image: string}) => {
+function formatLikes(likes: number) {
+    if (likes >= 1000000) {
+      return (likes / 1000000).toFixed(1) + "M"; // Millions
+    } else if (likes >= 1000) {
+      return (likes / 1000).toFixed(1) + "K"; // Thousands
+    } else {
+      return likes.toString(); // Return as-is for smaller numbers
+    }
+  }
+export const PostCard = ({image, post}: {image: string, post: Post}) => {
+  // Check if post has an active session
+
   return (
     <div className="post-card__wrapper">
         <div className="post-card__rating">
@@ -13,24 +25,22 @@ export const PostCard = ({image}: {image: string}) => {
             <img className="post-card__img" src={image}/>
             <div className="post-card__content">
                 <span className="post-card__heading">
-                    <h1 className="post-card__heading__title">Title</h1>
+                    <h1 className="post-card__heading__title">{post.title}</h1>
                     <h1 className="post-card__date">2 hours ago</h1>
                 </span>
                 <span className="post-card__info">
-                    <h1 className="post-card__poster">Name</h1>
+                    <h1 className="post-card__poster">{post.appUser.username}</h1>
                     <span className="post-card__engagements">
                         <span className="post-card__comments">
-                            <p>23 <FaComment className="icon"/></p>
+                            <p>{post.comments.length} <FaComment className="icon"/></p>
                         </span>
                         <span className="post-card__likes">
-                            <p>1.7k <FaThumbsUp className="icon"/></p>
+                            <p>{formatLikes(post.likes)} <FaThumbsUp className="icon"/></p>
                         </span>
                     </span>
                 </span>
                 <p className="post-card__description">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-                    Alias nesciunt illum quibusdam quae delectus odio quasi 
-                    mollitia minus iusto ipsum?
+                    {post.description}
                 </p>
             </div>
         </div>
