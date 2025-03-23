@@ -18,9 +18,7 @@ export const PostCard = ({image, post}: {image: string, post: Post}) => {
         <div className="post-card__rating">
             <p>3.7</p>
         </div>
-        <span className="post-card__active">
-            <p>active</p>
-        </span>
+        <div className="post-card__active"/>
         <div className="post-card">
             <img className="post-card__img" src={image}/>
             <div className="post-card__content">

@@ -5,7 +5,7 @@ import { Skeleton } from './Skeleton'
 
 export const Posts = () => {
   const {data: posts, isLoading} = usePosts()
- 
+  
   return (
     <div className="grid">
         {isLoading && 

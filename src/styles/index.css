@@ -5,8 +5,8 @@
 1025px — 1200px: Desktops, large screens
 */
 :root {
-  --primary: #1E1E1E;
-  --secondary: #1E90FF;
+  --primary: #151515;
+  --secondary: #202020;
   --secondary-hover: #62acf7;
   --secondary-text: #fff;
 }
@@ -15,6 +15,7 @@ html, body, #root {
   height: 100%;
   margin: 0;
   padding: 0;
+  font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;;
   font-size: 62.5%;
   background-color: var(--primary);
 }
@@ -183,12 +184,14 @@ html, body, #root {
 .post-card__rating p {
   font-size: 2rem;
   font-weight: bold;
+  color: white
 }
 
 .post-card__active {
-  border-radius: 2rem;
-  padding: 0.5rem 1rem;
-  background-color: var(--secondary);
+  border-radius: 1rem;
+  height: 2rem;
+  width: 2rem;
+  background-color: #03fc98;
   position: absolute;
   top: 0;
   right: 0;
@@ -241,14 +244,14 @@ html, body, #root {
 
 .nav {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: center;
   padding: 0 2rem
 }
 
-.nav img {
-  width: 100%;
-  height: 50px;
+.nav .title{
+  color: white;
+  font-size: 3rem;
 }
 
 .nav .icon {
@@ -342,7 +345,7 @@ html, body, #root {
 
 @media screen and (min-width: 1024px){
   .nav img {
-    height: 100px;
+    height: 50px;
   }
   .switch {
     transform: scale(1);
@@ -357,7 +360,11 @@ html, body, #root {
   width: 100%;
   display: flex;
   align-items: center;
-  margin-right: 1rem;
+  margin-right: 2rem;
+  margin-left: 2rem;
+  background-color: #202020;
+  transition: all 0.3s;
+  cursor: pointer
 }
 
 .search-input input {
@@ -366,16 +373,18 @@ html, body, #root {
   font-size: 1.6rem;
   transition: border-color 0.2s ease-in-out;
   background-color: transparent;
-  color: #FFFF
+  color: #202020;
+  cursor: pointer
 }
 
 .search-input input:focus {
   outline: none;
-  border-color: #03fc98; /* Change border color on focus */
 }
 
 .search-input .icon {
   font-size: 2rem;
+  color: white;
+  transition: all 0.3s;
 }
 
 @media screen and (min-width:1024px){
