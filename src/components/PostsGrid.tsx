@@ -1,9 +1,9 @@
 import { PostCard } from './PostCard'
 import placeholder from "../assets/images/placeholder.webp"
-import usePosts from '../hooks/usePosts'
+import { usePosts }  from '../hooks/usePosts'
 import { Skeleton } from './Skeleton'
 
-export const Posts = () => {
+export const PostsGrid = () => {
   const {data: posts, isLoading} = usePosts()
   
   return (

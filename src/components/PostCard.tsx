@@ -1,20 +1,12 @@
-import { FaComment, FaThumbsUp } from "react-icons/fa";
 import { Post } from "../utils/interfaces/Interfaces";
+import { useNavigate } from "react-router-dom";
+import { PostEngagements } from "./PostEngagements";
 
-function formatLikes(likes: number) {
-    if (likes >= 1000000) {
-      return (likes / 1000000).toFixed(1) + "M"; // Millions
-    } else if (likes >= 1000) {
-      return (likes / 1000).toFixed(1) + "K"; // Thousands
-    } else {
-      return likes.toString(); // Return as-is for smaller numbers
-    }
-  }
 export const PostCard = ({image, post}: {image: string, post: Post}) => {
   // Check if post has an active session
-
+  const navigate = useNavigate()
   return (
-    <div className="post-card__wrapper">
+    <div className="post-card__wrapper" onClick={() => navigate(`/${post.id}`)}>
         <div className="post-card__rating">
             <p>3.7</p>
         </div>
@@ -26,17 +18,7 @@ export const PostCard = ({image, post}: {image: string, post: Post}) => {
                     <h1 className="post-card__heading__title">{post.title}</h1>
                     <h1 className="post-card__date">2 hours ago</h1>
                 </span>
-                <span className="post-card__info">
-                    <h1 className="post-card__poster">{post.appUser.username}</h1>
-                    <span className="post-card__engagements">
-                        <span className="post-card__comments">
-                            <p>{post.comments.length} <FaComment className="icon"/></p>
-                        </span>
-                        <span className="post-card__likes">
-                            <p>{formatLikes(post.likes)} <FaThumbsUp className="icon"/></p>
-                        </span>
-                    </span>
-                </span>
+                <PostEngagements post={post}/>
                 <p className="post-card__description">
                     {post.description}
                 </p>

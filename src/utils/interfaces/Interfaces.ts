@@ -1,5 +1,11 @@
 export interface Comment {
-    id: number
+    id: number,
+    title: string,
+    content: string,
+    commentedBy: string,
+    commentedAt: Date,
+    likes: number,
+    dislikes: number
 }
 
 export interface Session {
