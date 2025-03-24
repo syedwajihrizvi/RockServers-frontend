@@ -1,6 +1,7 @@
 import { Post } from "../utils/interfaces/Interfaces";
 import { useNavigate } from "react-router-dom";
 import { PostEngagements } from "./PostEngagements";
+import Avatar from "../assets/images/avatar.webp"
 
 export const PostCard = ({image, post}: {image: string, post: Post}) => {
   // Check if post has an active session
@@ -16,12 +17,15 @@ export const PostCard = ({image, post}: {image: string, post: Post}) => {
             <div className="post-card__content">
                 <span className="post-card__heading">
                     <h1 className="post-card__heading__title">{post.title}</h1>
-                    <h1 className="post-card__date">2 hours ago</h1>
+                    <PostEngagements post={post}/>
                 </span>
-                <PostEngagements post={post}/>
                 <p className="post-card__description">
                     {post.description}
                 </p>
+                <div className="post-card__user-info">
+                  <img className="post-card__avatar" src={Avatar} alt="Avatar"/>
+                  <p>Posted by <span style={{fontWeight:'bold'}}>{post.appUser.username}</span> 2hr ago.</p>
+                </div>
             </div>
         </div>
     </div>

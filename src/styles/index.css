@@ -122,6 +122,8 @@ html, body, #root {
 
 .post-card__heading__title {
   font-size: 2rem;
+  margin-right: 1rem;
+  margin-bottom: 0;
 }
 
 .post-card__date {
@@ -171,7 +173,8 @@ html, body, #root {
 
 .post-card__description {
   font-size: 1.6rem;
-  color: var(--secondary-text)
+  color: var(--secondary-text);
+  margin: 0;
 }
 
 .post-card__rating {
@@ -185,6 +188,25 @@ html, body, #root {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.post-card__user-info {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.3rem;
+  align-items: center;
+}
+
+.post-card__user-info p {
+  margin: 0;
+  color: white;
+  font-size: 1.2rem;
+}
+
+.post-card__avatar {
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
 }
 
 .post-card__rating p {
