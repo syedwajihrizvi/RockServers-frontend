@@ -448,6 +448,10 @@ html, body, #root {
 
 /* Post Details */
 
+.post-details-card__wrapper {
+  position: absolute;
+}
+
 .post-details-card {
   max-width: 568px;
   border-radius: 2rem;
@@ -457,65 +461,25 @@ html, body, #root {
 
 .post-details__img {
   width: 100%;
-  height: 200px;
-}
-
-.post-details-card__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: white;
-  flex-direction: row;
-  padding: 0.5rem 1rem;
-}
-
-.header__img {
-  width: 50px;
-  height: 50px;
-  border-radius: 100%;
-}
-
-.header__info {
-  display: flex;
-  gap: 1rem
-}
-
-.header__info__user {
-  align-items: center;
-  text-align: center;
-}
-
-.header__info__user__name {
-  margin: 0;
-  font-size: 1.2rem;
-}
-
-.header__title {
-  font-size: 2rem;
-  margin: 0;
-}
-
-.header__rating {
-  background-color: var(--secondary);
-  border-radius: 100%;
-  height: 20px;
-  width: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-}
-
-.header__rating p {
-  color: white;
-  font-size: 1.5rem;
 }
 
 .post-details-card__content {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: start;
   padding: 0.5rem 1rem;
+}
+
+.post-details-card__content__info h3 {
+  margin: 0;
+  font-size: 2rem;
+  color: white;
+}
+
+.post-details-card__content__info p {
+  margin: 0;
+  font-size: 1.2rem;
+  color: white;
 }
 
 .post-details-card__comments {
@@ -525,7 +489,7 @@ html, body, #root {
 
 .post-details-card__comments h1 {
   color: var(--secondary);
-  font-size: 3rem;
+  font-size: 2rem;
   font-weight: bold;
   margin-bottom: 1rem;
 }
@@ -564,10 +528,12 @@ html, body, #root {
 .comment__content__content__user {
   margin: 0;
   font-weight: bold;
+  font-size: 1.2rem;
 }
 
 .comment__content__content__comment {
   margin: 0;
+  font-size: 1.2rem;
 }
 
 .comment__content__content__date {
@@ -586,7 +552,15 @@ html, body, #root {
 .comment__engagement span {
   display: flex;
   justify-content: center;
-  align-items: center;
   text-wrap: nowrap;
   gap: 0.5rem
+}
+
+.comment__engagement .icon{
+  transition: transform 0.3s ease-in;
+}
+
+.comment__engagement .icon:hover {
+  transform: scale(1.1);
+  cursor: pointer
 }
