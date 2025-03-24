@@ -1,4 +1,4 @@
-export interface Comment {
+export interface IComment {
     id: number,
     title: string,
     content: string,
@@ -8,12 +8,12 @@ export interface Comment {
     dislikes: number
 }
 
-export interface Session {
+export interface ISession {
     id: number,
     active: boolean
 }
 
-export interface Post {
+export interface IPost {
     id: number,
     title: string,
     description: string,
@@ -22,8 +22,8 @@ export interface Post {
     appUser: {
         username: string
     },
-    comments: Comment[],
-    sessions: Session[],
+    comments: IComment[],
+    sessions: ISession[],
     views: number,
     likes: number,
     dislikes: number

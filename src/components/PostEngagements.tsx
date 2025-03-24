@@ -1,5 +1,5 @@
 import { FaComment, FaThumbsUp } from 'react-icons/fa'
-import { Post } from '../utils/interfaces/Interfaces'
+import { IPost } from '../utils/interfaces/Interfaces'
 
 function formatLikes(likes: number) {
     if (likes >= 1000000) {
@@ -11,7 +11,7 @@ function formatLikes(likes: number) {
     }
 }
 
-export const PostEngagements = ({post}: {post: Post}) => {
+export const PostEngagements = ({post}: {post: IPost}) => {
   return (
         <span className="post-card__engagements">
             <span className="post-card__comments">

@@ -1,9 +1,9 @@
-import { Post } from "../utils/interfaces/Interfaces";
+import { IPost } from "../utils/interfaces/Interfaces";
 import { useNavigate } from "react-router-dom";
 import { PostEngagements } from "./PostEngagements";
 import Avatar from "../assets/images/avatar.webp"
 
-export const PostCard = ({image, post}: {image: string, post: Post}) => {
+export const PostCard = ({image, post}: {image: string, post: IPost}) => {
   // Check if post has an active session
   const navigate = useNavigate()
   return (
