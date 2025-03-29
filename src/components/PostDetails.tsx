@@ -3,25 +3,22 @@ import { usePost } from "../hooks/usePosts"
 import apiClient from "../utils/services/dataServices"
 import Avatar from "../assets/images/avatar.webp"
 import { CiCirclePlus } from "react-icons/ci";
-import { MdFilterList } from "react-icons/md";
 
-import { IComment, IPost } from "../utils/interfaces/Interfaces"
+import { IPost } from "../utils/interfaces/Interfaces"
 import { generateImageUrl, hasActiveSession } from "../utils/helpers/helpers";
 import useQueryStore from "../stores/useQueryStore"
-import { PostEngagements } from "./PostEngagements"
+import { Engagements } from "./Engagements"
 import { Skeleton } from "./Skeleton"
 import { useEffect, useState } from "react"
-import { Comment } from "./Comment"
 import { toPlatformIcon } from "../utils/helpers/mappers";
 import { PreviewCard } from "./PreviewCard";
+import { Comments } from "./Comments";
 
 export const PostDetails = () => {
   const {id: postId} = useParams()
   const {data:post, isLoading} = usePost(parseInt(postId as string))
   const [isLoadingSimilarPosts, setIsLoadingSimilarPosts] = useState(false)
   const [similarPosts, setSimilarPosts] = useState<IPost[]>([])
-  const [viewAll, setViewAll] = useState(false)
-  const [addingComment, setAddingComment] = useState(false)
   const { handleSetGameInfo } = useQueryStore()
   const navigate = useNavigate()
 
@@ -53,9 +50,6 @@ export const PostDetails = () => {
             <button className="session-option btn btn--danger btn--md">Join Queue</button>
   }
 
-  const renderComments = (comments: IComment[]) =>
-    comments.length < 2 || viewAll ? comments : comments.slice(0, 2)
-
   const handleSimilarPostClick = () => {
     if (post) {
         handleSetGameInfo(post.gameId, post.gameName)
@@ -64,60 +58,34 @@ export const PostDetails = () => {
   }
 
   return (
-    <div className="post-details__container">
+    <div className="card-details__container">
         {isLoading && <Skeleton customClass="skeleton--lg"/>}
         {!isLoading && post && 
-        <div className="post-details-card__wrapper">
-            <div className="post-details-card">
-                <div className="post-details__img-wrapper">
+        <div className="card-details-card__wrapper">
+            <div className="card-details-card">
+                <div className="card-details__img-wrapper">
                     <div className="post-card__rating post-card__rating--black post-card__rating--md">
                         <p>3.7</p>
                     </div>
-                    <div className="post-details__platform">
+                    <div className="card-details__platform">
                         {toPlatformIcon(post.platformName, 30, "white")}
                     </div>
                     {renderJoinButton()}
                     <img src={generateImageUrl(post.imagePath)} alt="post Image" className="post-details__img" />
                 </div>
-                <div className="post-details-card__content">
-                    <div className="post-details-card__content__info">
+                <div className="card-details-card__content">
+                    <div className="card-details-card__content__info">
                         <h3>{post.title}</h3>
                         <p>{post.description}</p>
-                        <div className="post-card__user-info">
-                            <img className="post-card__avatar" src={Avatar} 
+                        <div className="card__user-info">
+                            <img className="card__avatar" src={Avatar} 
                                 alt="Avatar"/>
                             <p>Posted by <span style={{fontWeight:'bold'}}>{post.appUser.username}</span> 2hr ago.</p>
                         </div>
                     </div>
-                    <PostEngagements post={post}/>
+                    <Engagements comments={post.comments} likes={post.likes}/>
                 </div>
-                <div className="post-details-card__comments">
-                    <h1>{post.comments.length} Comments</h1>
-                    <div className="post-details-card__comments__add-wrapper">
-                        <div className="post-details-card__comments__add">
-                            <img src={Avatar} alt="Avatar"/>
-                            <input type="text" placeholder="Add Comment..." 
-                                   onFocus={() => setAddingComment(true)}
-                                   onBlur={() => setAddingComment(false)}
-                                   />
-                        </div>
-                        <div className={`button-group add-comment add-comment--${addingComment ?  'shown' : 'hidden'}`}>
-                            <button className="btn btn--xs btn--success">Submit</button>
-                            <button className="btn btn--xs btn--danger" 
-                                    onClick={() => setAddingComment(false)}>
-                                        Cancel
-                            </button>
-                        </div>
-                    </div>
-                    {renderComments(post.comments).map(comment => (
-                        <Comment comment={comment}/>
-                    ))}
-                    {post.comments.length > 2 && 
-                    <div className="comment__view-all">
-                        <p>View All</p>
-                        <MdFilterList className="icon" fontSize={20} onClick={() => setViewAll(!viewAll)}/>
-                    </div>}
-                </div>
+                <Comments comments={post.comments}/>
             </div>
             <div className="similar-posts">
                 <h3 className="similar-posts__heading">Similar Posts</h3>

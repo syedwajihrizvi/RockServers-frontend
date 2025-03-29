@@ -41,6 +41,9 @@ export interface IDiscussion {
     appUser: {
         username: string
     },
+    comments: IComment[],
+    views: number,
+    likes: number
 }
 
 export interface IGame {

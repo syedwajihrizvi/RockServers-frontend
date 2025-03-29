@@ -1,5 +1,5 @@
 import { FaComment, FaHeart } from 'react-icons/fa'
-import { IPost } from '../utils/interfaces/Interfaces'
+import { IComment } from '../utils/interfaces/Interfaces';
 
 function formatLikes(likes: number) {
     if (likes >= 1000000) {
@@ -11,16 +11,16 @@ function formatLikes(likes: number) {
     }
 }
 
-export const PostEngagements = ({post}: {post: IPost}) => {
+export const Engagements = ({comments, likes}: {comments: IComment[], likes: number}) => {
   return (
         <span className="post-card__engagements">
             <span>
                 <FaComment className='icon'/>
-                <p>{post?.comments.length}</p>
+                <p>{comments ? comments.length : 0}</p>
             </span>
             <span>
                 <FaHeart className="icon icon--heart"/>
-                <p>{formatLikes(post?.likes as number)}</p>
+                <p>{formatLikes(likes as number)}</p>
             </span>
         </span>
   )

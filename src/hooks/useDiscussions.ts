@@ -19,3 +19,12 @@ export const useDiscussions = (queryParams: DiscussionQueryParams = {}) => {
         queryFn: fetchDiscussions
     })
 }
+
+export const useDiscussion = (discussionId: number) => {
+    const fetchDiscussion = () =>
+        apiClient.get<IDiscussion>(`/discussions/${discussionId}`).then(res => res.data)
+    return useQuery<IDiscussion, Error>({
+        queryKey: ['discussions', discussionId],
+        queryFn: fetchDiscussion
+    })
+}

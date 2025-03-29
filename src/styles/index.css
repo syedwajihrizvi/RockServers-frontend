@@ -260,19 +260,19 @@ html, body, #root {
   background-color: #03fc98;
 }
 
-.post-card__user-info {
+.card__user-info {
   display: flex;
   gap: 0.3rem;
   align-items: center;
 }
 
-.post-card__user-info p {
+.card__user-info p {
   margin: 0;
   color: white;
   font-size: 1.2rem;
 }
 
-.post-card__avatar {
+.card__avatar {
   width: 20px;
   height: 20px;
   border-radius: 100%;
@@ -576,24 +576,24 @@ html, body, #root {
 
 /* Post Details */
 
-.post-details-card__wrapper {
+.card-details-card__wrapper {
   position: absolute;
 }
 
 @media screen and (min-width: 768px) {
-  .post-details-card__wrapper {
+  .card-details-card__wrapper {
     display: flex;
     gap: 2rem
   }
 }
-.post-details-card {
+.card-details-card {
   max-width: 568px;
   border-radius: 2rem;
   overflow: hidden;
   background-color: var(--secondary);
 }
 
-.post-details__img-wrapper {
+.card-details__img-wrapper {
   position: relative;
 }
 
@@ -601,35 +601,35 @@ html, body, #root {
   width: 100%;
 }
 
-.post-details-card__content {
+.card-details-card__content {
   display: flex;
   justify-content: space-between;
   align-items: start;
   padding: 0.5rem 1rem;
 }
 
-.post-details-card__content__info h3 {
+.card-details-card__content__info h3 {
   margin: 0;
   font-size: 2rem;
   color: white;
 }
 
-.post-details-card__content__info p {
+.card-details-card__content__info p {
   margin: 0;
   font-size: 1.4rem;
   color: white;
 }
 
-.post-details-card__content__info .post-card__user-info {
+.card-details-card__content__info .card__user-info {
   margin-top: 1rem;
 }
 
-.post-details-card__comments {
+.card-details-card__comments {
   background-color: white;
   padding: 0 1rem;
 }
 
-.post-details-card__comments h1 {
+.card-details-card__comments h1 {
   color: var(--secondary);
   font-size: 1.8rem;
   font-weight: bold;
@@ -637,25 +637,25 @@ html, body, #root {
   text-align: center;
 }
 
-.post-details-card__comments__add-wrapper {
+.card-details-card__comments__add-wrapper {
   margin-bottom: 1rem;
   overflow: hidden;
 }
 
-.post-details-card__comments__add {
+.card-details-card__comments__add {
   display: flex;
   align-items: start;
   gap: 0.5rem;
   margin-bottom: 1rem;
 }
 
-.post-details-card__comments__add img{
+.card-details-card__comments__add img{
   width: 25px;
   height: 25px;
   border-radius: 100%;
 }
 
-.post-details-card__comments__add input {
+.card-details-card__comments__add input {
   width: 100%;
   border-radius: 1rem;
   border: 0;
@@ -666,13 +666,13 @@ html, body, #root {
   transition: box-shadow 0.2s ease-in-out, border 0.2s ease-in-out;
 }
 
-.post-details-card__comments__add input:focus {
+.card-details-card__comments__add input:focus {
   outline: none;
   border: 1px solid #4A90E2;
   box-shadow: 0 4px 12px rgba(74, 144, 226, 0.2);
 }
 
-.post-details__platform {
+.card-details__platform {
   position: absolute;
   bottom: 1%;
   left: 1%;

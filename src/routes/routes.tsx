@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import { Main } from "../components/Main";
 import { PostDetails } from "../components/PostDetails";
 import { AllPosts } from "../components/AllPosts";
+import { DiscussionDetails } from "../components/DiscussionDetails";
 
 const router = createBrowserRouter([
     {
@@ -13,8 +14,12 @@ const router = createBrowserRouter([
                 element: <AllPosts/>
             },
             {
-                path: ':id',
+                path: 'posts/:id',
                 element: <PostDetails/>
+            },
+            {
+                path: 'discussions/:id',
+                element: <DiscussionDetails/>
             }
         ]
     }
