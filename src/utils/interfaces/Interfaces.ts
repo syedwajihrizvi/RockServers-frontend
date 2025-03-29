@@ -18,13 +18,33 @@ export interface IPost {
     title: string,
     description: string,
     postedAt: Date,
+    gameId: number,
     gameName: string,
     appUser: {
         username: string
     },
+    platformName: string,
     comments: IComment[],
     sessions: ISession[],
+    imagePath: string,
     views: number,
     likes: number,
     dislikes: number
+}
+
+export interface IDiscussion {
+    id: number,
+    postedAt: Date,
+    title: string,
+    content: string,
+    imagePath: string,
+    appUser: {
+        username: string
+    },
+}
+
+export interface IGame {
+    id: number,
+    title: string,
+    slug: string
 }

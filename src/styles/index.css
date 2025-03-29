@@ -58,6 +58,25 @@ html, body, #root {
   font-size: 1.6rem;
   padding: 0.5rem 1rem;
 }
+
+/* Post type toolbar */
+.post-type-toolbar {
+  background: var(--secondary);
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  height: 100%;
+  gap: 0.1rem;
+}
+
+.post-type-toolbar__item {
+  color: white;
+  font-size: 1.6rem;
+  padding: 0;
+}
+
 /* Sorters */
 .sorters {
   display: flex;
@@ -75,6 +94,11 @@ html, body, #root {
 }
 
 /* Posts */
+.post-grid__title {
+  color: white;
+  font-size: 3rem;
+}
+
 .grid {
   display: flex;
   flex-direction: column;
@@ -100,7 +124,6 @@ html, body, #root {
 
 .post-card__img {
   width: 100%;
-  height: 200px;
 }
 
 .post-card__content {
@@ -153,6 +176,7 @@ html, body, #root {
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 0.5rem
 }
 
 .post-card__engagements p {
@@ -163,12 +187,17 @@ html, body, #root {
 
 .post-card__engagements .icon {
   font-size: 1.5rem;
-  color: var(--secondary-text)
+  color: var(--secondary-text);
+  transition: all 0.3s;
 }
 
-.post-card__comments .icon {
-  position: relative;
-  top: 0.25rem;
+.post-card__engagements .icon:hover {
+  transform: scale(1.1);
+}
+
+.post-card__engagements .icon--heart {
+  color: red;
+  cursor: pointer
 }
 
 .post-card__description {
@@ -182,16 +211,30 @@ html, body, #root {
   position: absolute;
   top: 1%;
   left: 1%;
-  height: 50px;
-  width: 50px;
-  background-color: var(--secondary);
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
+.post-card__rating--sm {
+  height: 30px;
+  width: 30px;
+}
+
+.post-card__rating--md {
+  height: 50px;
+  width: 50px;
+}
+
+.post-card__rating--black {
+  background-color: var(--secondary);
+}
+
+.post-card__rating--green {
+  background-color: #03fc98;
+}
+
 .post-card__user-info {
-  margin-top: 1rem;
   display: flex;
   gap: 0.3rem;
   align-items: center;
@@ -209,10 +252,22 @@ html, body, #root {
   border-radius: 100%;
 }
 
-.post-card__rating p {
-  font-size: 2rem;
+.post-card__rating--black p {
   font-weight: bold;
   color: white
+}
+
+.post-card__rating--md p {
+  font-size: 2rem;
+}
+
+.post-card__rating--sm p {
+  font-size: 1.4rem;
+}
+
+.post-card__rating--green p {
+  color: white;
+  font-weight: bold;
 }
 
 .post-card__active {
@@ -230,6 +285,13 @@ html, body, #root {
   margin: 0;
   font-size: 1.2rem;
   color: var(--secondary-text)
+}
+
+.post-card__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
 }
 
 @media screen and (min-width: 768px){
@@ -344,6 +406,12 @@ html, body, #root {
   font-size: 1.6rem;
 }
 
+.button-group {
+  display: flex;
+  justify-content: end;
+  gap: 1rem;
+}
+
 /* Switch */
 .switch {
   width: 42px;
@@ -445,8 +513,6 @@ html, body, #root {
 /* Skeleton */
 
 .skeleton {
-  width: 300px;
-  height: 400px;
   background-color: var(--secondary);
   border-radius: 2rem;
   border: none;
@@ -455,9 +521,31 @@ html, body, #root {
   justify-content: center;
 }
 
+.skeleton--sm {
+  width: 150px;
+  height: 200px;
+}
+
+.skeleton--md {
+  width: 300px;
+  height: 400px;
+}
+
 .skeleton--lg {
   width: 500px;
   height: 600px;
+}
+
+.skeleton--dynamic {
+  width: 150px;
+  height: 200px;
+}
+
+@media screen and (min-width: 768px){
+  .skeleton--dynamic {
+    width: 250px;
+    height: 300px;
+  }  
 }
 
 /* Post Details */
@@ -466,11 +554,21 @@ html, body, #root {
   position: absolute;
 }
 
+@media screen and (min-width: 768px) {
+  .post-details-card__wrapper {
+    display: flex;
+    gap: 2rem
+  }
+}
 .post-details-card {
   max-width: 568px;
   border-radius: 2rem;
   overflow: hidden;
   background-color: var(--secondary);
+}
+
+.post-details__img-wrapper {
+  position: relative;
 }
 
 .post-details__img {
@@ -492,8 +590,12 @@ html, body, #root {
 
 .post-details-card__content__info p {
   margin: 0;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   color: white;
+}
+
+.post-details-card__content__info .post-card__user-info {
+  margin-top: 1rem;
 }
 
 .post-details-card__comments {
@@ -511,6 +613,7 @@ html, body, #root {
 
 .post-details-card__comments__add-wrapper {
   margin-bottom: 1rem;
+  overflow: hidden;
 }
 
 .post-details-card__comments__add {
@@ -541,6 +644,12 @@ html, body, #root {
   outline: none;
   border: 1px solid #4A90E2;
   box-shadow: 0 4px 12px rgba(74, 144, 226, 0.2);
+}
+
+.post-details__platform {
+  position: absolute;
+  bottom: 1%;
+  left: 1%;
 }
 
 /* Comments */
@@ -636,8 +745,114 @@ html, body, #root {
   transform: scale(1.1);
 }
 
-.button-group {
+.add-comment {
+  transition: all 0.3s ease-in-out;
+  overflow: hidden;
+}
+
+.add-comment--hidden {
+  opacity: 0;
+  max-height: 0; 
+  transform: translateY(-10px);
+}
+
+.add-comment--shown {
+  opacity: 1;
+  max-height: fit-content;
+  transform: translateY(0);
+}
+
+.session-option {
+  position: absolute;
+  top: 1%;
+  right: 1%
+}
+
+/* Similar Posts */
+
+.similar-posts__heading {
+  font-size: 4rem;
+  margin: 0;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.similar-posts__content {
   display: flex;
-  justify-content: end;
   gap: 1rem;
+  align-items: center;
+}
+
+.similar-posts .icon {
+  font-size: 4rem;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.similar-posts .icon:hover {
+  transform: scale(1.1);
+}
+
+/* Preview Card */
+.preview-card {
+  width: 150px;
+  height: 200px;
+  position: relative;
+  border-radius: 1rem;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+
+.preview-card:hover {
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+.preview-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures the image fills the box and crops excess */
+}
+
+@media screen and (min-width: 768px){
+  .preview-card {
+    width: 250px;
+  }  
+}
+
+.preview-card__title {
+  background-color: white;
+  padding: 0.5rem;
+  text-align: center;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 100%;
+  transform: translate(-50%);
+}
+
+.preview-card__title h3 {
+  color: black;
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.preview-card__user-info {
+  position: absolute;
+  display: flex;
+  justify-content: space-evenly;
+  background-color: #03fc98;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 5rem;
+  top: 1%;
+  right: 1%;
+}
+
+.preview-card__user-info img {
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  object-fit: cover;
 }

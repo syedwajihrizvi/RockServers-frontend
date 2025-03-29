@@ -1,4 +1,4 @@
-import { FaComment, FaThumbsUp } from 'react-icons/fa'
+import { FaComment, FaHeart } from 'react-icons/fa'
 import { IPost } from '../utils/interfaces/Interfaces'
 
 function formatLikes(likes: number) {
@@ -14,11 +14,13 @@ function formatLikes(likes: number) {
 export const PostEngagements = ({post}: {post: IPost}) => {
   return (
         <span className="post-card__engagements">
-            <span className="post-card__comments">
-                <p>{post?.comments.length} <FaComment className="icon"/></p>
+            <span>
+                <FaComment className='icon'/>
+                <p>{post?.comments.length}</p>
             </span>
-            <span className="post-card__likes">
-                <p>{formatLikes(post?.likes as number)} <FaThumbsUp className="icon"/></p>
+            <span>
+                <FaHeart className="icon icon--heart"/>
+                <p>{formatLikes(post?.likes as number)}</p>
             </span>
         </span>
   )
