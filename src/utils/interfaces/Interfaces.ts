@@ -48,3 +48,8 @@ export interface IGame {
     title: string,
     slug: string
 }
+
+export interface IPlatform {
+    id: number,
+    name: string
+}

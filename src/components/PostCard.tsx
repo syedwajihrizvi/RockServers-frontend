@@ -2,7 +2,7 @@ import { IPost } from "../utils/interfaces/Interfaces";
 import { useNavigate } from "react-router-dom";
 import { PostEngagements } from "./PostEngagements";
 import Avatar from "../assets/images/avatar.webp"
-import { generateImageUrl, hasActiveSession } from "../utils/helpers/helpers";
+import { generateImageUrl, hasActiveSession, renderPartialContent } from "../utils/helpers/helpers";
 import { toPlatformIcon } from "../utils/helpers/mappers";
 
 export const PostCard = ({post}: {post: IPost}) => {
@@ -22,7 +22,7 @@ export const PostCard = ({post}: {post: IPost}) => {
                     <PostEngagements post={post}/>
                 </span>
                 <p className="post-card__description">
-                    {post.description}
+                  {renderPartialContent(post.description)}
                 </p>
                 <div className="post-card__footer">
                   <div className="post-card__user-info">

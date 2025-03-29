@@ -1,5 +1,5 @@
 import Avatar from "../assets/images/avatar.webp"
-import { generateImageUrl } from '../utils/helpers/helpers'
+import { generateImageUrl, renderPartialContent } from '../utils/helpers/helpers'
 import { IDiscussion } from '../utils/interfaces/Interfaces'
 
 export const DiscussionCard = ({discussion}: {discussion: IDiscussion}) => {
@@ -12,8 +12,7 @@ export const DiscussionCard = ({discussion}: {discussion: IDiscussion}) => {
                     <h1 className="post-card__heading__title">{discussion.title}</h1>
                 </span>
                 <p className="post-card__description">
-                    {discussion.content.length > 100 && discussion.content.slice(0, 100)}...
-                    {discussion.content.length < 100 && discussion.content}
+                    {renderPartialContent(discussion.content)}
                 </p>
                 <div className="post-card__footer">
                   <div className="post-card__user-info">

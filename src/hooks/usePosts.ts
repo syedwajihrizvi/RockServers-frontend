@@ -5,12 +5,13 @@ import useQueryStore from "../stores/useQueryStore"
 
 type PostQueryParams = {
     gameId? :number,
-    postToRemoveId?: number
+    postToRemoveId?: number,
+    platformId?: number
 }
 
 export const usePosts = (queryParams: PostQueryParams = {}) => {
-    const { gameId } = useQueryStore()
-    queryParams = {...queryParams, gameId}
+    const { gameId, platformId } = useQueryStore()
+    queryParams = {...queryParams, gameId, platformId}
     const fetchPosts = () =>
         apiClient.get<IPost[]>('/posts', {params: queryParams}).then(res => res.data)
     return useQuery<IPost[], Error>({
