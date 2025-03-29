@@ -3,11 +3,10 @@ import useQueryStore from "../stores/useQueryStore"
 
 export const Filters = () => {
   const {data:games, isLoading} = useGames()
-  const { gameId, handleSetGameInfo } = useQueryStore()
+  const { gameId, handleSetGameInfo, handleSetPost, postType } = useQueryStore()
 
   const handleGameOptionSelect = (gameInfo: string) => {
     // Get gameId and gameName
-    console.log(gameInfo)
     const splitInfo = gameInfo.split(',')
     const gameId = parseInt(splitInfo[0])
     const gameName = splitInfo[1]
@@ -28,14 +27,20 @@ export const Filters = () => {
               {game.title}
             </option>)}
         </select>
-        <select onChange={(event) => console.log(event.target.value)}>
-            <option value={0}>All Posts</option>
-            <option>Posts</option>
-            <option>Discussions</option>
-        </select>
+        <div className="post-type-filter">
+          <span className={`post-type-filter__span post-type-filter__span${postType == 'posts' ? '-white': '-dark'}`}
+                onClick={() => handleSetPost('posts')}>
+            Posts
+          </span>
+          <span className={`post-type-filter__span post-type-filter__span${postType == 'discussions' ? '-white': '-dark'}`}
+                onClick={() => handleSetPost('discussions')}>
+            Discussions
+          </span>
+        </div>
+        {postType == 'posts' && 
         <button className="btn btn--secondary btn--sm">
-            Active
-        </button>
+          Active Posts
+        </button>}
     </div>
   )
 }

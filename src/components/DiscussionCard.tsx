@@ -12,7 +12,8 @@ export const DiscussionCard = ({discussion}: {discussion: IDiscussion}) => {
                     <h1 className="post-card__heading__title">{discussion.title}</h1>
                 </span>
                 <p className="post-card__description">
-                    {discussion.content}
+                    {discussion.content.length > 100 && discussion.content.slice(0, 100)}...
+                    {discussion.content.length < 100 && discussion.content}
                 </p>
                 <div className="post-card__footer">
                   <div className="post-card__user-info">

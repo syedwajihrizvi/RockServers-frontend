@@ -9,15 +9,27 @@ export const PostsGrid = () => {
   const {data: posts, isLoading: isLoadingPosts} = usePosts()
   const {data: discussions, isLoading: isLoadingDiscussions} = useDiscussions()
 
-  const {gameName} = useQueryStore()
+  const {gameName, postType} = useQueryStore()
+  const renderPosts = () => {
+    if (isLoadingPosts || isLoadingDiscussions) {
+      return [...Array(12).keys()].map(() => <Skeleton customClass='skeleton--md'/>)
+    } 
+    else if (!isLoadingPosts && (postType == "posts")) {
+      return posts!.map((post) => <PostCard post={post}/>)
+    }
+    else if (!isLoadingDiscussions && (postType == "discussions")) {
+      return discussions!.map((discussion) => <DiscussionCard discussion={discussion}/>)
+    } else {
+      // Render an assorted version of all posts
+      console.log("Invalid post type")
+    }
+  }
+
   return (
     <div className='posts-grid'>
       {gameName && <h1 className='post-grid__title'>Posts for {gameName}</h1>}
       <div className="grid">
-          {(isLoadingPosts || isLoadingDiscussions) && 
-          [...Array(12).keys()].map(() => <Skeleton customClass='skeleton--md'/>)}
-          {!isLoadingPosts && posts!.map((post) => <PostCard post={post}/>)}
-          {!isLoadingDiscussions && discussions!.map((discussion) => <DiscussionCard discussion={discussion}/>)}
+          {renderPosts()}
       </div>
     </div>
   )
