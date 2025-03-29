@@ -6,21 +6,22 @@ import { capitalize } from "../utils/helpers/helpers"
 export const Filters = () => {
   const {data:games, isLoading: isLoadingGames} = useGames()
   const {data:platforms, isLoading: isLoadingPlatforms} = usePlatforms()
-  const { gameId, handleSetGameInfo, handleSetPlatformInfo, handleSetPost, postType } = useQueryStore()
+  const { gameId, handleSetGameInfo, handleSetPlatformInfo, handleSetPost, postType, platformId } = useQueryStore()
 
   const handleGameOptionSelect = (gameInfo: string) => {
     // Get gameId and gameName
     const splitInfo = gameInfo.split(',')
     const gameId = parseInt(splitInfo[0])
-    const gameName = splitInfo[1]
-    if (gameId == 0)
+    console.log(gameInfo)
+    if (gameId == -1)
       handleSetGameInfo(undefined, undefined)
-    else
+    else {
+      const gameName = splitInfo[1]
       handleSetGameInfo(gameId, gameName)
+    }
   }
 
   const handlePlatformOptionSelect = (platformInfo: string) => {
-    console.log(platformInfo)
     // Get gameId and gameName
     const splitInfo = platformInfo.split(',')
     const platformId = parseInt(splitInfo[0])
@@ -36,7 +37,7 @@ export const Filters = () => {
     !isLoadingGames && !isLoadingPlatforms && games && platforms &&
     <div className="filters filter--games">
         <select onChange={(event) => handleGameOptionSelect(event.target.value)}>
-            <option value={0}>All Games</option>
+            <option value={-1}>All Games</option>
             {games.map(game => 
             <option 
               key={game.id} selected={game.id == gameId} value={`${game.id},${game.title}`}>
@@ -47,7 +48,7 @@ export const Filters = () => {
             <option value={-1}>All Platforms</option>
             {platforms.map(platform => 
             <option 
-              key={platform.id} selected={platform.id == gameId} 
+              key={platform.id} selected={platform.id == platformId} 
               value={`${platform.id},${platform.name}`}>
               {capitalize(platform.name)}
             </option>)}
