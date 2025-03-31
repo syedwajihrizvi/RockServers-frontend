@@ -61,7 +61,7 @@ export const PostDetails = () => {
     <div className="card-details__container">
         {isLoading && <Skeleton customClass="skeleton--lg"/>}
         {!isLoading && post && 
-        <div className="card-details-card__wrapper">
+        <div className="card-details-card__wrapper post-details__wrapper">
             <div className="card-details-card">
                 <div className="card-details__img-wrapper">
                     <div className="post-card__rating post-card__rating--black post-card__rating--md">
@@ -85,7 +85,7 @@ export const PostDetails = () => {
                     </div>
                     <Engagements comments={post.comments} likes={post.likes}/>
                 </div>
-                <Comments comments={post.comments} addFirst={true}/>
+                <Comments comments={post.comments} addFirst={true} withViewAll={true}/>
             </div>
             <div className="similar-posts">
                 <h3 className="similar-posts__heading">Similar Posts</h3>

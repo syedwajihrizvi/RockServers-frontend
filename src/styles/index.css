@@ -577,20 +577,26 @@ html, body, #root {
 /* Post Details */
 
 .card-details-card__wrapper {
-  position: absolute;
+  position: absolute;;
 }
 
 @media screen and (min-width: 768px) {
   .card-details-card__wrapper {
     display: flex;
+  }
+
+  .post-details__wrapper {
     gap: 2rem
   }
 }
+
 .card-details-card {
   max-width: 568px;
   border-radius: 2rem;
   overflow: hidden;
   background-color: var(--secondary);
+  max-height: fit-content;
+  padding-bottom: 1rem;
 }
 
 .card-details__img-wrapper {
@@ -629,6 +635,18 @@ html, body, #root {
   padding: 0 1rem;
 }
 
+.card-details-fixed__comments {
+  border-radius: 2rem;
+  overflow: hidden;
+}
+
+.card-details-fixed__comments__content {
+  max-height: 600px;
+  overflow-y: scroll;
+  background-color: white;
+  padding: 1rem;
+}
+
 .card-details-card__comments h1 {
   color: var(--secondary);
   font-size: 1.8rem;
@@ -638,8 +656,7 @@ html, body, #root {
 }
 
 .card-details-card__comments__add-wrapper {
-  margin-bottom: 1rem;
-  overflow: hidden;
+  background-color: white;
 }
 
 .card-details-card__comments__add {
@@ -678,6 +695,12 @@ html, body, #root {
   left: 1%;
 }
 
+@media screen and (min-width: 768px) {
+  .discussion-details {
+    display: flex;
+   
+  }  
+}
 /* Comments */
 .comment {
   display: flex;
