@@ -85,7 +85,7 @@ export const PostDetails = () => {
                     </div>
                     <Engagements comments={post.comments} likes={post.likes}/>
                 </div>
-                <Comments comments={post.comments}/>
+                <Comments comments={post.comments} addFirst={true}/>
             </div>
             <div className="similar-posts">
                 <h3 className="similar-posts__heading">Similar Posts</h3>

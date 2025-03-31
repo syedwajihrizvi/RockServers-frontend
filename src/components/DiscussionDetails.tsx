@@ -32,7 +32,7 @@ export const DiscussionDetails = () => {
                     </div>
                     <Engagements comments={discussion.comments} likes={discussion.likes}/>
                 </div>
-                <Comments comments={discussion.comments}/>
+                <Comments comments={discussion.comments} addFirst={false}/>
             </div>
         </div>}
     </div>
