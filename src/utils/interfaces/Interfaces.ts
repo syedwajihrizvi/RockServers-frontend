@@ -38,6 +38,7 @@ export interface IDiscussion {
     title: string,
     content: string,
     imagePath: string,
+    otherImages: string[],
     appUser: {
         username: string
     },
