@@ -7,12 +7,15 @@ type PostQueryParams = {
     gameId? :number,
     postToRemoveId?: number,
     platformId?: number,
-    searchValue?: string
+    searchValue?: string,
+    sessionType?: string,
+    mostRecent?: boolean,
+    orderBy?: string
 }
 
 export const usePosts = (queryParams: PostQueryParams = {}) => {
-    const { gameId, platformId, searchValue } = useQueryStore()
-    queryParams = {...queryParams, gameId, platformId, searchValue}
+    const { gameId, platformId, searchValue, sessionType, mostRecent, orderBy } = useQueryStore()
+    queryParams = {...queryParams, gameId, platformId, searchValue, sessionType, mostRecent, orderBy}
     const fetchPosts = () =>
         apiClient.get<IPost[]>('/posts', {params: queryParams}).then(res => res.data)
     return useQuery<IPost[], Error>({

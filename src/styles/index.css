@@ -403,6 +403,12 @@ html, body, #root {
   transition: all 0.3s;
 }
 
+.btn--secondary--active {
+  background-color: var(--secondary-hover);
+  color: white;
+  transition: all 0.3s;
+}
+
 .btn--secondary:hover {
   cursor: pointer;
   background-color: var(--secondary-hover);

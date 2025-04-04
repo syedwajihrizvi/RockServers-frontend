@@ -26,6 +26,7 @@ export interface IPost {
     platformName: string,
     comments: IComment[],
     sessions: ISession[],
+    activeSession: boolean,
     imagePath: string,
     views: number,
     likes: number,

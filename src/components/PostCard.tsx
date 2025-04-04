@@ -2,7 +2,7 @@ import { IPost } from "../utils/interfaces/Interfaces";
 import { useNavigate } from "react-router-dom";
 import { Engagements } from "./Engagements";
 import Avatar from "../assets/images/avatar.webp"
-import { generateImageUrl, hasActiveSession, renderPartialContent } from "../utils/helpers/helpers";
+import { generateImageUrl,renderPartialContent } from "../utils/helpers/helpers";
 import { toPlatformIcon } from "../utils/helpers/mappers";
 
 export const PostCard = ({post}: {post: IPost}) => {
@@ -13,7 +13,7 @@ export const PostCard = ({post}: {post: IPost}) => {
         <div className="post-card__rating post-card__rating--black post-card__rating--md">
             <p>3.7</p>
         </div>
-        {hasActiveSession(post) && <div className="post-card__active"/>}
+        {post.activeSession && <div className="post-card__active"/>}
         <div className="post-card">
             <img className="post-card__img" src={generateImageUrl(post.imagePath)}/>
             <div className="post-card__content">

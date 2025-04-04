@@ -5,7 +5,7 @@ import Avatar from "../assets/images/avatar.webp"
 import { CiCirclePlus } from "react-icons/ci";
 
 import { IPost } from "../utils/interfaces/Interfaces"
-import { generateImageUrl, hasActiveSession } from "../utils/helpers/helpers";
+import { generateImageUrl } from "../utils/helpers/helpers";
 import useQueryStore from "../stores/useQueryStore"
 import { Engagements } from "./Engagements"
 import { Skeleton } from "./Skeleton"
@@ -45,7 +45,7 @@ export const PostDetails = () => {
   
   const renderJoinButton = () => {
     if (post)
-        return hasActiveSession(post) ? 
+        return post.activeSession ? 
             <button className="session-option btn btn--success btn--md">Join</button> : 
             <button className="session-option btn btn--danger btn--md">Join Queue</button>
   }
