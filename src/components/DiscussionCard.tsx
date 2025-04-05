@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom"
 import Avatar from "../assets/images/avatar.webp"
 import { generateImageUrl, renderPartialContent } from '../utils/helpers/helpers'
 import { IDiscussion } from '../utils/interfaces/Interfaces'
+import { Engagements } from "./Engagements"
 
 export const DiscussionCard = ({discussion}: {discussion: IDiscussion}) => {
   const navigate = useNavigate()
@@ -12,6 +13,7 @@ export const DiscussionCard = ({discussion}: {discussion: IDiscussion}) => {
             <div className="post-card__content">
                 <span className="post-card__heading">
                     <h1 className="post-card__heading__title">{discussion.title}</h1>
+                    <Engagements likes={discussion.likes} comments={discussion.comments}/>
                 </span>
                 <p className="post-card__description">
                     {renderPartialContent(discussion.content)}

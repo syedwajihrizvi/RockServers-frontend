@@ -11,12 +11,15 @@ function formatLikes(likes: number) {
     }
 }
 
-export const Engagements = ({comments, likes}: {comments: IComment[], likes: number}) => {
+export const Engagements = ({comments, likes}: {comments: IComment[] | number, likes: number}) => {
+  
+  const commentCount = Array.isArray(comments) ? comments && comments.length : typeof comments == 'number' ? comments : 0;
+
   return (
         <span className="post-card__engagements">
             <span>
                 <FaComment className='icon'/>
-                <p>{comments ? comments.length : 0}</p>
+                <p>{commentCount}</p>
             </span>
             <span>
                 <FaHeart className="icon icon--heart"/>

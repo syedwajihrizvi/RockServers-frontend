@@ -5,12 +5,14 @@ import useQueryStore from "../stores/useQueryStore"
 
 type DiscussionQueryParams = {
     gameId?: number,
-    discussionToRemoveId?: number
+    searchValue?: string,
+    mostRecent?: boolean,
+    orderBy?: string
 }
 
 export const useDiscussions = (queryParams: DiscussionQueryParams = {}) => {
-    const { gameId } = useQueryStore()
-    queryParams = {...queryParams, gameId}
+    const { gameId, searchValue, mostRecent, orderBy } = useQueryStore()
+    queryParams = {...queryParams, gameId, searchValue, mostRecent, orderBy}
     const fetchDiscussions = () =>
         apiClient.get<IDiscussion[]>('/discussions', {params: queryParams} )
                  .then(res => res.data)
