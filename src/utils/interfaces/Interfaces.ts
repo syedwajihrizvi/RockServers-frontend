@@ -40,6 +40,8 @@ export interface IDiscussion {
     id: number,
     postedAt: Date,
     title: string,
+    gameId: number,
+    gameName: string,
     content: string,
     imagePath: string,
     otherImages: string[],

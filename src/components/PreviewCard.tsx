@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom"
 import { generateImageUrl } from "../utils/helpers/helpers"
-import { IPost } from "../utils/interfaces/Interfaces"
+import { IDiscussion, IPost } from "../utils/interfaces/Interfaces"
 import Avatar from "../assets/images/avatar.webp"
 
-export const PreviewCard = ({post}: {post: IPost}) => {
+export const PreviewCard = ({post}: {post: IPost | IDiscussion}) => {
   const navigate = useNavigate()
   return (
     <div className="preview-card" onClick={() => navigate(`/${post.id}`)}>

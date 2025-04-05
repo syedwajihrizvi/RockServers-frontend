@@ -16,7 +16,20 @@ interface QueryStore {
     handleSearch: (searchValue: string) => void,
     handleSetSessionType: (sessionType: string) => void,
     handleSetMostRecent: () => void,
-    handleSetOrderBy: (orderBy?: string) => void
+    handleSetOrderBy: (orderBy?: string) => void,
+    handleResetAll: () => void
+}
+
+const defaulState = {
+    gameId: undefined,
+    platformId: undefined,
+    platformName: undefined,
+    gameName: undefined,
+    postType: 'posts',
+    searchValue: undefined,
+    sessionType: 'all',
+    mostRecent: false,
+    orderBy: undefined,  
 }
 
 const useQueryStore = create<QueryStore>((set) => ({
@@ -46,6 +59,9 @@ const useQueryStore = create<QueryStore>((set) => ({
     handleSetOrderBy: (orderBy?: string) => {
         set((state) => ({...state, orderBy}))
     },
+    handleResetAll: () => {
+        set(() => ({...defaulState}))
+    }
 }))
 
 export default useQueryStore

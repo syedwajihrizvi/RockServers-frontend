@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useDiscussion } from '../hooks/useDiscussions'
 import { Skeleton } from './Skeleton'
 import { generateImageUrl } from '../utils/helpers/helpers'
@@ -6,21 +6,57 @@ import Avatar from "../assets/images/avatar.webp"
 import { AddComment, Comments } from './Comments'
 import { Engagements } from './Engagements'
 import { useEffect, useState } from 'react'
+import { IDiscussion } from '../utils/interfaces/Interfaces'
+import { CiCirclePlus } from 'react-icons/ci'
+import { PreviewCard } from './PreviewCard'
+import apiClient from "../utils/services/dataServices"
+import useQueryStore from '../stores/useQueryStore'
 
 export const DiscussionDetails = () => {
   const {id: discussionId} = useParams()
   const {data: discussion, isLoading} = useDiscussion(parseInt(discussionId as string))
   const [thumbImage, setThumbImage] = useState('')
+  const [isLoadingSimilarDiscussions, setIsLoadingSimilarDiscussions] = useState(false)
+  const [similarDiscussions, setSimilarDiscussions] = useState<IDiscussion[]>([])
+  const { handleSetGameInfo, handleSetPost } = useQueryStore()
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (discussion?.imagePath)
         setThumbImage(discussion.imagePath)
   }, [isLoading, discussion])
 
+  useEffect(() => {
+    if (discussion) {
+        setIsLoadingSimilarDiscussions(true)
+        apiClient.get<IDiscussion[]>(
+            '/discussions',
+            {params: {
+                gameId: discussion.gameId,
+                limit: 3,
+                discussionToRemoveId: discussion.id
+            }}
+        )
+        .then(res => setSimilarDiscussions(res.data))
+        .catch(() => setSimilarDiscussions([...similarDiscussions]))
+        .finally(() => setIsLoadingSimilarDiscussions(false))
+
+    }
+  }, [discussion])
+
+  const handleSimilarDiscissionClick = () => {
+    if (discussion) {
+        handleSetGameInfo(discussion.gameId, discussion.gameName)
+        handleSetPost('discussions')
+        navigate('/')
+    }
+  }
+
   return (
     <div className="card-details__container">
         {isLoading && <Skeleton customClass="skeleton--lg"/>}
-        {!isLoading && discussion && 
+        {!isLoading && discussion &&
+        <>
         <div className="card-details-card__wrapper">
             <div className="card-details-card">
                 <div>
@@ -54,8 +90,23 @@ export const DiscussionDetails = () => {
                     </div>}
             </div>
             {discussion.comments.length > 0 &&
-            <Comments comments={[...discussion.comments, ...discussion.comments,...discussion.comments, ...discussion.comments,...discussion.comments, ...discussion.comments,...discussion.comments, ...discussion.comments,...discussion.comments, ...discussion.comments,...discussion.comments, ...discussion.comments,...discussion.comments, ...discussion.comments,...discussion.comments, ...discussion.comments]} addFirst={false} withViewAll={false}/>}
-        </div>}
+            <Comments comments={[...discussion.comments, ...discussion.comments,...discussion.comments, ...discussion.comments,...discussion.comments, ...discussion.comments,...discussion.comments, ...discussion.comments,...discussion.comments, ...discussion.comments,...discussion.comments, ...discussion.comments,...discussion.comments, ...discussion.comments,...discussion.comments, ...discussion.comments]} addFirst={false} withViewAll={false}/>}         
+        </div>
+        <div className="similar-posts">
+                <h3 className="similar-posts__heading">{`Similar Posts for ${discussion.gameName}`}</h3>
+                <div className="similar-posts__content">
+                    {isLoadingSimilarDiscussions &&
+                    [...Array(3).keys()].map(() => 
+                        <Skeleton customClass="skeleton skeleton--dynamic"/>)}
+                    {!isLoadingSimilarDiscussions && similarDiscussions && 
+                    similarDiscussions.map(post => <PreviewCard post={post}/>)
+                    }
+                    <CiCirclePlus 
+                        fontSize={40} color="white" 
+                        className="icon" onClick={() => handleSimilarDiscissionClick()}/>
+                </div>
+            </div> 
+        </>}
     </div>
   )
 }

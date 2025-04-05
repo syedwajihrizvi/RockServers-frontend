@@ -20,7 +20,7 @@ export const PostDetails = () => {
   const [isLoadingSimilarPosts, setIsLoadingSimilarPosts] = useState(false)
   const [successfullSessions, setSuccessfullSessions] = useState<ISession[]>([])
   const [similarPosts, setSimilarPosts] = useState<IPost[]>([])
-  const { handleSetGameInfo } = useQueryStore()
+  const { handleSetGameInfo, handleSetPost } = useQueryStore()
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -55,6 +55,7 @@ export const PostDetails = () => {
   const handleSimilarPostClick = () => {
     if (post) {
         handleSetGameInfo(post.gameId, post.gameName)
+        handleSetPost('posts')
         navigate('/')
     }
   }
