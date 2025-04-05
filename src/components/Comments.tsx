@@ -45,7 +45,7 @@ export const Comments = ({comments, addFirst, withViewAll}: {comments: IComment[
             ))}
             {comments && comments.length > 2 && 
                 <div className="comment__view-all">
-                    <p>View All</p>
+                    <p>{viewAll ? "Back" : "View All"}</p>
                     <MdFilterList className="icon" fontSize={20} onClick={() => setViewAll(!viewAll)}/>
                 </div>}          
             </div> : 

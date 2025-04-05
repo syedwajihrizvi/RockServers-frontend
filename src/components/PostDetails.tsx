@@ -4,8 +4,8 @@ import apiClient from "../utils/services/dataServices"
 import Avatar from "../assets/images/avatar.webp"
 import { CiCirclePlus } from "react-icons/ci";
 
-import { IPost } from "../utils/interfaces/Interfaces"
-import { generateImageUrl } from "../utils/helpers/helpers";
+import { IPost, ISession } from "../utils/interfaces/Interfaces"
+import { formatStringDate, generateImageUrl, getDateDifference, getSuccessfulSessions } from "../utils/helpers/helpers";
 import useQueryStore from "../stores/useQueryStore"
 import { Engagements } from "./Engagements"
 import { Skeleton } from "./Skeleton"
@@ -18,6 +18,7 @@ export const PostDetails = () => {
   const {id: postId} = useParams()
   const {data:post, isLoading} = usePost(parseInt(postId as string))
   const [isLoadingSimilarPosts, setIsLoadingSimilarPosts] = useState(false)
+  const [successfullSessions, setSuccessfullSessions] = useState<ISession[]>([])
   const [similarPosts, setSimilarPosts] = useState<IPost[]>([])
   const { handleSetGameInfo } = useQueryStore()
   const navigate = useNavigate()
@@ -25,6 +26,7 @@ export const PostDetails = () => {
   useEffect(() => {
     if (post) {
         setIsLoadingSimilarPosts(true)
+        setSuccessfullSessions(getSuccessfulSessions(post))
         apiClient.get<IPost[]>(
             '/posts', 
             {params: {
@@ -88,7 +90,7 @@ export const PostDetails = () => {
                 <Comments comments={post.comments} addFirst={true} withViewAll={true}/>
             </div>
             <div className="similar-posts">
-                <h3 className="similar-posts__heading">Similar Posts</h3>
+                <h3 className="similar-posts__heading">{`Similar Posts for ${post.gameName}`}</h3>
                 <div className="similar-posts__content">
                     {isLoadingSimilarPosts &&
                     [...Array(3).keys()].map(() => 
@@ -99,6 +101,31 @@ export const PostDetails = () => {
                     <CiCirclePlus 
                         fontSize={40} color="white" 
                         className="icon" onClick={() => handleSimilarPostClick()}/>
+                </div>
+                <div>
+                    {successfullSessions.length > 0 ? 
+                    <div className="post-session-history">
+                        <h3 className="session-table__title">Session History</h3>
+                        <h5 className="session-table__subtitle">{`This post has had ${successfullSessions.length}`} completed sessions.</h5>
+                        <table className="session-table">
+                            <tr className="session-table__header">
+                                <th>Start</th>
+                                <th>Duration</th>
+                                <th>Player Count</th>
+                                <th>Rating</th>
+                            </tr>
+                            {successfullSessions.map(session => {
+                                return (
+                                <tr className="session-table__data">
+                                    <td>{formatStringDate(session.startTime)}</td>
+                                    <td>{getDateDifference(session.startTime, session.endTime!)}</td>
+                                    <td>{session.users.length}</td>
+                                    <td>4.3</td>
+                                </tr>)
+                            })}
+                        </table>
+                    </div> : 
+                    <h3>This post has not had any previous sessions.</h3>}
                 </div>
             </div>
         </div>}

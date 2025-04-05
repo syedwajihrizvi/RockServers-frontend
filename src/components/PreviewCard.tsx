@@ -12,7 +12,6 @@ export const PreviewCard = ({post}: {post: IPost}) => {
         </div>
         <div className="preview-card__user-info">
             <img src={Avatar} alt="User Info" />
-            <p>{post.appUser.username}</p>
         </div>
         <img src={generateImageUrl(post.imagePath)}/>
         <div className="preview-card__title">

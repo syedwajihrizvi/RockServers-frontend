@@ -10,7 +10,10 @@ export interface IComment {
 
 export interface ISession {
     id: number,
-    active: boolean
+    active: boolean,
+    endTime: string | null,
+    startTime: string,
+    users: string[]
 }
 
 export interface IPost {

@@ -361,7 +361,7 @@ html, body, #root {
 
 .nav {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: center;
   padding: 0 2rem
 }
@@ -371,6 +371,8 @@ html, body, #root {
   font-size: 3rem;
   cursor: pointer;
   transition: all 0.3s;
+  margin: 1rem;
+  margin-right: 0;
 }
 
 .nav .title:hover {
@@ -387,6 +389,12 @@ html, body, #root {
   align-items: center;
   justify-content: center;
   gap: 1rem
+}
+
+@media screen and (min-width: 768px){
+  .nav {
+    justify-content: space-evenly;
+  }  
 }
 
 .btn {
@@ -506,14 +514,14 @@ html, body, #root {
   border: 1px solid black;
   border-radius: 3rem;
   padding: 0.5rem;
-  width: 100%;
+  width: 90%;
+  box-sizing: border-box;
+  margin: 0 auto;
   display: flex;
   align-items: center;
-  margin-right: 2rem;
-  margin-left: 2rem;
   background-color: #202020;
   transition: all 0.3s;
-  cursor: pointer
+  cursor: pointer;
 }
 
 .search-input input {
@@ -534,6 +542,13 @@ html, body, #root {
   font-size: 2rem;
   color: white;
   transition: all 0.3s;
+}
+
+@media screen and (min-width:768px){
+  .search-input {
+    margin-left: 2rem;
+    margin-right: 2rem;
+  }
 }
 
 @media screen and (min-width:1024px){
@@ -582,17 +597,30 @@ html, body, #root {
 
 /* Post Details */
 
-.card-details-card__wrapper {
-  position: absolute;;
+.card-details__container {
+  position: absolute;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 
-@media screen and (min-width: 768px) {
+.card-details-card__wrapper {
+  box-sizing: border-box;
+  padding: 1rem;
+  width: 95%;
+}
+
+@media screen and (min-width: 1024px) {
   .card-details-card__wrapper {
     display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    width: 90%;
   }
 
   .post-details__wrapper {
-    gap: 2rem
+    gap: 2rem;
   }
 }
 
@@ -602,7 +630,6 @@ html, body, #root {
   overflow: hidden;
   background-color: var(--secondary);
   max-height: fit-content;
-  padding-bottom: 1rem;
 }
 
 .card-details__img-wrapper {
@@ -610,7 +637,10 @@ html, body, #root {
 }
 
 .post-details__img {
+  object-fit: cover;
   width: 100%;
+  min-width: 250px;
+  height: 350px;
 }
 
 .discussion-thumbnail {
@@ -753,7 +783,6 @@ html, body, #root {
 @media screen and (min-width: 768px) {
   .discussion-details {
     display: flex;
-   
   }  
 }
 /* Comments */
@@ -868,8 +897,8 @@ html, body, #root {
 
 .session-option {
   position: absolute;
-  top: 1%;
-  right: 1%
+  top: 2%;
+  right: 2%
 }
 
 /* Similar Posts */
@@ -885,6 +914,7 @@ html, body, #root {
   display: flex;
   gap: 1rem;
   align-items: center;
+  flex-wrap: nowrap;
 }
 
 .similar-posts .icon {
@@ -898,10 +928,73 @@ html, body, #root {
   transform: scale(1.1);
 }
 
+@media screen and (min-width: 1024px){
+  .similar-posts__content {
+    flex-wrap: wrap;
+  }  
+}
+
+/* Post Session History */
+.post-session-history {
+  color: white;
+  width: 100%;
+  border-radius: 2rem;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.session-table__title {
+  font-size: 3rem;
+  margin: 0;
+}
+
+.session-table__subtitle {
+  font-size: 2rem;
+  margin: 0;
+  margin-bottom: 1rem;
+}
+
+.session-table {
+  color: white;
+  width: 100%;
+}
+
+.session-table th:first-child {
+  border-top-left-radius: 1rem;
+}
+
+.session-table th:last-child {
+  border-top-right-radius: 1rem;
+}
+
+.session-table tr:last-child td:first-child {
+  border-bottom-left-radius: 1rem;
+}
+
+.session-table tr:last-child td:last-child {
+  border-bottom-right-radius: 1rem;
+}
+
+.session-table td, .session-table th {
+  text-align: left;
+  padding: 1rem;
+}
+
+.session-table__header {
+  background: white;
+  color: black;
+  font-size: 1.8rem;
+}
+
+.session-table__data {
+  color: black;
+  background-color: #03fc98;
+  font-size: 1.4rem;
+}
 /* Preview Card */
 .preview-card {
-  width: 150px;
-  height: 200px;
+  width: 140px;
+  height: 180px;
   position: relative;
   border-radius: 1rem;
   overflow: hidden;
@@ -916,7 +1009,7 @@ html, body, #root {
 .preview-card img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Ensures the image fills the box and crops excess */
+  object-fit: cover;
 }
 
 @media screen and (min-width: 768px){
@@ -946,7 +1039,6 @@ html, body, #root {
   position: absolute;
   display: flex;
   justify-content: space-evenly;
-  background-color: #03fc98;
   gap: 0.5rem;
   padding: 0.5rem;
   border-radius: 5rem;
