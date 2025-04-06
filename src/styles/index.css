@@ -1058,3 +1058,25 @@ html, body, #root {
   border-radius: 100%;
   object-fit: cover;
 }
+
+/* Accounts */
+.account-container {
+  max-width: 128rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.account-container__img {
+  object-fit: cover;
+  border-radius: 1.2rem;
+}
+
+.account-container__img-one {
+  width: 768px;
+}
+
+.account-container__img-two {
+  width: 320px;
+}

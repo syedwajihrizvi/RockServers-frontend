@@ -4,13 +4,13 @@ import Dropdown from "./Dropdown";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useQueryStore from "../stores/useQueryStore";
-
-const isLoggedIn = true
+import { useGlobalContext } from "../providers/global-provider";
 
 export const Navbar = () => {
   const navigate = useNavigate()
   const [windowWidth, setWindowWidth] = useState(window.innerWidth)
   const { handleResetAll } = useQueryStore()
+  const { isLoggedIn } = useGlobalContext()
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth)
     window.addEventListener('resize', handleResize)
@@ -24,8 +24,7 @@ export const Navbar = () => {
             <h3 className="title" onClick={() => {
               handleResetAll()
               navigate('/')}
-            }>
-              ROCKSERVERS</h3>
+            }>ROCKSERVERS</h3>
         </div>
         <SearchInput/>
         <div className="nav__options">

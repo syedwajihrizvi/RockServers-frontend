@@ -63,3 +63,8 @@ export interface IPlatform {
     id: number,
     name: string
 }
+
+export interface IUser {
+    id: string,
+    email: string
+}
