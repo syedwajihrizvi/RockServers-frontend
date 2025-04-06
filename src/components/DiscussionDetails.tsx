@@ -3,7 +3,7 @@ import { useDiscussion } from '../hooks/useDiscussions'
 import { Skeleton } from './Skeleton'
 import { generateImageUrl } from '../utils/helpers/helpers'
 import Avatar from "../assets/images/avatar.webp"
-import { AddComment, Comments } from './Comments'
+import { Comments } from './Comments'
 import { Engagements } from './Engagements'
 import { useEffect, useState } from 'react'
 import { IDiscussion } from '../utils/interfaces/Interfaces'
@@ -64,6 +64,12 @@ export const DiscussionDetails = () => {
                         <img src={generateImageUrl(thumbImage ? thumbImage : discussion.imagePath)} 
                              alt="post Image" className="discussion-thumbnail" />
                     </div>
+                    {discussion.otherImages && discussion.otherImages.length > 0 &&
+                    <div className='discussion-details__other-images'>
+                        {discussion.otherImages.map(image => (
+                            <img src={generateImageUrl(image)} onClick={() => setThumbImage(image)}/>
+                        ))}
+                    </div>}
                     <div className="card-details-card__content">
                         <div className="card-details-card__content__info">
                             <h3>{discussion.title}</h3>
@@ -76,23 +82,11 @@ export const DiscussionDetails = () => {
                         </div>
                         <Engagements comments={discussion.comments} likes={discussion.likes}/>
                     </div>
-                    {discussion.otherImages && discussion.otherImages.length > 0 &&
-                    <div className='discussion-details__other-images'>
-                        {discussion.otherImages.map(image => (
-                            <img src={generateImageUrl(image)} onClick={() => setThumbImage(image)}/>
-                        ))}
-                    </div>}
                 </div>
-                {discussion.comments.length == 0 && 
-                    <div className='card-details__no-comments'>
-                        <h1>Be the first to comment</h1>
-                        <AddComment/>
-                    </div>}
-            </div>
-            {discussion.comments.length > 0 &&
-            <Comments comments={[...discussion.comments, ...discussion.comments,...discussion.comments, ...discussion.comments,...discussion.comments, ...discussion.comments,...discussion.comments, ...discussion.comments,...discussion.comments, ...discussion.comments,...discussion.comments, ...discussion.comments,...discussion.comments, ...discussion.comments,...discussion.comments, ...discussion.comments]} addFirst={false} withViewAll={false}/>}         
-        </div>
-        <div className="similar-posts">
+                <Comments comments={[...discussion.comments, ...discussion.comments, ...discussion.comments]} 
+                          withViewAll={false}/>
+            </div>   
+            <div className="similar-posts">
                 <h3 className="similar-posts__heading">{`Similar Posts for ${discussion.gameName}`}</h3>
                 <div className="similar-posts__content">
                     {isLoadingSimilarDiscussions &&
@@ -105,7 +99,8 @@ export const DiscussionDetails = () => {
                         fontSize={40} color="white" 
                         className="icon" onClick={() => handleSimilarDiscissionClick()}/>
                 </div>
-            </div> 
+            </div>      
+        </div>
         </>}
     </div>
   )

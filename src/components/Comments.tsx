@@ -26,7 +26,7 @@ export const AddComment = ({customClass}: {customClass?: string}) => {
     )
 }
 
-export const Comments = ({comments, addFirst, withViewAll}: {comments: IComment[], addFirst: boolean, withViewAll: boolean}) => {
+export const Comments = ({comments, withViewAll}: {comments: IComment[], withViewAll: boolean}) => {
     const [viewAll, setViewAll] = useState(false)
     const renderComments = (comments: IComment[]) => {
         if (withViewAll)
@@ -34,8 +34,7 @@ export const Comments = ({comments, addFirst, withViewAll}: {comments: IComment[
         return comments
     }
 
-
-    return addFirst ? 
+    return withViewAll ? 
         <div className="card-details-card__comments">
             <h1>{comments ? `${comments.length} Comments` : 'No Comments'}</h1>
             <AddComment/>
@@ -51,6 +50,7 @@ export const Comments = ({comments, addFirst, withViewAll}: {comments: IComment[
             </div> : 
             <div className="card-details-fixed__comments">
                 <div className="card-details-fixed__comments__content">
+                <h1>{comments.length > 0 ? `${comments.length} Comments` : 'No Comments'}</h1>
                 {renderComments(comments).map(comment => (
                     <Comment comment={comment}/>
                 ))}

@@ -678,23 +678,29 @@ html, body, #root {
 }
 
 .card-details-fixed__comments {
-  border-radius: 2rem;
+  border-bottom-left-radius: 2rem;
+  border-bottom-right-radius: 2rem;
   overflow: hidden;
 }
 
 .card-details-fixed__comments__content {
-  max-height: 600px;
+  max-height: 100px;
   overflow-y: scroll;
   background-color: white;
   padding: 1rem;
 }
 
-.card-details-card__comments h1 {
+.card-details-fixed__comments__content::-webkit-scrollbar {
+  display: none;
+}
+
+.card-details-card__comments h1, .card-details-fixed__comments__content h1 {
   color: var(--secondary);
   font-size: 1.8rem;
   font-weight: bold;
+  margin: 0;
   margin-bottom: 1rem;
-  text-align: center;
+  text-align: left;
 }
 
 .card-details-card__comments__add-wrapper {
