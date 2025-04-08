@@ -1061,7 +1061,6 @@ html, body, #root {
 
 /* Accounts */
 .account-container {
-  max-width: 128rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1073,15 +1072,142 @@ html, body, #root {
   object-fit: cover;
   border-radius: 1.2rem;
   opacity: 0;
-  top: 0;
-  left: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   position: absolute;
 }
 
 .account-container__img-one {
-  width: 600px;
+  width: 100%;
 }
 
 .account-container__img-two {
-  width: 400px;
+  width: 100%;
+}
+
+.account-input {
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  padding: 4rem 3rem;
+  border-radius: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  width: 90vw;
+  padding: 1rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.account-input__header {
+  width: 80%;
+  padding: 1rem;
+  margin-right: 2rem;
+}
+
+.account-input__heading {
+  color: white;
+  margin: 0;
+  font-size: 3.5rem;
+}
+
+.account-input__forgot {
+  width: 80%;
+}
+
+.account-input__forgot a {
+  font-size: 1.5rem;
+  margin: 0;
+  color: white
+}
+
+.account-input__subtitle {
+  margin: 0;
+  margin-top: 0.5rem;
+  color: white;
+  font-size: 1.6rem;
+}
+
+.account-input input {
+  width: 80%;
+  border-radius: 0.5rem;
+  border: none;
+  padding: 1rem;
+  font-size: 2rem;
+  margin-top: 0.5rem;
+}
+
+.account-input__btn {
+  background-color: #03fc98;
+  padding: 1rem 1rem;
+  font-size: 2.5rem;
+  border-radius: 10rem;
+  width: 80%;
+  text-align: center;
+  margin-top: 1rem;
+  transition: all 0.3s;
+}
+
+.account-input__btn:hover {
+  background-color: #01b66d;
+  cursor: pointer;
+}
+
+.account-input__join-now {
+  color: white;
+  font-size: 1.4rem;
+}
+
+.account-input__join-now a {
+  color: white
+}
+
+@media screen and (min-width: 768px){
+  .account-input {
+    width: 45rem;
+  }
+
+  .account-input__header {
+    width: 40rem;
+  }
+
+  .account-input input {
+    width: 40rem;
+  }
+
+  .account-input__btn {
+    width: 40rem;
+  }
+
+  .account-input__forgot {
+    width: 40rem;
+  }
+
+  .account-container__img-one {
+    width: 700px;
+  }
+  
+  .account-container__img-two {
+    width: 500px;
+  }
+
+  .account-container__content {
+    margin-left:70rem;
+  } 
+
+  .account-container__img {
+    top: 50%;
+    left: 20%;
+    transform: translate(-20%, -50%);
+  }
+
+  .account-input input {
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+
+  .account-input input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+  }
 }

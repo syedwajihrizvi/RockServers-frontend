@@ -8,6 +8,7 @@ import Trevor from "../assets/images/rockstart-games-wp-5.webp"
 import Sadie from "../assets/images/rockstart-games-wp-6.webp"
 import Michael from "../assets/images/rockstart-games-wp-7.webp"
 import { ReactNode, useEffect, useState, useRef } from "react"
+import { Outlet } from "react-router-dom"
 
 interface WallpaperProps {
   location: string,
@@ -36,28 +37,30 @@ export const Account = () => {
          className={`account-container__img ${image.class}`} 
          src={image.location} alt={image.alt}/>
   )
-  useEffect(() => {
-    const handleClick = () => {
-      const nextIndex = currentImageIndex == images.length - 1 ? 0 : currentImageIndex + 1
-      setPrevImageIndex(currentImageIndex)
-      setCurrentImageIndex(nextIndex)
-    }
-    window.addEventListener('click', handleClick)
 
-    return () => window.removeEventListener('click', handleClick)
+  useEffect(() => {
+    const handleImageChange = setInterval(() => {
+      const currentIndex = currentImageIndex
+      setCurrentImageIndex(currentImageIndex == images.length - 1 ? 0 : currentImageIndex + 1)
+      setPrevImageIndex(currentIndex)
+    }, 3000)
+    return () => clearInterval(handleImageChange)
   })
 
   useGSAP(() => {
     const tl = gsap.timeline()
     if (prevImageIndex != null)
-      tl.to(imageRefs.current[prevImageIndex], { opacity: 0, duration: 0.5})
-    tl.to(imageRefs.current[currentImageIndex], { opacity: 1, duration: 0.5})
+      tl.to(imageRefs.current[prevImageIndex], { opacity: 0, duration: 0.8})
+    tl.to(imageRefs.current[currentImageIndex], { opacity: 1, duration: 0.8})
   }, [currentImageIndex])
 
   return (
     <div className="account-container">
       <div>
         {imageNodes}
+      </div>
+      <div className="account-container__content">
+        <Outlet/>
       </div>
     </div>
   )
