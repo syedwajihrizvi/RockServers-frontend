@@ -55,13 +55,13 @@ export const Account = () => {
   }, [currentImageIndex])
 
   return (
-    <div className="account-container">
-      <div>
-        {imageNodes}
-      </div>
-      <div className="account-container__content">
-        <Outlet/>
-      </div>
+  <div className="account-container">
+    <div>
+      {imageNodes}
     </div>
+    <div className="account-container__content">
+      <Outlet/>
+    </div>
+  </div>
   )
 }

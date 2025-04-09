@@ -66,5 +66,6 @@ export interface IPlatform {
 
 export interface IUser {
     id: string,
-    email: string
+    email: string,
+    token: string
 }

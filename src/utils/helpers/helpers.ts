@@ -37,4 +37,4 @@ export const formatSecondsToString = (totalSeconds: number): string => {
     const m = minutes > 0 ? `${minutes} minute${minutes > 1 ? 's' : ''}` : ''
   
     return [h, m].filter(Boolean).join(' and ') || '0 minutes'
-  }
+}

@@ -3,7 +3,6 @@ import { HamburgerMenuIcon } from "@radix-ui/react-icons";
 import "../styles/dropdown.css";
 
 const DropdownMenuDemo = () => {
-
 	return (
 		<DropdownMenu.Root>
 			<DropdownMenu.Trigger asChild>
@@ -28,9 +27,6 @@ const DropdownMenuDemo = () => {
 					</DropdownMenu.Item>
 					<DropdownMenu.Item className="DropdownMenuItem">
 						Schedule
-					</DropdownMenu.Item>
-                    <DropdownMenu.Item className="DropdownMenuItem">
-						Sign Out
 					</DropdownMenu.Item>
 				</DropdownMenu.Content>
 			</DropdownMenu.Portal>

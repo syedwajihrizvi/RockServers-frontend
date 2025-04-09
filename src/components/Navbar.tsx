@@ -14,7 +14,6 @@ export const Navbar = () => {
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth)
     window.addEventListener('resize', handleResize)
-
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
@@ -31,7 +30,7 @@ export const Navbar = () => {
             <Toggle/>
             {isLoggedIn && <Dropdown/>}
             {!isLoggedIn && 
-            <button className="btn btn--secondary btn--md">
+            <button className="btn btn--secondary btn--md" onClick={() => navigate('/account/register')}>
               Sign Up
             </button>}
         </div>
