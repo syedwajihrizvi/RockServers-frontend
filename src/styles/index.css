@@ -1131,14 +1131,23 @@ html, body, #root {
   font-size: 1.6rem;
 }
 
-.account-input input {
-  width: 80%;
+.account-input__input {
   border-radius: 0.5rem;
   border: none;
   padding: 1rem;
   font-size: 2rem;
   margin-top: 0.5rem;
   color: white
+}
+
+.account-input__error {
+  color: red;
+  font-size: 1.6rem;
+  margin: 0;
+}
+
+.account-input__input--fw {
+  width: 80%;
 }
 
 .account-input__password {
@@ -1192,6 +1201,23 @@ html, body, #root {
   color: white
 }
 
+.account-input__platform-select {
+  display: flex;
+  width: 80%;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.account-input__platform-select__dropdown {
+  font-size: 2rem;
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+.account-input__platform-select input {
+  background-color: red;
+}
+
 @media screen and (min-width: 768px){
   .account-input {
     width: 45rem;
@@ -1201,7 +1227,11 @@ html, body, #root {
     width: 40rem;
   }
 
-  .account-input input {
+  .account-input__input--fw {
+    width: 40rem;
+  }
+
+  .account-input__platform-select {
     width: 40rem;
   }
 

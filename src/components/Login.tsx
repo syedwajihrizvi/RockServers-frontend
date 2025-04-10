@@ -41,13 +41,15 @@ export const Login = () => {
         <h1 className="account-input__heading">Sign In</h1>
         <p className="account-input__subtitle">Improve your Rockstar experience!</p>
       </div>
-        <input type="text" placeholder="Email or Username" 
+        <input className="account-input__input account-input__input--fw" 
+               type="text" placeholder="Email or Username" 
                onChange={(event) => {
                 setLoginError(false)
                 setForm({...form, emailOrUsername: event.target.value})
               }}/>
         <span className="account-input__password">
-        <input type={viewPassword ? "text" : "password"} placeholder="Password"
+        <input className="account-input__input account-input__input--fw" 
+               type={viewPassword ? "text" : "password"} placeholder="Password"
                onChange={(event) => {
                 setLoginError(false)
                 setForm({...form, password: event.target.value})
