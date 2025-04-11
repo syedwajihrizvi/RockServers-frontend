@@ -3,15 +3,28 @@ import { IComment } from "../utils/interfaces/Interfaces"
 import { Comment } from "./Comment"
 import Avatar from "../assets/images/avatar.webp"
 import { MdFilterList } from "react-icons/md"
+import { useGlobalContext } from "../providers/global-provider"
 
-export const AddComment = ({customClass}: {customClass?: string}) => {
+export const AddComment = ({customClass, handleAddComment}: 
+    {customClass?: string, handleAddComment: () => void}) => {
     const [addingComment, setAddingComment] = useState(false)
+    const { isLoggedIn } = useGlobalContext()
+
+    const handleSetAddingComment = (target: HTMLInputElement) => {
+        if (!isLoggedIn) {
+            handleAddComment()
+            target.blur()
+        }
+        else
+            setAddingComment(true)
+    }
+
     return (
         <div className={`card-details-card__comments__add-wrapper ${customClass ? customClass : ''}`}>
             <div className="card-details-card__comments__add">
                 <img src={Avatar} alt="Avatar"/>
                 <input type="text" placeholder="Add Comment..." 
-                    onFocus={() => setAddingComment(true)}
+                    onFocus={(event) => handleSetAddingComment(event.target)}
                     onBlur={() => setAddingComment(false)}
                     />
             </div>
@@ -26,7 +39,8 @@ export const AddComment = ({customClass}: {customClass?: string}) => {
     )
 }
 
-export const Comments = ({comments, withViewAll}: {comments: IComment[], withViewAll: boolean}) => {
+export const Comments = ({comments, withViewAll, handleAddComment}: 
+    {comments: IComment[], withViewAll: boolean, handleAddComment: () => void}) => {
     const [viewAll, setViewAll] = useState(false)
     const renderComments = (comments: IComment[]) => {
         if (withViewAll)
@@ -37,7 +51,7 @@ export const Comments = ({comments, withViewAll}: {comments: IComment[], withVie
     return withViewAll ? 
         <div className="card-details-card__comments">
             <h1>{comments ? `${comments.length} Comments` : 'No Comments'}</h1>
-            <AddComment/>
+            <AddComment handleAddComment={handleAddComment}/>
             {comments && 
                 renderComments(comments).map(comment => (
                     <Comment comment={comment}/>
@@ -55,6 +69,6 @@ export const Comments = ({comments, withViewAll}: {comments: IComment[], withVie
                     <Comment comment={comment}/>
                 ))}
                 </div>
-                <AddComment customClass='with-x-padding'/>
+                <AddComment customClass='with-x-padding' handleAddComment={handleAddComment}/>
             </div>
 }

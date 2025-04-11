@@ -3,6 +3,7 @@ import { usePost } from "../hooks/usePosts"
 import apiClient from "../utils/services/dataServices"
 import Avatar from "../assets/images/avatar.webp"
 import { CiCirclePlus } from "react-icons/ci";
+import { ToastContainer, toast } from 'react-toastify'
 
 import { IPost, ISession } from "../utils/interfaces/Interfaces"
 import { formatStringDate, generateImageUrl, getDateDifference, getSuccessfulSessions } from "../utils/helpers/helpers";
@@ -13,6 +14,8 @@ import { useEffect, useState } from "react"
 import { toPlatformIcon } from "../utils/helpers/mappers";
 import { PreviewCard } from "./PreviewCard";
 import { Comments } from "./Comments";
+import { useGlobalContext } from "../providers/global-provider";
+import { LoginToastComponent } from "./CustomToasts/LoginToastComponent";
 
 export const PostDetails = () => {
   const {id: postId} = useParams()
@@ -22,6 +25,7 @@ export const PostDetails = () => {
   const [similarPosts, setSimilarPosts] = useState<IPost[]>([])
   const { handleSetGameInfo, handleSetPost } = useQueryStore()
   const navigate = useNavigate()
+  const { isLoggedIn } = useGlobalContext()
 
   useEffect(() => {
     if (post) {
@@ -60,8 +64,25 @@ export const PostDetails = () => {
     }
   }
 
+  const handleToastButtonClick = () => {
+    navigate('/account/login')
+  }
+
+  const handlePostLike = () => {
+    if (!isLoggedIn) 
+        toast(LoginToastComponent({action: "Like this Post", handleClick: handleToastButtonClick}), {autoClose: 5000})
+  }
+
+  const handlePostComment = () => {
+    if (!isLoggedIn)
+        toast(LoginToastComponent({action: "Comment on this Post", handleClick: handleToastButtonClick}), {autoClose: 5000})
+  }
+
   return (
     <div className="card-details__container">
+        <ToastContainer
+            position="top-center"
+            />
         {isLoading && <Skeleton customClass="skeleton--lg"/>}
         {!isLoading && post && 
         <div className="card-details-card__wrapper post-details__wrapper">
@@ -86,9 +107,9 @@ export const PostDetails = () => {
                             <p>Posted by <span style={{fontWeight:'bold'}}>{post.appUser.username}</span> 2hr ago.</p>
                         </div>
                     </div>
-                    <Engagements comments={post.comments} likes={post.likes}/>
+                    <Engagements comments={post.comments} likes={post.likes} handleLike={handlePostLike}/>
                 </div>
-                <Comments comments={post.comments} withViewAll={true}/>
+                <Comments comments={post.comments} withViewAll={true} handleAddComment={handlePostComment}/>
             </div>
             <div className="similar-posts">
                 <h3 className="similar-posts__heading">{`Similar Posts for ${post.gameName}`}</h3>

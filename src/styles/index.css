@@ -1269,3 +1269,37 @@ html, body, #root {
     color: rgba(255, 255, 255, 0.4);
   }
 }
+
+/* Custom Toasts */
+
+.toast-login {
+  display: flex;
+  height: 10rem;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.toast-login__heading {
+  font-size: 2rem;
+  color: black
+}
+
+.toast-login__btn {
+  background-color: #03fc98;
+  font-size: 2rem;
+  height: fit-content;
+  padding: 1rem;
+  border-radius: 1rem;
+  color: black;
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.toast-login__btn:hover {
+  background-color: #01b66d;
+}

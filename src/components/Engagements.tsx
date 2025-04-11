@@ -11,7 +11,8 @@ function formatLikes(likes: number) {
     }
 }
 
-export const Engagements = ({comments, likes}: {comments: IComment[] | number, likes: number}) => {
+export const Engagements = ({comments, likes, handleLike}: 
+    {comments: IComment[] | number, likes: number, handleLike: () => void}) => {
   
   const commentCount = Array.isArray(comments) ? comments && comments.length : typeof comments == 'number' ? comments : 0;
 
@@ -22,7 +23,7 @@ export const Engagements = ({comments, likes}: {comments: IComment[] | number, l
                 <p>{commentCount}</p>
             </span>
             <span>
-                <FaHeart className="icon icon--heart"/>
+                <FaHeart className="icon icon--heart" onClick={handleLike}/>
                 <p>{formatLikes(likes as number)}</p>
             </span>
         </span>

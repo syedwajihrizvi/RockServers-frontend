@@ -3,6 +3,8 @@ import { useDiscussion } from '../hooks/useDiscussions'
 import { Skeleton } from './Skeleton'
 import { generateImageUrl } from '../utils/helpers/helpers'
 import Avatar from "../assets/images/avatar.webp"
+import { ToastContainer, toast } from 'react-toastify'
+
 import { Comments } from './Comments'
 import { Engagements } from './Engagements'
 import { useEffect, useState } from 'react'
@@ -11,6 +13,8 @@ import { CiCirclePlus } from 'react-icons/ci'
 import { PreviewCard } from './PreviewCard'
 import apiClient from "../utils/services/dataServices"
 import useQueryStore from '../stores/useQueryStore'
+import { LoginToastComponent } from "./CustomToasts/LoginToastComponent";
+import { useGlobalContext } from '../providers/global-provider'
 
 export const DiscussionDetails = () => {
   const {id: discussionId} = useParams()
@@ -19,6 +23,7 @@ export const DiscussionDetails = () => {
   const [isLoadingSimilarDiscussions, setIsLoadingSimilarDiscussions] = useState(false)
   const [similarDiscussions, setSimilarDiscussions] = useState<IDiscussion[]>([])
   const { handleSetGameInfo, handleSetPost } = useQueryStore()
+  const { isLoggedIn } = useGlobalContext()
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -52,8 +57,25 @@ export const DiscussionDetails = () => {
     }
   }
 
+  const handleToastButtonClick = () => {
+    navigate('/account/login')
+  }
+
+  const handleDiscussionLike = () => {
+    if (!isLoggedIn) 
+        toast(LoginToastComponent({action: "Like this Post", handleClick: handleToastButtonClick}), {autoClose: 5000})
+  }
+
+  const handleDiscussionComment = () => {
+    if (!isLoggedIn)
+        toast(LoginToastComponent({action: "Comment on this Post", handleClick: handleToastButtonClick}), {autoClose: 5000})
+  }
+
   return (
     <div className="card-details__container">
+        <ToastContainer
+            position="top-center"
+            />
         {isLoading && <Skeleton customClass="skeleton--lg"/>}
         {!isLoading && discussion &&
         <>
@@ -80,11 +102,11 @@ export const DiscussionDetails = () => {
                                 <p>Posted by <span style={{fontWeight:'bold'}}>{discussion.appUser.username}</span> 2hr ago.</p>
                             </div>
                         </div>
-                        <Engagements comments={discussion.comments} likes={discussion.likes}/>
+                        <Engagements comments={discussion.comments} likes={discussion.likes} handleLike={handleDiscussionLike}/>
                     </div>
                 </div>
                 <Comments comments={[...discussion.comments, ...discussion.comments, ...discussion.comments]} 
-                          withViewAll={false}/>
+                          withViewAll={false} handleAddComment={handleDiscussionComment}/>
             </div>   
             <div className="similar-posts">
                 <h3 className="similar-posts__heading">{`Similar Posts for ${discussion.gameName}`}</h3>
