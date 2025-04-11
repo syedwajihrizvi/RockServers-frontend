@@ -16,6 +16,7 @@ import { PreviewCard } from "./PreviewCard";
 import { Comments } from "./Comments";
 import { useGlobalContext } from "../providers/global-provider";
 import { LoginToastComponent } from "./CustomToasts/LoginToastComponent";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const PostDetails = () => {
   const {id: postId} = useParams()
@@ -26,6 +27,7 @@ export const PostDetails = () => {
   const { handleSetGameInfo, handleSetPost } = useQueryStore()
   const navigate = useNavigate()
   const { isLoggedIn } = useGlobalContext()
+  const queryClient = useQueryClient()
 
   useEffect(() => {
     if (post) {
@@ -71,6 +73,18 @@ export const PostDetails = () => {
   const handlePostLike = () => {
     if (!isLoggedIn) 
         toast(LoginToastComponent({action: "Like this Post", handleClick: handleToastButtonClick}), {autoClose: 5000})
+    else {
+        // Increment the post like
+        apiClient.patch(`/posts/${post?.id}/updateLikes`, true, {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }).then(res => {
+            console.log(res.data)
+            queryClient.invalidateQueries({ queryKey: ["posts", post?.id]})
+         }).catch(err => console.log(err))
+        // Refetch the query
+    }
   }
 
   const handlePostComment = () => {

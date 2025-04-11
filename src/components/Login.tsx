@@ -1,10 +1,9 @@
 import { IoIosEye, IoIosEyeOff } from "react-icons/io";
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import apiClient from "../utils/services/dataServices"
 import { IUser } from "../utils/interfaces/Interfaces";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from '@tanstack/react-query'
-import { useGlobalContext } from "../providers/global-provider";
 
 export const Login = () => {
   const [form, setForm] = useState<{emailOrUsername: string, password: string}>({emailOrUsername: "", password: ""})
@@ -12,12 +11,7 @@ export const Login = () => {
   const [viewPassword, setViewPassword] = useState(false)
   const [loginError, setLoginError] = useState(false)
   const navigate = useNavigate()
-  const { isLoggedIn } = useGlobalContext()
   // If logged in, then just navigate to main page
-  useEffect(() => {
-    if (isLoggedIn)
-      navigate('/')
-  })
 
   const handleFormSubmit = () => {
     const { emailOrUsername, password } = form
