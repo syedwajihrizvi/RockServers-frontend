@@ -85,9 +85,15 @@ export const DiscussionDetails = () => {
   }
 
   const handleSubmitComment = (commentContent: string | undefined) => {
-    console.log(commentContent)
+    const jwtToken = localStorage.getItem('x-auth-token')
+    apiClient.post('/discussionComments', { content: commentContent, discussionId: discussion?.id},
+                  { headers: {Authorization: `Bearer ${jwtToken}`}})
+             .then(res => {
+                console.log(res.data)
+                queryClient.invalidateQueries({ queryKey: ["discussions", discussion?.id]})
+            })
+             .catch(err => console.log(err))
   }
-
   return (
     <div className="card-details__container">
         <ToastContainer
@@ -122,7 +128,7 @@ export const DiscussionDetails = () => {
                         <Engagements comments={discussion.comments} likes={discussion.likes} handleLike={handleDiscussionLike}/>
                     </div>
                 </div>
-                <Comments comments={[...discussion.comments, ...discussion.comments, ...discussion.comments]} 
+                <Comments comments={discussion.comments} 
                           withViewAll={false} handleAddComment={handleDiscussionComment}
                           handleSubmitComment={handleSubmitComment}/>
             </div>   
