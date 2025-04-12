@@ -15,6 +15,7 @@ import apiClient from "../utils/services/dataServices"
 import useQueryStore from '../stores/useQueryStore'
 import { LoginToastComponent } from "./CustomToasts/LoginToastComponent";
 import { useGlobalContext } from '../providers/global-provider'
+import { useQueryClient } from '@tanstack/react-query'
 
 export const DiscussionDetails = () => {
   const {id: discussionId} = useParams()
@@ -25,6 +26,7 @@ export const DiscussionDetails = () => {
   const { handleSetGameInfo, handleSetPost } = useQueryStore()
   const { isLoggedIn } = useGlobalContext()
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
 
   useEffect(() => {
     if (discussion?.imagePath)
@@ -64,6 +66,17 @@ export const DiscussionDetails = () => {
   const handleDiscussionLike = () => {
     if (!isLoggedIn) 
         toast(LoginToastComponent({action: "Like this Post", handleClick: handleToastButtonClick}), {autoClose: 5000})
+    else {
+        // Increment the discussion like
+        apiClient.patch(`/discussions/${discussion?.id}/updateLikes`, true, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((res) => {
+            console.log(res.data)
+            queryClient.invalidateQueries({queryKey: ['discussions', discussion?.id]})
+        })
+    }
   }
 
   const handleDiscussionComment = () => {
