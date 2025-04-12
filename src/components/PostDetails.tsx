@@ -79,17 +79,26 @@ export const PostDetails = () => {
             headers: {
               'Content-Type': 'application/json'
             }
-          }).then(res => {
-            console.log(res.data)
+          }).then(() => {
             queryClient.invalidateQueries({ queryKey: ["posts", post?.id]})
          }).catch(err => console.log(err))
-        // Refetch the query
     }
   }
 
   const handlePostComment = () => {
     if (!isLoggedIn)
         toast(LoginToastComponent({action: "Comment on this Post", handleClick: handleToastButtonClick}), {autoClose: 5000})
+  }
+
+  const handleSubmitComment = (commentContent: string | undefined) => {
+    const jwtToken = localStorage.getItem('x-auth-token')
+    apiClient.post('/comments', { title: "Title", content: commentContent, postId: postId},
+                  { headers: {Authorization: `Bearer ${jwtToken}`}})
+             .then(res => {
+                console.log(res.data)
+                queryClient.invalidateQueries({ queryKey: ["posts", post?.id]})
+            })
+             .catch(err => console.log(err))
   }
 
   return (
@@ -123,7 +132,7 @@ export const PostDetails = () => {
                     </div>
                     <Engagements comments={post.comments} likes={post.likes} handleLike={handlePostLike}/>
                 </div>
-                <Comments comments={post.comments} withViewAll={true} handleAddComment={handlePostComment}/>
+                <Comments comments={post.comments} withViewAll={true} handleAddComment={handlePostComment} handleSubmitComment={handleSubmitComment}/>
             </div>
             <div className="similar-posts">
                 <h3 className="similar-posts__heading">{`Similar Posts for ${post.gameName}`}</h3>

@@ -675,6 +675,7 @@ html, body, #root {
 .card-details-card__comments {
   background-color: white;
   padding: 0 1rem;
+  width: 50rem;
 }
 
 .card-details-fixed__comments {

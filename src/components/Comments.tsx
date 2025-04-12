@@ -1,13 +1,16 @@
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { IComment } from "../utils/interfaces/Interfaces"
 import { Comment } from "./Comment"
 import Avatar from "../assets/images/avatar.webp"
 import { MdFilterList } from "react-icons/md"
 import { useGlobalContext } from "../providers/global-provider"
 
-export const AddComment = ({customClass, handleAddComment}: 
-    {customClass?: string, handleAddComment: () => void}) => {
+export const AddComment = ({customClass, handleAddComment, handleSubmitComment}: 
+    {customClass?: string, handleAddComment: () => void, 
+    handleSubmitComment: (commentContent: string | undefined) => void}) => {
     const [addingComment, setAddingComment] = useState(false)
+    const [commentBody, setCommentBody] = useState("")
+    const inputRef = useRef<HTMLInputElement>(null)
     const { isLoggedIn } = useGlobalContext()
 
     const handleSetAddingComment = (target: HTMLInputElement) => {
@@ -19,19 +22,33 @@ export const AddComment = ({customClass, handleAddComment}:
             setAddingComment(true)
     }
 
+    const handleCancelClick = () => {
+        if (inputRef && inputRef.current)
+            inputRef.current.value = ""
+        setAddingComment(false)      
+    }
+
+    const handleSubmitClick = () => {
+        handleSubmitComment(commentBody)
+        if (inputRef && inputRef.current)
+            inputRef.current.value = ""
+        setAddingComment(false)
+    }
+
     return (
         <div className={`card-details-card__comments__add-wrapper ${customClass ? customClass : ''}`}>
             <div className="card-details-card__comments__add">
                 <img src={Avatar} alt="Avatar"/>
                 <input type="text" placeholder="Add Comment..." 
                     onFocus={(event) => handleSetAddingComment(event.target)}
-                    onBlur={() => setAddingComment(false)}
-                    />
+                    onChange={(event) => setCommentBody(event.target.value)}
+                    ref={inputRef}/>
             </div>
             <div className={`button-group add-comment add-comment--${addingComment ?  'shown' : 'hidden'}`}>
-                <button className="btn btn--xs btn--success">Submit</button>
+                <button className="btn btn--xs btn--success" 
+                        onClick={() => handleSubmitClick()}>Submit</button>
                 <button className="btn btn--xs btn--danger" 
-                        onClick={() => setAddingComment(false)}>
+                        onClick={() => handleCancelClick()}>
                             Cancel
                 </button>
             </div>
@@ -39,8 +56,10 @@ export const AddComment = ({customClass, handleAddComment}:
     )
 }
 
-export const Comments = ({comments, withViewAll, handleAddComment}: 
-    {comments: IComment[], withViewAll: boolean, handleAddComment: () => void}) => {
+export const Comments = ({comments, withViewAll, handleAddComment, handleSubmitComment}: 
+    {comments: IComment[], withViewAll: boolean, 
+     handleAddComment: () => void, 
+     handleSubmitComment: (commentContent: string | undefined) => void}) => {
     const [viewAll, setViewAll] = useState(false)
     const renderComments = (comments: IComment[]) => {
         if (withViewAll)
@@ -51,7 +70,7 @@ export const Comments = ({comments, withViewAll, handleAddComment}:
     return withViewAll ? 
         <div className="card-details-card__comments">
             <h1>{comments ? `${comments.length} Comments` : 'No Comments'}</h1>
-            <AddComment handleAddComment={handleAddComment}/>
+            <AddComment handleAddComment={handleAddComment} handleSubmitComment={handleSubmitComment}/>
             {comments && 
                 renderComments(comments).map(comment => (
                     <Comment comment={comment}/>
@@ -69,6 +88,7 @@ export const Comments = ({comments, withViewAll, handleAddComment}:
                     <Comment comment={comment}/>
                 ))}
                 </div>
-                <AddComment customClass='with-x-padding' handleAddComment={handleAddComment}/>
+                <AddComment customClass='with-x-padding' handleAddComment={handleAddComment} 
+                            handleSubmitComment={handleSubmitComment}/>
             </div>
 }

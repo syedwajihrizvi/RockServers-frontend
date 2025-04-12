@@ -71,6 +71,10 @@ export const DiscussionDetails = () => {
         toast(LoginToastComponent({action: "Comment on this Post", handleClick: handleToastButtonClick}), {autoClose: 5000})
   }
 
+  const handleSubmitComment = (commentContent: string | undefined) => {
+    console.log(commentContent)
+  }
+
   return (
     <div className="card-details__container">
         <ToastContainer
@@ -106,7 +110,8 @@ export const DiscussionDetails = () => {
                     </div>
                 </div>
                 <Comments comments={[...discussion.comments, ...discussion.comments, ...discussion.comments]} 
-                          withViewAll={false} handleAddComment={handleDiscussionComment}/>
+                          withViewAll={false} handleAddComment={handleDiscussionComment}
+                          handleSubmitComment={handleSubmitComment}/>
             </div>   
             <div className="similar-posts">
                 <h3 className="similar-posts__heading">{`Similar Posts for ${discussion.gameName}`}</h3>
