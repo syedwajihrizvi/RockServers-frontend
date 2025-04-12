@@ -25,6 +25,7 @@ export const PostDetails = () => {
   const [successfullSessions, setSuccessfullSessions] = useState<ISession[]>([])
   const [similarPosts, setSimilarPosts] = useState<IPost[]>([])
   const { handleSetGameInfo, handleSetPost } = useQueryStore()
+  const { user } = useGlobalContext()
   const navigate = useNavigate()
   const { isLoggedIn } = useGlobalContext()
   const queryClient = useQueryClient()
@@ -75,11 +76,13 @@ export const PostDetails = () => {
         toast(LoginToastComponent({action: "Like this Post", handleClick: handleToastButtonClick}), {autoClose: 5000})
     else {
         // Increment the post like
-        apiClient.patch(`/posts/${post?.id}/updateLikes`, true, {
+        apiClient.patch(`/posts/${post?.id}/updateLikes`, !(user && user.likedPosts.includes(post!.id)), {
             headers: {
-              'Content-Type': 'application/json'
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${localStorage.getItem('x-auth-token')}`
             }
           }).then(() => {
+            queryClient.invalidateQueries({ queryKey: ["me"]})
             queryClient.invalidateQueries({ queryKey: ["posts", post?.id]})
          }).catch(err => console.log(err))
     }
@@ -130,7 +133,8 @@ export const PostDetails = () => {
                             <p>Posted by <span style={{fontWeight:'bold'}}>{post.appUser.username}</span> 2hr ago.</p>
                         </div>
                     </div>
-                    <Engagements comments={post.comments} likes={post.likes} handleLike={handlePostLike}/>
+                    <Engagements comments={post.comments} likes={post.likes} 
+                                 userLiked={user ? user.likedPosts.includes(post.id) : false} handleLike={handlePostLike}/>
                 </div>
                 <Comments comments={post.comments} withViewAll={true} handleAddComment={handlePostComment} handleSubmitComment={handleSubmitComment}/>
             </div>

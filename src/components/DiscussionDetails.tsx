@@ -125,7 +125,8 @@ export const DiscussionDetails = () => {
                                 <p>Posted by <span style={{fontWeight:'bold'}}>{discussion.appUser.username}</span> 2hr ago.</p>
                             </div>
                         </div>
-                        <Engagements comments={discussion.comments} likes={discussion.likes} handleLike={handleDiscussionLike}/>
+                        <Engagements comments={discussion.comments} likes={discussion.likes} 
+                                     handleLike={handleDiscussionLike}/>
                     </div>
                 </div>
                 <Comments comments={discussion.comments} 

@@ -67,5 +67,6 @@ export interface IPlatform {
 export interface IUser {
     id: string,
     email: string,
-    token: string
+    token: string,
+    likedPosts: number[]
 }

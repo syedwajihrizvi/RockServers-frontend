@@ -4,10 +4,13 @@ import { Engagements } from "./Engagements";
 import Avatar from "../assets/images/avatar.webp"
 import { generateImageUrl,renderPartialContent } from "../utils/helpers/helpers";
 import { toPlatformIcon } from "../utils/helpers/mappers";
+import { useGlobalContext } from "../providers/global-provider";
 
 export const PostCard = ({post}: {post: IPost}) => {
   // Check if post has an active session
   const navigate = useNavigate()
+  const { user } = useGlobalContext()
+
   return (
     <div className="post-card__wrapper" onClick={() => navigate(`/posts/${post.id}`)}>
         <div className="post-card__rating post-card__rating--black post-card__rating--md">
@@ -19,7 +22,7 @@ export const PostCard = ({post}: {post: IPost}) => {
             <div className="post-card__content">
                 <span className="post-card__heading">
                     <h1 className="post-card__heading__title">{post.title}</h1>
-                    <Engagements comments={post.comments} likes={post.likes}/>
+                    <Engagements comments={post.comments} likes={post.likes} userLiked={user ? user.likedPosts.includes(post.id) : false}/>
                 </span>
                 <p className="post-card__description">
                   {renderPartialContent(post.description)}

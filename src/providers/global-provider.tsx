@@ -1,8 +1,11 @@
 import { createContext, ReactNode, useContext, useEffect } from "react";
 import { useUser } from "../hooks/useUser";
+import { IUser } from "../utils/interfaces/Interfaces";
 
 interface GlobalContextType {
-    isLoggedIn: boolean
+    isLoggedIn: boolean,
+    user: IUser | undefined,
+    isLoading: boolean
 }
 
 const GlobalContext = createContext<GlobalContextType | undefined>(undefined)
@@ -17,7 +20,7 @@ export const GlobalProvider = ({ children } : {children: ReactNode}) => {
 
     const isLoggedIn = user && user?.email ? true : false
     return (
-    <GlobalContext.Provider value={{isLoggedIn}}>
+    <GlobalContext.Provider value={{isLoggedIn, user, isLoading}}>
         {children}
     </GlobalContext.Provider>
     )
