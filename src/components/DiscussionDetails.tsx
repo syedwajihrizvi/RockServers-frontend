@@ -92,9 +92,8 @@ export const DiscussionDetails = () => {
     const jwtToken = localStorage.getItem('x-auth-token')
     apiClient.post('/discussionComments', { content: commentContent, discussionId: discussion?.id},
                   { headers: {Authorization: `Bearer ${jwtToken}`}})
-             .then(res => {
-                console.log(res.data)
-                queryClient.invalidateQueries({ queryKey: ["discussions", discussion?.id]})
+             .then(() => {
+                queryClient.invalidateQueries({ queryKey: ["discussionComments", discussion?.id]})
             })
              .catch(err => console.log(err))
   }
@@ -129,7 +128,7 @@ export const DiscussionDetails = () => {
                                 <p>Posted by <span style={{fontWeight:'bold'}}>{discussion.appUser.username}</span> 2hr ago.</p>
                             </div>
                         </div>
-                        <Engagements comments={discussion.comments} likes={discussion.likes} 
+                        <Engagements comments={discussionComments} likes={discussion.likes} 
                                      handleLike={handleDiscussionLike}
                                      userLiked={userDidLike(user?.likedDiscussions, discussion.id)}/>
                     </div>

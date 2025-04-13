@@ -1,8 +1,9 @@
 import { KeyboardEvent, useEffect, useRef, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import useQueryStore from "../stores/useQueryStore";
+import { useNavigate } from "react-router-dom";
 export const SearchInput = () => {
-
+  const navigate = useNavigate()
   const [searchInput, setSearchInput] = useState("")
   const searchDiv = useRef<HTMLDivElement>(null)
   const searchIcon = useRef<HTMLElement>(null)
@@ -25,8 +26,11 @@ export const SearchInput = () => {
   }, [])
 
   const handleKeyDown = (event: KeyboardEvent) => {
-    if (event.key == 'Enter')
+    if (event.key == 'Enter') {
+      navigate('/')
       handleSearch(searchInput.length > 0 ? searchInput : '')
+    }
+
   }
 
   return (

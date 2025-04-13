@@ -12,7 +12,7 @@ function formatLikes(likes: number) {
 }
 
 export const Engagements = ({comments, likes, userLiked, handleLike}: 
-    {comments: IComment[] | number, likes: number, userLiked: boolean, handleLike?: () => void}) => {
+    {comments: IComment[] | undefined, likes: number, userLiked: boolean, handleLike?: () => void}) => {
   
   const commentCount = Array.isArray(comments) ? comments && comments.length : typeof comments == 'number' ? comments : 0;
 

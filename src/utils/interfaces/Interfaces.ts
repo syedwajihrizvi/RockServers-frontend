@@ -1,9 +1,10 @@
 export interface IComment {
     id: number,
+    appUserId: string,
     title: string,
     content: string,
     commentedBy: string,
-    commentedAt: Date,
+    commentedAt: string,
     likes: number,
     dislikes: number
 }

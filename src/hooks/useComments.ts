@@ -4,7 +4,7 @@ import { IComment } from "../utils/interfaces/Interfaces"
 
 export const useComment = (contentId:number) => {
     const fetchComments = () =>
-        apiClient.get<IComment[]>("/comments", {params: {postId: contentId}})
+        apiClient.get<IComment[]>("/comments", {params: {contentId}})
                  .then(res => res.data)
     return useQuery<IComment[], Error>({
         queryKey: ['comments', contentId],
@@ -14,7 +14,7 @@ export const useComment = (contentId:number) => {
 
 export const useDiscussionComment = (contentId:number) => {
     const fetchComments = () =>
-        apiClient.get<IComment[]>("/discussionComments", {params: {postId: contentId}})
+        apiClient.get<IComment[]>("/discussionComments", {params: {contentId}})
                  .then(res => res.data)
     return useQuery<IComment[], Error>({
         queryKey: ['discussionComments', contentId],

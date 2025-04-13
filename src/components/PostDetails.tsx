@@ -133,7 +133,7 @@ export const PostDetails = () => {
                             <p>Posted by <span style={{fontWeight:'bold'}}>{post.appUser.username}</span> 2hr ago.</p>
                         </div>
                     </div>
-                    <Engagements comments={post.comments} likes={post.likes} 
+                    <Engagements comments={postComments} likes={post.likes} 
                                  userLiked={userDidLike(user?.likedPosts, post.id)} handleLike={handlePostLike}/>
                 </div>
                 {
