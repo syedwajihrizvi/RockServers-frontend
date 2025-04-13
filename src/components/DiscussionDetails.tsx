@@ -105,7 +105,7 @@ export const DiscussionDetails = () => {
         {isLoading && <Skeleton customClass="skeleton--lg"/>}
         {!isLoading && discussion &&
         <>
-        <div className="card-details-card__wrapper">
+        <div className="card-details-card__wrapper post-details__wrapper">
             <div className="card-details-card">
                 <div>
                     <div className="card-details__img-wrapper">
