@@ -38,3 +38,7 @@ export const formatSecondsToString = (totalSeconds: number): string => {
   
     return [h, m].filter(Boolean).join(' and ') || '0 minutes'
 }
+
+export const userDidLike = (likes: number[] | undefined, target: number) => {
+    return likes ? likes.includes(target) : false
+}

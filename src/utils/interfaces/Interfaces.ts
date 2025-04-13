@@ -68,5 +68,6 @@ export interface IUser {
     id: string,
     email: string,
     token: string,
-    likedPosts: number[]
+    likedPosts: number[],
+    likedDiscussions: number[]
 }

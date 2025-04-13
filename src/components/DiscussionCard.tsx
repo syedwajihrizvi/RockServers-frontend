@@ -3,9 +3,11 @@ import Avatar from "../assets/images/avatar.webp"
 import { generateImageUrl, renderPartialContent } from '../utils/helpers/helpers'
 import { IDiscussion } from '../utils/interfaces/Interfaces'
 import { Engagements } from "./Engagements"
+import { useGlobalContext } from "../providers/global-provider"
 
 export const DiscussionCard = ({discussion}: {discussion: IDiscussion}) => {
   const navigate = useNavigate()
+  const { user } = useGlobalContext()
   return (
     <div className="post-card__wrapper" onClick={() => navigate(`/discussions/${discussion.id}`)}>
         <div className="post-card">
@@ -13,7 +15,8 @@ export const DiscussionCard = ({discussion}: {discussion: IDiscussion}) => {
             <div className="post-card__content">
                 <span className="post-card__heading">
                     <h1 className="post-card__heading__title">{discussion.title}</h1>
-                    <Engagements likes={discussion.likes} comments={discussion.comments}/>
+                    <Engagements likes={discussion.likes} comments={discussion.comments}
+                                 userLiked={user ? user.likedDiscussions.includes(discussion.id) : false}/>
                 </span>
                 <p className="post-card__description">
                     {renderPartialContent(discussion.content)}

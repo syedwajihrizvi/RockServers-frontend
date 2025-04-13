@@ -5,8 +5,8 @@ import Avatar from "../assets/images/avatar.webp"
 import { CiCirclePlus } from "react-icons/ci";
 import { ToastContainer, toast } from 'react-toastify'
 
-import { IPost, ISession } from "../utils/interfaces/Interfaces"
-import { formatStringDate, generateImageUrl, getDateDifference, getSuccessfulSessions } from "../utils/helpers/helpers";
+import { IPost } from "../utils/interfaces/Interfaces"
+import { formatStringDate, generateImageUrl, getDateDifference, userDidLike } from "../utils/helpers/helpers";
 import useQueryStore from "../stores/useQueryStore"
 import { Engagements } from "./Engagements"
 import { Skeleton } from "./Skeleton"
@@ -17,12 +17,13 @@ import { Comments } from "./Comments";
 import { useGlobalContext } from "../providers/global-provider";
 import { LoginToastComponent } from "./CustomToasts/LoginToastComponent";
 import { useQueryClient } from "@tanstack/react-query";
+import { useSessions } from "../hooks/useSessions";
 
 export const PostDetails = () => {
   const {id: postId} = useParams()
   const {data:post, isLoading} = usePost(parseInt(postId as string))
+  const {data: successfullSessions } = useSessions(parseInt(postId as string), true, false) 
   const [isLoadingSimilarPosts, setIsLoadingSimilarPosts] = useState(false)
-  const [successfullSessions, setSuccessfullSessions] = useState<ISession[]>([])
   const [similarPosts, setSimilarPosts] = useState<IPost[]>([])
   const { handleSetGameInfo, handleSetPost } = useQueryStore()
   const { user } = useGlobalContext()
@@ -32,8 +33,6 @@ export const PostDetails = () => {
 
   useEffect(() => {
     if (post) {
-        setIsLoadingSimilarPosts(true)
-        setSuccessfullSessions(getSuccessfulSessions(post))
         apiClient.get<IPost[]>(
             '/posts', 
             {params: {
@@ -76,7 +75,7 @@ export const PostDetails = () => {
         toast(LoginToastComponent({action: "Like this Post", handleClick: handleToastButtonClick}), {autoClose: 5000})
     else {
         // Increment the post like
-        apiClient.patch(`/posts/${post?.id}/updateLikes`, !(user && user.likedPosts.includes(post!.id)), {
+        apiClient.patch(`/posts/${post?.id}/updateLikes`, !(user && post && userDidLike(user.likedPosts, post.id)), {
             headers: {
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${localStorage.getItem('x-auth-token')}`
@@ -97,8 +96,7 @@ export const PostDetails = () => {
     const jwtToken = localStorage.getItem('x-auth-token')
     apiClient.post('/comments', { title: "Title", content: commentContent, postId: postId},
                   { headers: {Authorization: `Bearer ${jwtToken}`}})
-             .then(res => {
-                console.log(res.data)
+             .then(() => {
                 queryClient.invalidateQueries({ queryKey: ["posts", post?.id]})
             })
              .catch(err => console.log(err))
@@ -134,7 +132,7 @@ export const PostDetails = () => {
                         </div>
                     </div>
                     <Engagements comments={post.comments} likes={post.likes} 
-                                 userLiked={user ? user.likedPosts.includes(post.id) : false} handleLike={handlePostLike}/>
+                                 userLiked={userDidLike(user?.likedPosts, post.id)} handleLike={handlePostLike}/>
                 </div>
                 <Comments comments={post.comments} withViewAll={true} handleAddComment={handlePostComment} handleSubmitComment={handleSubmitComment}/>
             </div>
@@ -151,7 +149,7 @@ export const PostDetails = () => {
                         fontSize={40} color="white" 
                         className="icon" onClick={() => handleSimilarPostClick()}/>
                 </div>
-                <div>
+                {successfullSessions && <div>
                     {successfullSessions.length > 0 ? 
                     <div className="post-session-history">
                         <h3 className="session-table__title">Session History</h3>
@@ -175,7 +173,7 @@ export const PostDetails = () => {
                         </table>
                     </div> : 
                     <h3>This post has not had any previous sessions.</h3>}
-                </div>
+                </div>}
             </div>
         </div>}
     </div>

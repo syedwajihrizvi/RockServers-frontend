@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { useDiscussion } from '../hooks/useDiscussions'
 import { Skeleton } from './Skeleton'
-import { generateImageUrl } from '../utils/helpers/helpers'
+import { generateImageUrl, userDidLike } from '../utils/helpers/helpers'
 import Avatar from "../assets/images/avatar.webp"
 import { ToastContainer, toast } from 'react-toastify'
 
@@ -25,6 +25,7 @@ export const DiscussionDetails = () => {
   const [similarDiscussions, setSimilarDiscussions] = useState<IDiscussion[]>([])
   const { handleSetGameInfo, handleSetPost } = useQueryStore()
   const { isLoggedIn } = useGlobalContext()
+  const { user } = useGlobalContext()
   const navigate = useNavigate()
   const queryClient = useQueryClient()
 
@@ -68,12 +69,13 @@ export const DiscussionDetails = () => {
         toast(LoginToastComponent({action: "Like this Post", handleClick: handleToastButtonClick}), {autoClose: 5000})
     else {
         // Increment the discussion like
-        apiClient.patch(`/discussions/${discussion?.id}/updateLikes`, true, {
+        apiClient.patch(`/discussions/${discussion?.id}/updateLikes`, !(user && discussion && userDidLike(user.likedDiscussions, discussion.id)), {
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('x-auth-token')}`
             }
-        }).then((res) => {
-            console.log(res.data)
+        }).then(() => {
+            queryClient.invalidateQueries({ queryKey: ["me"]})
             queryClient.invalidateQueries({queryKey: ['discussions', discussion?.id]})
         })
     }
@@ -126,7 +128,8 @@ export const DiscussionDetails = () => {
                             </div>
                         </div>
                         <Engagements comments={discussion.comments} likes={discussion.likes} 
-                                     handleLike={handleDiscussionLike}/>
+                                     handleLike={handleDiscussionLike}
+                                     userLiked={userDidLike(user?.likedDiscussions, discussion.id)}/>
                     </div>
                 </div>
                 <Comments comments={discussion.comments} 
