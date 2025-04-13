@@ -16,10 +16,12 @@ import useQueryStore from '../stores/useQueryStore'
 import { LoginToastComponent } from "./CustomToasts/LoginToastComponent";
 import { useGlobalContext } from '../providers/global-provider'
 import { useQueryClient } from '@tanstack/react-query'
+import { useDiscussionComment } from '../hooks/useComments'
 
 export const DiscussionDetails = () => {
   const {id: discussionId} = useParams()
   const {data: discussion, isLoading} = useDiscussion(parseInt(discussionId as string))
+  const {data: discussionComments} = useDiscussionComment(parseInt(discussionId as string))
   const [thumbImage, setThumbImage] = useState('')
   const [isLoadingSimilarDiscussions, setIsLoadingSimilarDiscussions] = useState(false)
   const [similarDiscussions, setSimilarDiscussions] = useState<IDiscussion[]>([])
@@ -132,9 +134,10 @@ export const DiscussionDetails = () => {
                                      userLiked={userDidLike(user?.likedDiscussions, discussion.id)}/>
                     </div>
                 </div>
-                <Comments comments={discussion.comments} 
+                {discussionComments && <Comments comments={discussionComments} 
                           withViewAll={false} handleAddComment={handleDiscussionComment}
-                          handleSubmitComment={handleSubmitComment}/>
+                          handleSubmitComment={handleSubmitComment}
+                          commentType="discussionComments"/>}
             </div>   
             <div className="similar-posts">
                 <h3 className="similar-posts__heading">{`Similar Posts for ${discussion.gameName}`}</h3>

@@ -4,6 +4,9 @@ import { Comment } from "./Comment"
 import Avatar from "../assets/images/avatar.webp"
 import { MdFilterList } from "react-icons/md"
 import { useGlobalContext } from "../providers/global-provider"
+import { userDidLike } from "../utils/helpers/helpers"
+import apiClient from "../utils/services/dataServices"
+import { useQueryClient } from "@tanstack/react-query"
 
 export const AddComment = ({customClass, handleAddComment, handleSubmitComment}: 
     {customClass?: string, handleAddComment: () => void, 
@@ -56,15 +59,29 @@ export const AddComment = ({customClass, handleAddComment, handleSubmitComment}:
     )
 }
 
-export const Comments = ({comments, withViewAll, handleAddComment, handleSubmitComment}: 
+export const Comments = ({comments, withViewAll, handleAddComment, handleSubmitComment, commentType}: 
     {comments: IComment[], withViewAll: boolean, 
      handleAddComment: () => void, 
-     handleSubmitComment: (commentContent: string | undefined) => void}) => {
+     handleSubmitComment: (commentContent: string | undefined) => void,
+     commentType: "comments" | "discussionComments"}) => {
     const [viewAll, setViewAll] = useState(false)
+    const { user } = useGlobalContext()
+    const queryClient = useQueryClient()
     const renderComments = (comments: IComment[]) => {
         if (withViewAll)
             return comments.length < 2 || viewAll ? comments : comments.slice(0, 2)
         return comments
+    }
+    const handleCommentLike = (commentId: number | undefined) => {
+        apiClient.patch(`/${commentType}/${commentId}/updateLikes`, !(user && commentId && userDidLike(commentType == 'comments' ? user.likedComments : user.likedDiscussionComments, commentId)), {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${localStorage.getItem('x-auth-token')}`
+            }
+          }).then(() => {
+            queryClient.invalidateQueries({queryKey: ["me"]})
+            queryClient.invalidateQueries({queryKey: [commentType]})
+          })
     }
 
     return withViewAll ? 
@@ -73,7 +90,9 @@ export const Comments = ({comments, withViewAll, handleAddComment, handleSubmitC
             <AddComment handleAddComment={handleAddComment} handleSubmitComment={handleSubmitComment}/>
             {comments && 
                 renderComments(comments).map(comment => (
-                    <Comment comment={comment}/>
+                    <Comment comment={comment} 
+                             userLiked={user? userDidLike(user.likedComments, comment.id) : false}
+                             handleLike={handleCommentLike}/>
             ))}
             {comments && comments.length > 2 && 
                 <div className="comment__view-all">
@@ -85,7 +104,9 @@ export const Comments = ({comments, withViewAll, handleAddComment, handleSubmitC
                 <div className="card-details-fixed__comments__content">
                 <h1>{comments.length > 0 ? `${comments.length} Comments` : 'No Comments'}</h1>
                 {renderComments(comments).map(comment => (
-                    <Comment comment={comment}/>
+                    <Comment comment={comment} 
+                             userLiked={user? userDidLike(commentType == 'comments' ? user.likedComments : user.likedDiscussionComments, comment.id) : false}
+                             handleLike={handleCommentLike}/>
                 ))}
                 </div>
                 <AddComment customClass='with-x-padding' handleAddComment={handleAddComment} 

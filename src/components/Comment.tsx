@@ -1,8 +1,9 @@
 import { IComment } from "../utils/interfaces/Interfaces"
 import Avatar from "../assets/images/avatar.webp"
-import { FaHeart, FaThumbsDown } from "react-icons/fa"
+import { FaHeart, FaRegHeart } from "react-icons/fa"
 
-export const Comment = ({comment}: {comment: IComment}) => {
+export const Comment = ({comment, userLiked, handleLike}: 
+{comment: IComment, userLiked: boolean, handleLike: (commentId: number | undefined) => void}) => {
   return (
     <div className="comment">
         <div className="comment__content">
@@ -16,8 +17,12 @@ export const Comment = ({comment}: {comment: IComment}) => {
             </div>
         </div>
         <div className="comment__engagement">
-            <span><FaHeart fontSize={12} className="icon" color='red'/><p>{comment.likes}</p></span>
-            <span><FaThumbsDown fontSize={12} className="icon"/></span>
+            <span>
+                {userLiked ? 
+                <FaHeart fontSize={12} className="icon" color='red' onClick={() => handleLike(comment.id)}/> : 
+                <FaRegHeart fontSize={12} className="icon" color='red' onClick={() => handleLike(comment.id)}/>}
+                <p>{comment.likes}</p>
+            </span>
         </div>
     </div>
   )

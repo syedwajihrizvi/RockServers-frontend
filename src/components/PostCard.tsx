@@ -22,7 +22,8 @@ export const PostCard = ({post}: {post: IPost}) => {
             <div className="post-card__content">
                 <span className="post-card__heading">
                     <h1 className="post-card__heading__title">{post.title}</h1>
-                    <Engagements comments={post.comments} likes={post.likes} userLiked={user ? user.likedPosts.includes(post.id) : false}/>
+                    <Engagements comments={post.comments} likes={post.likes} 
+                                 userLiked={user ? user.likedPosts.includes(post.id) : false}/>
                 </span>
                 <p className="post-card__description">
                   {renderPartialContent(post.description)}

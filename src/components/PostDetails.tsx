@@ -18,11 +18,13 @@ import { useGlobalContext } from "../providers/global-provider";
 import { LoginToastComponent } from "./CustomToasts/LoginToastComponent";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSessions } from "../hooks/useSessions";
+import { useComment } from "../hooks/useComments";
 
 export const PostDetails = () => {
   const {id: postId} = useParams()
   const {data:post, isLoading} = usePost(parseInt(postId as string))
-  const {data: successfullSessions } = useSessions(parseInt(postId as string), true, false) 
+  const {data: successfullSessions } = useSessions(parseInt(postId as string), true, false)
+  const {data: postComments} = useComment(parseInt(postId as string))
   const [isLoadingSimilarPosts, setIsLoadingSimilarPosts] = useState(false)
   const [similarPosts, setSimilarPosts] = useState<IPost[]>([])
   const { handleSetGameInfo, handleSetPost } = useQueryStore()
@@ -97,7 +99,7 @@ export const PostDetails = () => {
     apiClient.post('/comments', { title: "Title", content: commentContent, postId: postId},
                   { headers: {Authorization: `Bearer ${jwtToken}`}})
              .then(() => {
-                queryClient.invalidateQueries({ queryKey: ["posts", post?.id]})
+                queryClient.invalidateQueries({ queryKey: ["comments", post?.id]})
             })
              .catch(err => console.log(err))
   }
@@ -134,7 +136,14 @@ export const PostDetails = () => {
                     <Engagements comments={post.comments} likes={post.likes} 
                                  userLiked={userDidLike(user?.likedPosts, post.id)} handleLike={handlePostLike}/>
                 </div>
-                <Comments comments={post.comments} withViewAll={true} handleAddComment={handlePostComment} handleSubmitComment={handleSubmitComment}/>
+                {
+                postComments &&
+                <Comments comments={postComments} 
+                withViewAll={true} 
+                handleAddComment={handlePostComment} 
+                handleSubmitComment={handleSubmitComment}
+                commentType="comments"/>
+                }
             </div>
             <div className="similar-posts">
                 <h3 className="similar-posts__heading">{`Similar Posts for ${post.gameName}`}</h3>
