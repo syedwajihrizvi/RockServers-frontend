@@ -7,7 +7,7 @@ const DropdownMenuDemo = () => {
 		<DropdownMenu.Root>
 			<DropdownMenu.Trigger asChild>
 				<button className="IconButton" aria-label="Customise options">
-					<HamburgerMenuIcon />
+					<HamburgerMenuIcon color="#03fc98"/>
 				</button>
 			</DropdownMenu.Trigger>
 

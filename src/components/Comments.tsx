@@ -106,7 +106,7 @@ export const Comments = ({comments, withViewAll, handleAddComment, handleSubmitC
             <AddComment handleAddComment={handleAddComment} handleSubmitComment={handleSubmitComment}/>
             {comments && 
                 renderComments(comments).map(comment => (
-                    <Comment comment={comment} 
+                    <Comment key={comment.id} comment={comment} 
                              userLiked={user? userDidLike(user.likedComments, comment.id) : false}
                              handleLike={handleCommentLike} commentType={commentType}/>
             ))}
@@ -120,7 +120,7 @@ export const Comments = ({comments, withViewAll, handleAddComment, handleSubmitC
                 <div className="card-details-fixed__comments__content">
                 <h1>{comments.length > 0 ? `${comments.length} Comments` : 'No Comments'}</h1>
                 {renderComments(comments).map(comment => (
-                    <Comment comment={comment} 
+                    <Comment key={comment.id} comment={comment} 
                              userLiked={user? userDidLike(commentType == 'comments' ? user.likedComments : user.likedDiscussionComments, comment.id) : false}
                              handleLike={handleCommentLike} commentType={commentType}/>
                 ))}

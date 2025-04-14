@@ -21,7 +21,7 @@ export interface IPost {
     id: number,
     title: string,
     description: string,
-    postedAt: Date,
+    postedAt: string,
     gameId: number,
     gameName: string,
     appUser: {
@@ -39,7 +39,7 @@ export interface IPost {
 
 export interface IDiscussion {
     id: number,
-    postedAt: Date,
+    postedAt: string,
     title: string,
     gameId: number,
     gameName: string,

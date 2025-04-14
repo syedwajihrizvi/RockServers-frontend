@@ -2,7 +2,7 @@ import { IPost } from "../utils/interfaces/Interfaces";
 import { useNavigate } from "react-router-dom";
 import { Engagements } from "./Engagements";
 import Avatar from "../assets/images/avatar.webp"
-import { generateImageUrl,renderPartialContent } from "../utils/helpers/helpers";
+import { formatStringDate, generateImageUrl,renderPartialContent } from "../utils/helpers/helpers";
 import { toPlatformIcon } from "../utils/helpers/mappers";
 import { useGlobalContext } from "../providers/global-provider";
 
@@ -31,7 +31,7 @@ export const PostCard = ({post}: {post: IPost}) => {
                 <div className="post-card__footer">
                   <div className="card__user-info">
                     <img className="card__avatar" src={Avatar} alt="Avatar"/>
-                    <p>Posted by <span style={{fontWeight:'bold'}}>{post.appUser.username}</span> 2hr ago.</p>
+                    <p>Posted by <span style={{fontWeight:'bold'}}>{post.appUser.username}</span> {formatStringDate(post.postedAt)}</p>
                   </div>
                   {toPlatformIcon(post.platformName, 16, 'white')}
                 </div>

@@ -12,13 +12,13 @@ export const PostsGrid = () => {
   const {gameName, postType} = useQueryStore()
   const renderPosts = () => {
     if (isLoadingPosts || isLoadingDiscussions) {
-      return [...Array(12).keys()].map(() => <Skeleton customClass='skeleton--md'/>)
+      return [...Array(12).keys()].map((key) => <Skeleton key={key} customClass='skeleton--md'/>)
     } 
     else if (!isLoadingPosts && (postType == "posts")) {
-      return posts!.map((post) => <PostCard post={post}/>)
+      return posts!.map((post) => <PostCard key={post.id} post={post}/>)
     }
     else if (!isLoadingDiscussions && (postType == "discussions")) {
-      return discussions!.map((discussion) => <DiscussionCard discussion={discussion}/>)
+      return discussions!.map((discussion) => <DiscussionCard key={discussion.id} discussion={discussion}/>)
     } else {
       // Render an assorted version of all posts
       console.log("Invalid post type")

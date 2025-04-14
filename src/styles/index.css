@@ -384,6 +384,16 @@ html, body, #root {
   color: var(--secondary);
 }
 
+.create_icon {
+  color: #03fc98;
+  transition: all 0.3s
+}
+
+.create_icon:hover {
+  scale: 1.05;
+  cursor: pointer;
+}
+
 .nav__options {
   display: flex;
   align-items: center;

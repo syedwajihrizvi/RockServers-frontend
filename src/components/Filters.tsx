@@ -36,7 +36,7 @@ export const Filters = () => {
   return (
     !isLoadingGames && !isLoadingPlatforms && games && platforms &&
     <div className="filters filter--games">
-        <select onChange={(event) => handleGameOptionSelect(event.target.value)}>
+        <select  onChange={(event) => handleGameOptionSelect(event.target.value)}>
             <option value={-1}>All Games</option>
             {games.map(game => 
             <option 

@@ -130,7 +130,7 @@ export const PostDetails = () => {
                         <div className="card__user-info">
                             <img className="card__avatar" src={Avatar} 
                                 alt="Avatar"/>
-                            <p>Posted by <span style={{fontWeight:'bold'}}>{post.appUser.username}</span> 2hr ago.</p>
+                            <p>Posted by <span style={{fontWeight:'bold'}}>{post.appUser.username}</span> {formatStringDate(post.postedAt)}</p>
                         </div>
                     </div>
                     <Engagements comments={postComments} likes={post.likes} 
@@ -149,10 +149,10 @@ export const PostDetails = () => {
                 <h3 className="similar-posts__heading">{`Similar Posts for ${post.gameName}`}</h3>
                 <div className="similar-posts__content">
                     {isLoadingSimilarPosts &&
-                    [...Array(3).keys()].map(() => 
-                        <Skeleton customClass="skeleton skeleton--dynamic"/>)}
+                    [...Array(3).keys()].map((key) => 
+                        <Skeleton key={key} customClass="skeleton skeleton--dynamic"/>)}
                     {!isLoadingSimilarPosts && similarPosts && 
-                    similarPosts.map(post => <PreviewCard post={post}/>)
+                    similarPosts.map(post => <PreviewCard key={post.id} post={post}/>)
                     }
                     <CiCirclePlus 
                         fontSize={40} color="white" 
@@ -164,21 +164,25 @@ export const PostDetails = () => {
                         <h3 className="session-table__title">Session History</h3>
                         <h5 className="session-table__subtitle">{`This post has had ${successfullSessions.length}`} completed sessions.</h5>
                         <table className="session-table">
-                            <tr className="session-table__header">
-                                <th>Start</th>
-                                <th>Duration</th>
-                                <th>Player Count</th>
-                                <th>Rating</th>
-                            </tr>
-                            {successfullSessions.map(session => {
-                                return (
-                                <tr className="session-table__data">
-                                    <td>{formatStringDate(session.startTime)}</td>
-                                    <td>{getDateDifference(session.startTime, session.endTime!)}</td>
-                                    <td>{session.users.length}</td>
-                                    <td>4.3</td>
-                                </tr>)
-                            })}
+                            <thead>
+                                <tr className="session-table__header">
+                                    <th>Start</th>
+                                    <th>Duration</th>
+                                    <th>Player Count</th>
+                                    <th>Rating</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {successfullSessions.map(session => {
+                                    return (
+                                    <tr key={session.id} className="session-table__data">
+                                        <td>{formatStringDate(session.startTime)}</td>
+                                        <td>{getDateDifference(session.startTime, session.endTime!)}</td>
+                                        <td>{session.users.length}</td>
+                                        <td>4.3</td>
+                                    </tr>)
+                                })}
+                            </tbody>
                         </table>
                     </div> : 
                     <h3>This post has not had any previous sessions.</h3>}

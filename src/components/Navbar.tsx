@@ -1,5 +1,5 @@
-import { Toggle } from "./Toggle";
 import { SearchInput } from "./SearchInput";
+import { FaCirclePlus } from "react-icons/fa6";
 import Dropdown from "./Dropdown";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -27,8 +27,11 @@ export const Navbar = () => {
         </div>
         <SearchInput/>
         <div className="nav__options">
-            <Toggle/>
-            {isLoggedIn && <Dropdown/>}
+            {isLoggedIn && 
+            <>
+            <FaCirclePlus className="create_icon" size={30}/>
+            <Dropdown/>
+            </>}
             {!isLoggedIn && 
             <button className="btn btn--secondary btn--md" onClick={() => navigate('/account/register')}>
               Sign Up
@@ -42,8 +45,12 @@ export const Navbar = () => {
             <h3 className="title" onClick={() => navigate('/')}>ROCKSERVERS</h3>
         </div>
         <div className="nav__options">
-            <Toggle/>
-            {isLoggedIn && <Dropdown/>}
+            {isLoggedIn && 
+            <>
+            <FaCirclePlus className="create_icon" size={30}/>
+            <Dropdown/>
+            </>
+            }
             {!isLoggedIn && 
             <button className="btn btn--secondary btn--md">
               Sign Up

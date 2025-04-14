@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { useDiscussion } from '../hooks/useDiscussions'
 import { Skeleton } from './Skeleton'
-import { generateImageUrl, userDidLike } from '../utils/helpers/helpers'
+import { formatStringDate, generateImageUrl, userDidLike } from '../utils/helpers/helpers'
 import Avatar from "../assets/images/avatar.webp"
 import { ToastContainer, toast } from 'react-toastify'
 
@@ -115,7 +115,7 @@ export const DiscussionDetails = () => {
                     {discussion.otherImages && discussion.otherImages.length > 0 &&
                     <div className='discussion-details__other-images'>
                         {discussion.otherImages.map(image => (
-                            <img src={generateImageUrl(image)} onClick={() => setThumbImage(image)}/>
+                            <img key={image} src={generateImageUrl(image)} onClick={() => setThumbImage(image)}/>
                         ))}
                     </div>}
                     <div className="card-details-card__content">
@@ -125,7 +125,7 @@ export const DiscussionDetails = () => {
                             <div className="card__user-info">
                                 <img className="card__avatar" src={Avatar} 
                                     alt="Avatar"/>
-                                <p>Posted by <span style={{fontWeight:'bold'}}>{discussion.appUser.username}</span> 2hr ago.</p>
+                                <p>Posted by <span style={{fontWeight:'bold'}}>{discussion.appUser.username}</span> {formatStringDate(discussion.postedAt)}</p>
                             </div>
                         </div>
                         <Engagements comments={discussionComments} likes={discussion.likes} 
@@ -142,10 +142,10 @@ export const DiscussionDetails = () => {
                 <h3 className="similar-posts__heading">{`Similar Posts for ${discussion.gameName}`}</h3>
                 <div className="similar-posts__content">
                     {isLoadingSimilarDiscussions &&
-                    [...Array(3).keys()].map(() => 
-                        <Skeleton customClass="skeleton skeleton--dynamic"/>)}
+                    [...Array(3).keys()].map((key) => 
+                        <Skeleton key={`discussionSkeleton${key}`} customClass="skeleton skeleton--dynamic"/>)}
                     {!isLoadingSimilarDiscussions && similarDiscussions && 
-                    similarDiscussions.map(post => <PreviewCard post={post}/>)
+                    similarDiscussions.map(post => <PreviewCard key={post.id} post={post}/>)
                     }
                     <CiCirclePlus 
                         fontSize={40} color="white" 
