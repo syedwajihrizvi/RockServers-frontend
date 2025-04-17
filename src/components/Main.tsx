@@ -3,7 +3,7 @@ import { Navbar } from "./Navbar"
 
 export const Main = () => {
   return (
-    <div>
+    <div className="main-container">
         <Navbar/>
         <Outlet/>
     </div>

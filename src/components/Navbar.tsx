@@ -1,7 +1,7 @@
 import { SearchInput } from "./SearchInput";
 import { FaCirclePlus } from "react-icons/fa6";
 import Dropdown from "./Dropdown";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useQueryStore from "../stores/useQueryStore";
 import { useGlobalContext } from "../providers/global-provider";
@@ -11,6 +11,7 @@ export const Navbar = () => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth)
   const { handleResetAll } = useQueryStore()
   const { isLoggedIn } = useGlobalContext()
+
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth)
     window.addEventListener('resize', handleResize)
@@ -29,7 +30,7 @@ export const Navbar = () => {
         <div className="nav__options">
             {isLoggedIn && 
             <>
-            <FaCirclePlus className="create_icon" size={30}/>
+            <Link to="/create"><FaCirclePlus className="create_icon" size={30}/></Link>
             <Dropdown/>
             </>}
             {!isLoggedIn && 
@@ -47,7 +48,7 @@ export const Navbar = () => {
         <div className="nav__options">
             {isLoggedIn && 
             <>
-            <FaCirclePlus className="create_icon" size={30}/>
+            <Link to="/create"><FaCirclePlus className="create_icon" size={30}/></Link>
             <Dropdown/>
             </>
             }

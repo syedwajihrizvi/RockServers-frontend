@@ -7,6 +7,7 @@ import { Account } from "../components/Account";
 import { Login } from "../components/Login";
 import { Register } from "../components/Register";
 import { AccountSettings } from "../components/AccountSettings";
+import { Create } from "../components/Create";
 
 const router = createBrowserRouter([
     {
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
             {
                 path: 'discussions/:id',
                 element: <DiscussionDetails/>
+            },
+            {
+                path: 'create',
+                element: <Create/>
             }
         ]
     },

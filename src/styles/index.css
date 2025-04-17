@@ -1314,3 +1314,57 @@ html, body, #root {
 .toast-login__btn:hover {
   background-color: #01b66d;
 }
+
+/* Create */
+.create-container {
+  padding: 2rem;
+}
+
+.create-type {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.create-type .btn {
+  font-size: 2rem;
+}
+
+.create-input {
+  background-color: var(--secondary);
+  outline: none;
+  border: 0;
+  width: 40rem;
+  padding: 1rem 1.5rem;
+  font-size: 1.5rem;
+  border-radius: 1rem;
+  color: white
+}
+
+.create-post {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem
+}
+
+.create-textarea {
+  width: 40rem;
+  height: 20rem;
+  background-color: var(--secondary);
+  border-radius: 1rem;
+  border: 0;
+  font-size: 1.5rem;
+  padding: 1rem 1.5rem;
+  color: white
+}
+
+.create-option {
+  background-color: var(--secondary);
+  width: fit-content;
+  color: white;
+  font-size: 1.5rem;
+  padding: 1rem;
+  border-radius: 1rem;
+  outline: none;
+  border: 0;
+}
