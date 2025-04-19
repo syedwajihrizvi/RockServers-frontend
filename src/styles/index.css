@@ -1316,8 +1316,84 @@ html, body, #root {
 }
 
 /* Create */
+.create-container--wrapper {
+  position: relative;
+}
+
 .create-container {
   padding: 2rem;
+  overflow: hidden;
+}
+
+.create-choose-image__img {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.create-img__container {
+  width: 40%;
+  position: relative;
+}
+
+.create-img__container .icon {
+  position: absolute;
+  top: -10%;
+  right: -5%;
+  z-index: 1;
+}
+
+.create-container--wrapper img {
+  width: 100%;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.create-container--wrapper img:hover {
+  scale: 1.05
+}
+
+.create-choose-image .close-icon {
+  color: red;
+  font-size: 3rem;
+  position: absolute;
+  right: 1rem;
+  cursor: pointer;
+}
+
+.create-choose-image {
+  position: absolute;
+  background-color: white;
+  border-radius: 2rem;
+  padding: 1rem;
+  width: 40rem;
+  height: 50rem;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.create-img__container .icon {
+  font-size: 2rem;
+  color: #03fc98;
+  transform: all 0.3s;
+  cursor: pointer;
+}
+
+.file-upload-wrapper input[type="file"] {
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  left: 0;
+  height: 100;
+  width: 100%;
+  cursor: pointer; 
+}
+
+.create-choose-image .icon:hover {
+  scale: 1.05;
 }
 
 .create-type {
@@ -1355,7 +1431,8 @@ html, body, #root {
   border: 0;
   font-size: 1.5rem;
   padding: 1rem 1.5rem;
-  color: white
+  color: white;
+  outline: none
 }
 
 .create-option {
@@ -1368,3 +1445,22 @@ html, body, #root {
   outline: none;
   border: 0;
 }
+
+.create-upload-type {
+  display: flex;
+  gap: 1rem;
+}
+
+.create-post__img--selected__wrapper {
+ width: 40rem;
+}
+
+.create-post__img--selected__wrapper .btn {
+  font-size: 2rem;
+  position: absolute;
+  top: 2%;
+  left: 2%;
+  z-index: 100;
+  color: white;
+  border-radius: 2rem;
+ }

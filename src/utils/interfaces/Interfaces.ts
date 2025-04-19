@@ -74,3 +74,7 @@ export interface IUser {
     likedComments: number[],
     likedDiscussionComments: number[]
 }
+
+export interface IImage {
+    imagePath: string
+}
