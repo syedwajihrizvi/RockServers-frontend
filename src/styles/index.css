@@ -1464,3 +1464,44 @@ html, body, #root {
   color: white;
   border-radius: 2rem;
  }
+
+ .create-post__img--selected__wrapper {
+  position: relative;
+ }
+
+ .create-post__img--selected__wrapper .icon {
+  color: red;
+  font-size: 2rem;
+  position: absolute;
+  right: 0;
+  transition: all 0.3s;
+  z-index: 100;
+ }
+
+ .create-post__img--selected__wrapper .icon:hover {
+  scale: 1.15;
+  cursor: pointer;
+ }
+
+ .create-options {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  box-sizing: border-box;
+  gap: 1rem;
+ }
+
+ .create-options .btn {
+  width: 100%;
+  text-align: center;
+ }
+
+ .post-starting-time--label {
+  margin: 0;
+  color: white;
+  font-size: 2rem;
+}
