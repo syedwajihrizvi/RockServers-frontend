@@ -50,11 +50,9 @@ export const Create = () => {
   const handlePostCreationSubmit = () => {
     // Some basic front end validatin and Toat Container with message
     const { title, description, startTime, gameId, platformId, imageSelected, imageUploaded} = postData
-    if (!title || !description || !startTime || !gameId || !platformId || !(imageSelected || imageUploaded))
+    if (!title || !description || !startTime || !gameId || !platformId || (!imageSelected && !imageUploaded))
       toast.error("Please fix all errors")
     // Depends what type of request we are making
-    // If user has a selected image, this endpoint is needed
-    // If user has a custom uploaded image, this endpoint is needed
     if (imageUploaded) {
       const formData = new FormData()
       formData.append("title", title as string)
@@ -70,9 +68,17 @@ export const Create = () => {
                 setTimeout(() => {
                   navigate(`/posts/${res.data.id}`)
                 }, 3000)
-                console.log(res.data)
                })
                .catch(err => console.log(err))
+    } else {
+      apiClient.post('/posts', {title, description, gameId, platformId, imagePath: imageSelected}, 
+                    { headers: {"Authorization": `Bearer ${localStorage.getItem('x-auth-token')}`, "Content-Type": 'application/json'}})
+                    .then(res => {
+                      toast.success("Post created successfully")
+                      setTimeout(() => {
+                        navigate(`/posts/${res.data.id}`)
+                      }, 3000);
+                    })
     }
   }
 
@@ -141,8 +147,8 @@ export const Create = () => {
               {postData && postData.imageUploaded && renderUploadedImagePreview()}
             </div>
             <label className="post-starting-time--label" htmlFor="post-starting-time">Choose a start time to let people know.</label>
-            <input id="posts-starting-time" type="datetime-local" 
-                   className="create-input" value={new Date().toISOString().slice(0, 16)}
+            <input id="posts-starting-time" type="datetime-local" value={postData.startTime} 
+                   className="create-input"
                    onChange={(event) => setPostData({...postData, startTime: event.target.value})}/>
             <div className="create-options">
               <button className="btn btn--md btn--success" onClick={handlePostCreationSubmit}>Post</button>
