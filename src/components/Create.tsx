@@ -16,7 +16,8 @@ interface PostData {
   platformId?: number,
   startTime?: string,
   imageSelected?: string,
-  imageUploaded?: Blob | MediaSource
+  imageUploaded?: Blob | MediaSource,
+  otherImages?: File[]
 }
 
 export const Create = () => {
@@ -47,38 +48,80 @@ export const Create = () => {
     //         .catch(err => console.log(err))
   }
 
+  const handleMultipleFileUpload = (event) => {
+    const files = event.target.files
+    if (!files)
+      return
+    setPostData({...postData, otherImages: [...postData.otherImages ? postData.otherImages : [], ...files]})
+  }
+
+  const handleSubmitWrapper = () => {
+    if (creatingPost)
+      handlePostCreationSubmit()
+    else
+      handleDiscussionCreationSubmit()
+  }
+
+  const handleDiscussionCreationSubmit = () => {
+    const { title, description:content, gameId, imageSelected, imageUploaded, otherImages } = postData
+    if (!title || !content || !gameId || (!imageSelected && !imageUploaded))
+       toast("Please fill in all information")
+    else {
+      const formData = new FormData()
+      formData.append("title", title as string)
+      formData.append("content", content as string)
+      formData.append("gameId", `${gameId}` as string)
+      formData.append("imageFile", imageUploaded as Blob)
+      if (otherImages) {
+        otherImages.forEach((image) => formData.append("otherImages", image))
+      }
+      formData.forEach((value, key) => console.log(`Key: ${key}, Value: ${value}`))
+      apiClient.post('/discussions/customImage', formData,
+                      {headers: {"Authorization": `Bearer ${localStorage.getItem('x-auth-token')}`, "Content-Type": "multipart/form-data"}})
+                      .then(res => {
+                        toast.success("Discussion created successfully")
+                        setTimeout(() => {
+                          navigate(`/discussions/${res.data.id}`)
+                        }, 3000)
+                      })
+                      .catch(err => console.log(err))
+    }
+    
+  }
+
   const handlePostCreationSubmit = () => {
     // Some basic front end validatin and Toat Container with message
     const { title, description, startTime, gameId, platformId, imageSelected, imageUploaded} = postData
     if (!title || !description || !startTime || !gameId || !platformId || (!imageSelected && !imageUploaded))
-      toast.error("Please fix all errors")
-    // Depends what type of request we are making
-    if (imageUploaded) {
-      const formData = new FormData()
-      formData.append("title", title as string)
-      formData.append("description", description as string)
-      formData.append("gameId", `${gameId}` as string)
-      formData.append("platformId", `${platformId}` as string)
-      formData.append("imageFile", imageUploaded as Blob)
-      formData.forEach((value, key) => console.log(`Key: ${key}, Value: ${value}`))
-      apiClient.post('/posts/customImage', formData, 
-                     { headers: {"Authorization": `Bearer ${localStorage.getItem('x-auth-token')}`,"Content-Type": "multipart/form-data"}})
-               .then(res => {
-                toast.success("Post created successfully")
-                setTimeout(() => {
-                  navigate(`/posts/${res.data.id}`)
-                }, 3000)
-               })
-               .catch(err => console.log(err))
-    } else {
-      apiClient.post('/posts', {title, description, gameId, platformId, imagePath: imageSelected}, 
-                    { headers: {"Authorization": `Bearer ${localStorage.getItem('x-auth-token')}`, "Content-Type": 'application/json'}})
-                    .then(res => {
-                      toast.success("Post created successfully")
-                      setTimeout(() => {
-                        navigate(`/posts/${res.data.id}`)
-                      }, 3000);
-                    })
+      toast.error("Please fill in all information")
+    else {
+      // Depends what type of request we are making
+      if (imageUploaded) {
+        const formData = new FormData()
+        formData.append("title", title as string)
+        formData.append("description", description as string)
+        formData.append("gameId", `${gameId}` as string)
+        formData.append("platformId", `${platformId}` as string)
+        formData.append("imageFile", imageUploaded as Blob)
+        apiClient.post('/posts/customImage', formData, 
+                      { headers: {"Authorization": `Bearer ${localStorage.getItem('x-auth-token')}`,"Content-Type": "multipart/form-data"}})
+                .then(res => {
+                  toast.success("Post created successfully")
+                  setTimeout(() => {
+                    navigate(`/posts/${res.data.id}`)
+                  }, 3000)
+                })
+                .catch(err => console.log(err))
+      } else {
+        apiClient.post('/posts', {title, description, gameId, platformId, imagePath: imageSelected}, 
+                      { headers: {"Authorization": `Bearer ${localStorage.getItem('x-auth-token')}`, "Content-Type": 'application/json'}})
+                      .then(res => {
+                        toast.success("Post created successfully")
+                        setTimeout(() => {
+                          navigate(`/posts/${res.data.id}`)
+                        }, 3000);
+                      })
+      }
     }
   }
 
@@ -90,6 +133,25 @@ export const Create = () => {
       <img src={imageUrl}/>
       </div>
     }
+  }
+
+  const ChooseGame = () => {
+    return games && <select className="create-option" 
+                   onChange={(event) => setPostData({...postData, gameId: parseInt(event.target.value)})}>
+              <option>Choose a Game</option>
+                {games.map(game => 
+            <option key={game.id} value={game.id}>{game.title}</option>)}
+            </select>
+  }
+
+  const OtherImages = () => {
+    return (
+      <div className="create-discussion__other-images">
+        {postData && postData.otherImages && postData.otherImages.map(image => {
+          return <img src={URL.createObjectURL(image)}/>
+        })}
+      </div>
+    )
   }
 
   return (
@@ -115,23 +177,19 @@ export const Create = () => {
               <button className="btn btn--success btn--md" onClick={() => setCreatingPost(true)}>Post a session</button>
               <button className="btn btn--success btn--md" onClick={() => setCreatingPost(false)}>Discuss Something</button>
           </div>
-          {creatingPost && !isLoadingGames && games && <div className="create-post">
+          {!isLoadingGames && games && <div className="create-post">
             <div className="create-type">
-              <select className="create-option" 
-                      onChange={(event) => setPostData({...postData, gameId: parseInt(event.target.value)})}>
-                <option>Choose a Game</option>
-                {games.map(game => 
-                  <option key={game.id} value={game.id}>{game.title}</option>)}
-              </select>
-              <select className="create-option" onChange={(event) => setPostData({...postData, platformId: parseInt(event.target.value)})}>
+              <ChooseGame/>
+              {creatingPost && <select className="create-option" onChange={(event) => setPostData({...postData, platformId: parseInt(event.target.value)})}>
                 <option>What Platform</option>
                 <option value="2">Playstation</option>
                 <option value="0">XBox</option>
                 <option value="1">PC</option>
-              </select>
+              </select>}
             </div>
             <input placeholder="Enter a Title" className="create-input" onChange={(event) => setPostData({...postData, title: event.target.value})}/>
             <textarea placeholder="Enter a description" className="create-textarea" onChange={(event) => setPostData({...postData, description: event.target.value})}/>
+            <h3 className="create-post-thumbnail-heading">Choose a Thumbnail</h3>
             <div className="create-upload-type">
               <label className="file-upload-wrapper btn btn--success btn--md">
                 Upload Image <FaUpload className="icon"/>
@@ -146,17 +204,23 @@ export const Create = () => {
               </div>}
               {postData && postData.imageUploaded && renderUploadedImagePreview()}
             </div>
-            <label className="post-starting-time--label" htmlFor="post-starting-time">Choose a start time to let people know.</label>
-            <input id="posts-starting-time" type="datetime-local" value={postData.startTime} 
-                   className="create-input"
-                   onChange={(event) => setPostData({...postData, startTime: event.target.value})}/>
+            {!creatingPost &&
+              <label className="file-upload-wrapper btn btn--success btn--md">
+                Choose more images <FaUpload className="icon"/>
+                <input type="file" multiple onChange={handleMultipleFileUpload}/>
+              </label>}
+            {!creatingPost && <OtherImages/>}
+            {creatingPost && 
+            <>
+              <label className="post-starting-time--label" htmlFor="post-starting-time">Choose a start time to let people know.</label>
+              <input id="posts-starting-time" type="datetime-local" value={postData.startTime} 
+                    className="create-input"
+                    onChange={(event) => setPostData({...postData, startTime: event.target.value})}/>
+            </>}
             <div className="create-options">
-              <button className="btn btn--md btn--success" onClick={handlePostCreationSubmit}>Post</button>
+              <button className="btn btn--md btn--success" onClick={handleSubmitWrapper}>Post</button>
               <button className="btn btn--md btn--secondary">Cancel</button>
             </div>
-          </div>}
-          {!creatingPost && <div className="create-discussion">
-            <h1>Create Discussion</h1>
           </div>}
     </div>
     </div>
