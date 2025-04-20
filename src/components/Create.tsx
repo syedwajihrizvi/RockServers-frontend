@@ -71,12 +71,15 @@ export const Create = () => {
       formData.append("title", title as string)
       formData.append("content", content as string)
       formData.append("gameId", `${gameId}` as string)
-      formData.append("imageFile", imageUploaded as Blob)
+      if (imageUploaded)
+        formData.append("imageFile", imageUploaded as Blob)
+      else
+        formData.append("imagePath", imageSelected as string)
       if (otherImages) {
         otherImages.forEach((image) => formData.append("otherImages", image))
       }
       formData.forEach((value, key) => console.log(`Key: ${key}, Value: ${value}`))
-      apiClient.post('/discussions/customImage', formData,
+      apiClient.post(imageUploaded ? '/discussions/customImage' : '/discussions', formData,
                       {headers: {"Authorization": `Bearer ${localStorage.getItem('x-auth-token')}`, "Content-Type": "multipart/form-data"}})
                       .then(res => {
                         toast.success("Discussion created successfully")
