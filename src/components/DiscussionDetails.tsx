@@ -17,6 +17,7 @@ import { LoginToastComponent } from "./CustomToasts/LoginToastComponent";
 import { useGlobalContext } from '../providers/global-provider'
 import { useQueryClient } from '@tanstack/react-query'
 import { useDiscussionComment } from '../hooks/useComments'
+import { FollowButton } from './FollowButton'
 
 export const DiscussionDetails = () => {
   const {id: discussionId} = useParams()
@@ -137,7 +138,8 @@ export const DiscussionDetails = () => {
                           withViewAll={false} handleAddComment={handleDiscussionComment}
                           handleSubmitComment={handleSubmitComment}
                           commentType="discussionComments"/>}
-            </div>   
+            </div>
+            <div>
             <div className="similar-posts">
                 <h3 className="similar-posts__heading">{`Similar Posts for ${discussion.gameName}`}</h3>
                 <div className="similar-posts__content">
@@ -151,7 +153,9 @@ export const DiscussionDetails = () => {
                         fontSize={40} color="white" 
                         className="icon" onClick={() => handleSimilarDiscissionClick()}/>
                 </div>
-            </div>      
+            </div> 
+            <FollowButton username={discussion.appUser.username}/>
+         </div>    
         </div>
         </>}
     </div>

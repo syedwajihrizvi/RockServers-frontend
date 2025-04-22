@@ -19,6 +19,7 @@ import { LoginToastComponent } from "./CustomToasts/LoginToastComponent";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSessions } from "../hooks/useSessions";
 import { useComment } from "../hooks/useComments";
+import { FollowButton } from "./FollowButton";
 
 export const PostDetails = () => {
   const {id: postId} = useParams()
@@ -158,6 +159,7 @@ export const PostDetails = () => {
                         fontSize={40} color="white" 
                         className="icon" onClick={() => handleSimilarPostClick()}/>
                 </div>
+                <FollowButton username={post.appUser.username}/>
                 {successfullSessions && <div>
                     {successfullSessions.length > 0 ? 
                     <div className="post-session-history">

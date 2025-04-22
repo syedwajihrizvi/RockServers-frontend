@@ -11,7 +11,6 @@ export const Login = () => {
   const [viewPassword, setViewPassword] = useState(false)
   const [loginError, setLoginError] = useState(false)
   const navigate = useNavigate()
-  // If logged in, then just navigate to main page
 
   const handleFormSubmit = () => {
     const { emailOrUsername, password } = form
@@ -22,9 +21,8 @@ export const Login = () => {
       const jwt = res.data.token
       localStorage.setItem('x-auth-token', jwt)
       queryClient.invalidateQueries({ queryKey: ['me']})
-      setInterval(() => {
-        navigate('/')
-      }, 1000)
+      navigate('/')
+      
     })
     .catch(() => setLoginError(true))
   }

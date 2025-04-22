@@ -8,6 +8,8 @@ import { Login } from "../components/Login";
 import { Register } from "../components/Register";
 import { AccountSettings } from "../components/AccountSettings";
 import { Create } from "../components/Create";
+import { NotFound } from "../components/NotFound";
+import { Dashboard } from "../components/Dashboard";
 
 const router = createBrowserRouter([
     {
@@ -49,6 +51,14 @@ const router = createBrowserRouter([
                 element: <Register/>
             }
         ]
+    },
+    {
+        path: "/dashboard/*",
+        element: <Dashboard/>
+    },
+    {
+        path: "*",
+        element: <NotFound/>
     }
 ])
 

@@ -72,7 +72,8 @@ export interface IUser {
     likedPosts: number[],
     likedDiscussions: number[],
     likedComments: number[],
-    likedDiscussionComments: number[]
+    likedDiscussionComments: number[],
+    following: string[]
 }
 
 export interface IImage {

@@ -4,7 +4,7 @@ import { MdCancel } from "react-icons/md";
 import { useEffect, useState } from "react"
 import { useGames } from "../hooks/useGames";
 import { IImage } from "../utils/interfaces/Interfaces";
-import apiClient from "../utils/services/dataServices"
+import apiClient, { createDiscussion, createPostWithSelectedImage, createPostWithUploadedImage } from "../utils/services/dataServices"
 import { generateImageUrl } from "../utils/helpers/helpers";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -41,11 +41,6 @@ export const Create = () => {
     if (!file)
       return
     setPostData({...postData, imageUploaded: file, imageSelected: undefined})
-    // const formData = new FormData()
-    // formData.append("file", file, file.name)
-    // apiClient.post('/images', formData, { headers: {"Content-Type": "multipart/form-data"}})
-    //         .then(res => console.log(res))
-    //         .catch(err => console.log(err))
   }
 
   const handleMultipleFileUpload = (event) => {
@@ -78,23 +73,21 @@ export const Create = () => {
       if (otherImages) {
         otherImages.forEach((image) => formData.append("otherImages", image))
       }
-      formData.forEach((value, key) => console.log(`Key: ${key}, Value: ${value}`))
-      apiClient.post(imageUploaded ? '/discussions/customImage' : '/discussions', formData,
-                      {headers: {"Authorization": `Bearer ${localStorage.getItem('x-auth-token')}`, "Content-Type": "multipart/form-data"}})
-                      .then(res => {
-                        toast.success("Discussion created successfully")
-                        setTimeout(() => {
-                          navigate(`/discussions/${res.data.id}`)
-                        }, 3000)
-                      })
-                      .catch(err => console.log(err))
+      toast.promise(
+        createDiscussion(formData, !!imageUploaded),
+        {
+          pending: "Creating discussion",
+          success: "Discussion created successfully!",
+          error: "An unexpected error occured."
+        }
+      ).then(res => navigate(`/discussions/${res.data.id}`))
     }
     
   }
 
   const handlePostCreationSubmit = () => {
     // Some basic front end validatin and Toat Container with message
-    const { title, description, startTime, gameId, platformId, imageSelected, imageUploaded} = postData
+    const { title, description, startTime, gameId, platformId, imageSelected, imageUploaded} = postData  
     if (!title || !description || !startTime || !gameId || !platformId || (!imageSelected && !imageUploaded))
       toast.error("Please fill in all information")
     else {
@@ -106,24 +99,24 @@ export const Create = () => {
         formData.append("gameId", `${gameId}` as string)
         formData.append("platformId", `${platformId}` as string)
         formData.append("imageFile", imageUploaded as Blob)
-        apiClient.post('/posts/customImage', formData, 
-                      { headers: {"Authorization": `Bearer ${localStorage.getItem('x-auth-token')}`,"Content-Type": "multipart/form-data"}})
-                .then(res => {
-                  toast.success("Post created successfully")
-                  setTimeout(() => {
-                    navigate(`/posts/${res.data.id}`)
-                  }, 3000)
-                })
-                .catch(err => console.log(err))
+        toast.promise(
+          createPostWithUploadedImage(formData),
+          {
+            pending: "Uploading Post",
+            success: "Post created successfully!",
+            error: "An unexpected error occured"
+          }
+        ).then(res => navigate(`/posts/${res.data.id}`))
       } else {
-        apiClient.post('/posts', {title, description, gameId, platformId, imagePath: imageSelected}, 
-                      { headers: {"Authorization": `Bearer ${localStorage.getItem('x-auth-token')}`, "Content-Type": 'application/json'}})
-                      .then(res => {
-                        toast.success("Post created successfully")
-                        setTimeout(() => {
-                          navigate(`/posts/${res.data.id}`)
-                        }, 3000);
-                      })
+        const imagePath = imageSelected as string
+        toast.promise(
+          createPostWithSelectedImage({title, description, gameId, platformId, imagePath}),
+          {
+            pending: "Uploading Post",
+            success: "Post created successfully!",
+            error: "An unexpected error occured"
+          }
+        ).then(res => navigate(`/posts/${res.data.id}`))
       }
     }
   }
@@ -139,11 +132,13 @@ export const Create = () => {
   }
 
   const ChooseGame = () => {
-    return games && <select className="create-option" 
-                   onChange={(event) => setPostData({...postData, gameId: parseInt(event.target.value)})}>
+    return games && 
+            <select className="create-option" 
+                    value = {postData.gameId || ""}
+                    onChange={(event) => setPostData({...postData, gameId: parseInt(event.target.value)})}>
               <option>Choose a Game</option>
                 {games.map(game => 
-            <option key={game.id} value={game.id}>{game.title}</option>)}
+              <option key={game.id} value={game.id}>{game.title}</option>)}
             </select>
   }
 
@@ -183,7 +178,9 @@ export const Create = () => {
           {!isLoadingGames && games && <div className="create-post">
             <div className="create-type">
               <ChooseGame/>
-              {creatingPost && <select className="create-option" onChange={(event) => setPostData({...postData, platformId: parseInt(event.target.value)})}>
+              {creatingPost && 
+              <select className="create-option" 
+                      onChange={(event) => setPostData({...postData, platformId: parseInt(event.target.value)})}>
                 <option>What Platform</option>
                 <option value="2">Playstation</option>
                 <option value="0">XBox</option>
