@@ -7,7 +7,8 @@ type DiscussionQueryParams = {
     gameId?: number,
     searchValue?: string,
     mostRecent?: boolean,
-    orderBy?: string
+    orderBy?: string,
+    userId?: string
 }
 
 export const useDiscussions = (queryParams: DiscussionQueryParams = {}) => {

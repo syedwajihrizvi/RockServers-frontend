@@ -10,7 +10,8 @@ type PostQueryParams = {
     searchValue?: string,
     sessionType?: string,
     mostRecent?: boolean,
-    orderBy?: string
+    orderBy?: string,
+    userId?: string
 }
 
 export const usePosts = (queryParams: PostQueryParams = {}) => {

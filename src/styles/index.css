@@ -1683,9 +1683,63 @@ html, body, #root {
   font-size: 1rem;
   margin: 0;
 }
+
 .friend img {
   object-fit: cover;
   width: 3rem;
   height: 3rem;
   border-radius: 100%;
+}
+
+.profile {
+  background-color: var(--secondary);
+  border-radius: 2rem;
+  padding: 1rem;
+}
+
+.profile__header {
+  width: 100%;
+  max-width: 30rem;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.profile__img {
+  object-fit: cover;
+  width: 5rem;
+  height: 5rem;
+  border-radius: 100%;
+}
+
+.profile__username {
+  margin: 0;
+  color: white;
+  font-size: 2rem;
+}
+
+.profile__content {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 30rem;
+  position: relative;
+  left: 50%;
+  transform: translateX(-53%);
+  text-align: center;
+  margin-top: 1rem;
+  color: white;
+}
+
+.profile__info h5 {
+  font-size: 1.4rem;
+  margin: 0;
+  font-weight: bold;
+}
+
+.profile__info h4 {
+  font-size: 1.2rem;
+  margin: 0;
+  margin-top: 0.5rem;
 }

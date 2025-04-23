@@ -69,11 +69,14 @@ export interface IUser {
     id: string,
     email: string,
     token: string,
+    username: string,
     likedPosts: number[],
     likedDiscussions: number[],
     likedComments: number[],
     likedDiscussionComments: number[],
-    following: string[]
+    following: string[];
+    followers: string[];
+    totalPostings: number;
 }
 
 export interface IImage {

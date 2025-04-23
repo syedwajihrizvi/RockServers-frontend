@@ -4,16 +4,18 @@ import { LoginToastComponent } from "./CustomToasts/LoginToastComponent";
 import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../providers/global-provider";
 import apiClient from "../utils/services/dataServices"
+import { useQueryClient } from "@tanstack/react-query";
 
 export const FollowButton = ({username}: {username: string}) => {
   const navigate = useNavigate()
   const { isLoggedIn, user } = useGlobalContext()
+  const queryClient = useQueryClient()
   const handleToastButtonClick = () => {
     navigate('/account/login')
   }
-  console.log(user?.following)
+  const userFollows = user?.following.includes(username)
   const renderFollowString = () =>
-    user?.following.includes(username) ? "Unfollow" : "Follow"
+    userFollows ? "Unfollow" : "Follow"
 
   const handleClick = () => {
     if (!isLoggedIn)
@@ -25,7 +27,8 @@ export const FollowButton = ({username}: {username: string}) => {
                       formdata, 
                       {headers: 
                         {'Authorization': `Bearer ${localStorage.getItem('x-auth-token')}`, "Content-Type": "multipart/form-data"}})
-                        .then(res => console.log(res.data)).catch(err => console.log(err))
+                        .then(() => queryClient.invalidateQueries({queryKey: ["me"]}))
+                        .catch(err => console.log(err))
     }
   }
 

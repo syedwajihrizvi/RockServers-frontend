@@ -2,6 +2,9 @@ import { useQueryClient } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import Avatar from "../assets/images/avatar.webp"
+import { useGlobalContext } from "../providers/global-provider"
+import { Skeleton } from "./Skeleton"
+import { AllPosts } from "./AllPosts"
 
 const CustomChangeInput = ({label, placeholder, type}: {label: string, placeholder: string, type: string}) => {
     const [showActions, setShowActions] = useState(false)
@@ -20,6 +23,34 @@ const CustomChangeInput = ({label, placeholder, type}: {label: string, placehold
                 </div>}
             </div>
         </>
+    )
+}
+
+const Profile = () => {
+    const { isLoading, user } = useGlobalContext()
+    return (
+        isLoading ? 
+        <Skeleton/> : 
+        <div className="profile">
+            <div className="profile__header">
+                <img className="profile__img" src={Avatar}/>
+                <h3 className="profile__username">{user?.username}</h3>
+            </div>
+            <div className="profile__content">
+                <div className="profile__info">
+                    <h5>{user && user.following ? user.following.length : 0}</h5>
+                    <h4>Following</h4>
+                </div>
+                <div className="profile__info">
+                    <h5>{user && user.followers ? user.followers.length : 0}</h5>
+                    <h4>Followers</h4>
+                </div>
+                <div className="profile__info">
+                    <h5>{user && user.totalPostings ? user.totalPostings : 0}</h5>
+                    <h4>Posts</h4>
+                </div>
+            </div>
+        </div>
     )
 }
 
@@ -63,14 +94,9 @@ const Friends = () => {
 }
 
 const Posts = () => {
+    const { isLoading, user } = useGlobalContext()
     return (
-        <h1>Posts</h1>
-    )
-}
-
-const Discussions = () => {
-    return (
-        <h1>Discussions</h1>
+        isLoading ? <Skeleton/> : <AllPosts userId={user?.id}/>
     )
 }
 
@@ -80,9 +106,9 @@ const Notifications = () => {
     )
 }
 export const Dashboard = () => {
-  const [viewComponent, setViewComponent] = useState("account")
+  const [viewComponent, setViewComponent] = useState("profile")
   const navComponents = [
-    "account", "friends", "posts", "discussions", "notifications"
+    "profile", "settings", "friends", "posts", "notifications"
   ]
   const [screenWidth, setScreenWidth] = useState(window.screen.width)
 
@@ -97,14 +123,14 @@ export const Dashboard = () => {
 
   const renderComponent = () => {
     switch (viewComponent) {
-        case "account":
+        case "profile":
+            return <Profile/>
+        case "settings":
             return <AccountSettings/>
         case "friends":
             return <Friends/>
         case "posts":
             return <Posts/>
-        case "discussions":
-            return <Discussions/>
         case "notifications":
             return <Notifications/>
         default:

@@ -5,9 +5,9 @@ import useQueryStore from '../stores/useQueryStore'
 import { useDiscussions } from '../hooks/useDiscussions'
 import { DiscussionCard } from './DiscussionCard'
 
-export const PostsGrid = () => {
-  const {data: posts, isLoading: isLoadingPosts} = usePosts()
-  const {data: discussions, isLoading: isLoadingDiscussions} = useDiscussions()
+export const PostsGrid = ({userId}: {userId: string | undefined}) => {
+  const {data: posts, isLoading: isLoadingPosts} = usePosts({userId})
+  const {data: discussions, isLoading: isLoadingDiscussions} = useDiscussions({userId})
 
   const {gameName, postType} = useQueryStore()
   const renderPosts = () => {
