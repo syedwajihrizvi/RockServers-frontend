@@ -5,6 +5,7 @@ import Avatar from "../assets/images/avatar.webp"
 import { useGlobalContext } from "../providers/global-provider"
 import { Skeleton } from "./Skeleton"
 import { AllPosts } from "./AllPosts"
+import { IUser } from "../utils/interfaces/Interfaces"
 
 const CustomChangeInput = ({label, placeholder, type}: {label: string, placeholder: string, type: string}) => {
     const [showActions, setShowActions] = useState(false)
@@ -54,7 +55,8 @@ const Profile = () => {
     )
 }
 
-const AccountSettings = () => {
+const AccountSettings = ({user}: {user: IUser}) => {
+    console.log(user.email)
     const navigate = useNavigate()
     const queryClient = useQueryClient()
     const handleLogout = () => {
@@ -73,19 +75,38 @@ const AccountSettings = () => {
     )
 }
 
-const Friends = () => {
+const UserList = ({type, profileUser}: {type: "followers" | "following", profileUser: IUser}) => {
+    const renderButton = (renderUser: IUser) => {
+        if (type == "following") {
+            return (
+                profileUser.followers.find(u => u.id == renderUser.id) ?
+                <button className="btn btn--success btn--xs">Follows You</button> :
+                <button className="btn btn--success btn--xs">Unfollow</button>)
+        } else {
+            return (
+                profileUser.following.find(u => u.id == renderUser.id) ? 
+                <button className="btn btn--success btn--xs">Follows You</button> :
+                <button className="btn btn--success btn--xs">Follow Back</button>
+            )
+        }
+    }
+    const userList = type == "following" ? profileUser.following : profileUser.followers
+    if (userList.length == 0)
+        return (
+    type == "following" ? 
+    <h1 className="user-list-empty-heading">You are not following anyone</h1> : 
+    <h1 className="user-list-empty-heading">You currently have no followers</h1>)
+
     return (
         <div className="friends">
-            {Array.from(Array(10).keys()).map(() => (
+            {userList.map((user) => (
                 <div className="friend">
                     <div className="friend__info">
                         <img src={Avatar}/>
-                        <h3>Username</h3>
+                        <h3>{user.username}</h3>
                     </div>
                     <div className="friend__actions">
-                        <button className="btn btn--success btn--xs">Posts</button>
-                        <button className="btn btn--golden btn--xs">Discussions</button>
-                        <button className="btn btn--danger btn--xs">Remove</button>
+                        {renderButton(user)}
                     </div>
                 </div>
             ))}
@@ -93,22 +114,22 @@ const Friends = () => {
     )
 }
 
-const Posts = () => {
-    const { isLoading, user } = useGlobalContext()
+const Posts = ({user}: {user: IUser}) => {
     return (
-        isLoading ? <Skeleton/> : <AllPosts userId={user?.id}/>
+        <AllPosts userId={user.id}/>
     )
 }
 
-const Notifications = () => {
+const Notifications = ({user}: {user: IUser}) => {
     return (
-        <h1>Notifications</h1>
+        <h1>Notifications for {user.username}</h1>
     )
 }
 export const Dashboard = () => {
+  const { isLoading, user } = useGlobalContext()
   const [viewComponent, setViewComponent] = useState("profile")
   const navComponents = [
-    "profile", "settings", "friends", "posts", "notifications"
+    "settings", "followers", "following", "posts", "notifications"
   ]
   const [screenWidth, setScreenWidth] = useState(window.screen.width)
 
@@ -122,19 +143,21 @@ export const Dashboard = () => {
   }, [])
 
   const renderComponent = () => {
+    if (isLoading || !user)
+        return <Skeleton/>
     switch (viewComponent) {
-        case "profile":
-            return <Profile/>
         case "settings":
-            return <AccountSettings/>
-        case "friends":
-            return <Friends/>
+            return <AccountSettings user={user}/>
+        case "followers":
+            return <UserList type="followers" profileUser={user}/>
+        case "following":
+            return <UserList type="following" profileUser={user}/>
         case "posts":
-            return <Posts/>
+            return <Posts user={user}/>
         case "notifications":
-            return <Notifications/>
+            return <Notifications user={user}/>
         default:
-            return <AccountSettings/>
+            return <AccountSettings user={user}/>
     }
   }
   return (
@@ -154,7 +177,8 @@ export const Dashboard = () => {
             )}
         </div>}
         <div className="dashboard__content">
-            {renderComponent()}
+            <Profile/>
+            {isLoading ? <Skeleton/> : renderComponent()}
         </div>
     </div>
   )

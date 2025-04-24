@@ -74,8 +74,8 @@ export interface IUser {
     likedDiscussions: number[],
     likedComments: number[],
     likedDiscussionComments: number[],
-    following: string[];
-    followers: string[];
+    following: IUser[];
+    followers: IUser[];
     totalPostings: number;
 }
 

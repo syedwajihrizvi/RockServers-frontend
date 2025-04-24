@@ -1654,6 +1654,11 @@ html, body, #root {
   height: fit-content;
 }
 
+.user-list-empty-heading {
+  color: white;
+  font-size: 3rem;
+}
+
 .friends {
   display: flex;
   flex-direction: column;
@@ -1691,10 +1696,25 @@ html, body, #root {
   border-radius: 100%;
 }
 
+@media screen and (min-width: 768px) {
+  .friends {
+    max-width: 60rem;
+  }
+
+  .account-settings {
+    max-width: 60rem;
+  }
+
+  .profile {
+    max-width: 60rem;
+  }
+}
+
 .profile {
   background-color: var(--secondary);
   border-radius: 2rem;
   padding: 1rem;
+  margin-bottom: 1rem;
 }
 
 .profile__header {
