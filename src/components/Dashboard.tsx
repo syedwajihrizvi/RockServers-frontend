@@ -1,6 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query"
 import { ReactNode, useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import Avatar from "../assets/images/avatar.webp"
 import { useGlobalContext } from "../providers/global-provider"
 import { Skeleton } from "./Skeleton"
@@ -72,6 +72,8 @@ const AccountSettings = ({user}: {user: IUser}) => {
 }
 
 export const UserList = ({type, profileUser, authenticated}: {type: "followers" | "following", profileUser: IUser, authenticated: boolean}) => {
+    const { isLoading, user: loggedInUser } = useGlobalContext()
+    console.log(`Logged in user: ${loggedInUser?.username}`)
     const renderButton = (renderUser: IUser) => {
         if (type == "following") {
             return (
@@ -92,15 +94,20 @@ export const UserList = ({type, profileUser, authenticated}: {type: "followers" 
     type == "following" ? 
     <h1 className="user-list-empty-heading">You are not following anyone</h1> : 
     <h1 className="user-list-empty-heading">You currently have no followers</h1>)
+    console.log(profileUser.username)
+    const renderLink = (user: IUser) =>
+        user.username == loggedInUser?.username ? "/dashboard/settings" : `/profile/${user.username}`
 
     return (
         <div className="friends">
             {userList.map((user) => (
                 <div className="friend">
-                    <div className="friend__info">
-                        <img src={Avatar}/>
-                        <h3>{user.username}</h3>
-                    </div>
+                    <Link to={renderLink(user)}>
+                        <div className="friend__info">
+                            <img src={Avatar}/>
+                            <h3>{user.username}</h3>
+                        </div>
+                    </Link>
                     {authenticated && 
                     <div className="friend__actions">
                         {renderButton(user)}
