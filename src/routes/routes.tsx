@@ -9,7 +9,8 @@ import { Register } from "../components/Register";
 import { AccountSettings } from "../components/AccountSettings";
 import { Create } from "../components/Create";
 import { NotFound } from "../components/NotFound";
-import { Dashboard } from "../components/Dashboard";
+import { UserProfileDashboard } from "../components/Dashboard";
+import { ViewProfile } from "../components/ViewProfile";
 
 const router = createBrowserRouter([
     {
@@ -54,7 +55,11 @@ const router = createBrowserRouter([
     },
     {
         path: "/dashboard/*",
-        element: <Dashboard/>
+        element: <UserProfileDashboard/>
+    },
+    {
+        path: "/profile/:username",
+        element: <ViewProfile/>
     },
     {
         path: "*",

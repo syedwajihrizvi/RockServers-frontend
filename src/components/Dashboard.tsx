@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query"
-import { useEffect, useState } from "react"
+import { ReactNode, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import Avatar from "../assets/images/avatar.webp"
 import { useGlobalContext } from "../providers/global-provider"
@@ -27,11 +27,8 @@ const CustomChangeInput = ({label, placeholder, type}: {label: string, placehold
     )
 }
 
-const Profile = () => {
-    const { isLoading, user } = useGlobalContext()
+export const Profile = ({user}: {user: IUser}) => {
     return (
-        isLoading ? 
-        <Skeleton/> : 
         <div className="profile">
             <div className="profile__header">
                 <img className="profile__img" src={Avatar}/>
@@ -56,7 +53,6 @@ const Profile = () => {
 }
 
 const AccountSettings = ({user}: {user: IUser}) => {
-    console.log(user.email)
     const navigate = useNavigate()
     const queryClient = useQueryClient()
     const handleLogout = () => {
@@ -75,7 +71,7 @@ const AccountSettings = ({user}: {user: IUser}) => {
     )
 }
 
-const UserList = ({type, profileUser}: {type: "followers" | "following", profileUser: IUser}) => {
+export const UserList = ({type, profileUser, authenticated}: {type: "followers" | "following", profileUser: IUser, authenticated: boolean}) => {
     const renderButton = (renderUser: IUser) => {
         if (type == "following") {
             return (
@@ -105,16 +101,17 @@ const UserList = ({type, profileUser}: {type: "followers" | "following", profile
                         <img src={Avatar}/>
                         <h3>{user.username}</h3>
                     </div>
+                    {authenticated && 
                     <div className="friend__actions">
                         {renderButton(user)}
-                    </div>
+                    </div>}
                 </div>
             ))}
         </div>
     )
 }
 
-const Posts = ({user}: {user: IUser}) => {
+export const Posts = ({user}: {user: IUser}) => {
     return (
         <AllPosts userId={user.id}/>
     )
@@ -125,12 +122,9 @@ const Notifications = ({user}: {user: IUser}) => {
         <h1>Notifications for {user.username}</h1>
     )
 }
-export const Dashboard = () => {
-  const { isLoading, user } = useGlobalContext()
-  const [viewComponent, setViewComponent] = useState("profile")
-  const navComponents = [
-    "settings", "followers", "following", "posts", "notifications"
-  ]
+
+export const Dashboard = ({renderComponent, navComponents, user}: {renderComponent: (viewComponent: string, user: IUser) => ReactNode, navComponents: string[], user: IUser}) => {
+  const [viewComponent, setViewComponent] = useState(navComponents[0])
   const [screenWidth, setScreenWidth] = useState(window.screen.width)
 
   useEffect(() => {
@@ -142,24 +136,6 @@ export const Dashboard = () => {
     return () => window.removeEventListener("resize", handleResize)
   }, [])
 
-  const renderComponent = () => {
-    if (isLoading || !user)
-        return <Skeleton/>
-    switch (viewComponent) {
-        case "settings":
-            return <AccountSettings user={user}/>
-        case "followers":
-            return <UserList type="followers" profileUser={user}/>
-        case "following":
-            return <UserList type="following" profileUser={user}/>
-        case "posts":
-            return <Posts user={user}/>
-        case "notifications":
-            return <Notifications user={user}/>
-        default:
-            return <AccountSettings user={user}/>
-    }
-  }
   return (
     <div className="dashboard">
         {screenWidth < 768 && 
@@ -177,9 +153,33 @@ export const Dashboard = () => {
             )}
         </div>}
         <div className="dashboard__content">
-            <Profile/>
-            {isLoading ? <Skeleton/> : renderComponent()}
+            <Profile user={user}/>
+            {renderComponent(viewComponent, user)}
         </div>
     </div>
   )
+}
+
+export const UserProfileDashboard = () => {
+    const navComponents = ["settings", "followers", "following", "posts", "notifications"]
+    const { isLoading, user } = useGlobalContext()
+    const renderComponent = (viewComponent: string, user: IUser) => {
+        switch (viewComponent) {
+            case "settings":
+                return <AccountSettings user={user}/>
+            case "followers":
+                return <UserList type="followers" profileUser={user} authenticated={true}/>
+            case "following":
+                return <UserList type="following" profileUser={user} authenticated={true}/>
+            case "posts":
+                return <Posts user={user}/>
+            case "notifications":
+                return <Notifications user={user}/>
+            default:
+                return <AccountSettings user={user}/>
+        }
+      }
+      return isLoading ? 
+        <Skeleton/> :
+        <Dashboard renderComponent={renderComponent} navComponents={navComponents} user={user as IUser}/>     
 }

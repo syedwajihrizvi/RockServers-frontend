@@ -13,7 +13,7 @@ export const FollowButton = ({username}: {username: string}) => {
   const handleToastButtonClick = () => {
     navigate('/account/login')
   }
-  const userFollows = user?.following.includes(username)
+  const userFollows = user?.following.find(u => u.username == username)
   const renderFollowString = () =>
     userFollows ? "Unfollow" : "Follow"
 

@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
 import { usePost } from "../hooks/usePosts"
 import apiClient from "../utils/services/dataServices"
 import Avatar from "../assets/images/avatar.webp"
@@ -128,11 +128,13 @@ export const PostDetails = () => {
                     <div className="card-details-card__content__info">
                         <h3>{post.title}</h3>
                         <p>{post.description}</p>
-                        <div className="card__user-info">
-                            <img className="card__avatar" src={Avatar} 
-                                alt="Avatar"/>
-                            <p>Posted by <span style={{fontWeight:'bold'}}>{post.appUser.username}</span> {formatStringDate(post.postedAt)}</p>
-                        </div>
+                        <Link to={`/profile/${post.appUser.username}`}>
+                            <div className="card__user-info">
+                                <img className="card__avatar" src={Avatar} 
+                                    alt="Avatar"/>
+                                <p>Posted by <span style={{fontWeight:'bold'}}>{post.appUser.username}</span> {formatStringDate(post.postedAt)}</p>
+                            </div>
+                        </Link>
                     </div>
                     <Engagements comments={postComments} likes={post.likes} 
                                  userLiked={userDidLike(user?.likedPosts, post.id)} handleLike={handlePostLike}/>
