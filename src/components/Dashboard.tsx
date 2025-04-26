@@ -5,25 +5,43 @@ import Avatar from "../assets/images/avatar.webp"
 import { useGlobalContext } from "../providers/global-provider"
 import { Skeleton } from "./Skeleton"
 import { AllPosts } from "./AllPosts"
+import { ToastContainer, toast } from "react-toastify"
 import { IUser } from "../utils/interfaces/Interfaces"
+import apiClient from "../utils/services/dataServices"
 
-const CustomChangeInput = ({label, placeholder, type}: {label: string, placeholder: string, type: string}) => {
+const ConfirmationInput = () => {
+    return (
+        <div>
+            <h1>Please confirm password to change settings</h1>
+            <input type="password" placeholder="Enter current password"/>
+        </div>
+    )
+}
+
+const CustomChangeInput = ({label, placeholder, type, field}: 
+    {label: string, placeholder: string, type: string, field: string, renderConfirmation?: boolean}) => {
     const [showActions, setShowActions] = useState(false)
+    const [inputValue, setInputValue] = useState("")
+    const handleSubmit = () => {
+        toast(ConfirmationInput())
+    }
 
     return (
-        <>
+        <div>
             <label>
                 {label}
             </label>
-            <div className="input-wrapper" onFocus={() => setShowActions(true)} onBlur={() => setShowActions(false)}>
-                <input type={type} placeholder={placeholder}/>
+            <div className="input-wrapper" onFocus={() => setShowActions(true)}>
+                <input type={type} placeholder={placeholder} value={inputValue}
+                       onChange={(event) => setInputValue(event.target.value)}/>
                 {showActions &&
                 <div className="input-actions">
-                    <button className="btn btn--success btn--xs">Submit</button>
-                    <button className="btn btn--danger btn--xs">Cancel</button>
+                    <button className="btn btn--success btn--xs" onClick={handleSubmit}>Submit</button>
+                    <button className="btn btn--danger btn--xs" onClick={() => setShowActions(false)}>Cancel</button>
                 </div>}
             </div>
-        </>
+            <ToastContainer position="top-center"/>
+        </div>
     )
 }
 
@@ -55,19 +73,44 @@ export const Profile = ({user}: {user: IUser}) => {
 const AccountSettings = ({user}: {user: IUser}) => {
     const navigate = useNavigate()
     const queryClient = useQueryClient()
+    const [verified, setVerified] = useState(false)
+    const [password, setPassword] = useState("")
+
     const handleLogout = () => {
         localStorage.removeItem('x-auth-token')
         queryClient.invalidateQueries({queryKey: ["me"]})
         navigate('/')
     }
 
+    const handleSubmit = () => {
+        apiClient.post("/accounts/login", {emailOrUsername: user.username, password: password}, 
+            { headers: {"Authorization": `Bearer ${localStorage.getItem('x-auth-token')}`}})
+                 .then(() => setVerified(true))
+                 .catch(() => toast.error("Invalid Password Entered."))
+    }
+
     return (
         <div className="account-settings">
-            <CustomChangeInput label="Update Email" placeholder="Enter new email" type="text"/>
-            <CustomChangeInput label="Update Password" placeholder="Enter new password" type="password"/>
-            <CustomChangeInput label="Update Username" placeholder="Enter new username" type="text"/>
+            {verified ? 
+            <>
+                <CustomChangeInput label="Update Email" placeholder="Enter new email" type="text" field="email"/>
+                <CustomChangeInput label="Update Username" placeholder="Enter new username" type="text" field="username"/>
+                <CustomChangeInput label="Update Password" placeholder="Enter new password" type="password" field="password"/>
+            </> :
+            <>
+                <ToastContainer position="top-center"/>
+                <h2 className="verify-heading">
+                    Please confirm password to access account settings
+                </h2>
+                <div className="input-wrapper">
+                    <input type="password" placeholder="Enter Password" 
+                        onChange={(event) => setPassword(event.target.value)}/>
+                    <button className="btn btn--success btn--md" onClick={handleSubmit}>Confirm</button>
+                </div>
+            </>
+            }
             <button className="btn btn--success btn--md" onClick={handleLogout}>Logout</button>
-        </div>
+        </div> 
     )
 }
 
