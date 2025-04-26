@@ -4,6 +4,9 @@ import { IPost } from "../interfaces/Interfaces"
 export const generateImageUrl = (image: string) => 
     `http://localhost:5191/uploads/post_images/${image}.webp`
 
+export const generateAvatarUrl = (image: string) =>
+    `http://localhost:5191/uploads/avatar_images/${image}.webp`
+
 export const capitalize = (word: string) =>
     `${word[0].toUpperCase()}${word.slice(1)}`
 

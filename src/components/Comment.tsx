@@ -1,11 +1,10 @@
 import { IComment } from "../utils/interfaces/Interfaces"
-import Avatar from "../assets/images/avatar.webp"
 import { FaHeart, FaRegHeart, FaTrash} from "react-icons/fa"
 import { useGlobalContext } from "../providers/global-provider"
 import apiClient from "../utils/services/dataServices"
 import { useQueryClient } from "@tanstack/react-query"
 import { useParams } from "react-router-dom"
-import { formatStringDate } from "../utils/helpers/helpers"
+import { formatStringDate, generateAvatarUrl } from "../utils/helpers/helpers"
 
 export const Comment = ({comment, userLiked, commentType, handleLike}: 
 {comment: IComment, userLiked: boolean, commentType: "comments" | "discussionComments", handleLike: (commentId: number | undefined) => void}) => {
@@ -23,7 +22,7 @@ export const Comment = ({comment, userLiked, commentType, handleLike}:
     <div className="comment">
         <div className="comment__content">
             <div className="comment__content__user-info">
-                <img src={Avatar} alt="Comment User Avatar"/>
+                <img src={generateAvatarUrl(comment.avatar)} alt="Comment User Avatar"/>
             </div>
             <div className="comment__content__content">
                 <h5 className="comment__content__content__user">{comment.commentedBy}</h5>

@@ -1,4 +1,3 @@
-import { IoIosEye, IoIosEyeOff } from "react-icons/io";
 import { useState } from "react"
 import apiClient from "../utils/services/dataServices"
 import { IUser } from "../utils/interfaces/Interfaces";
@@ -8,7 +7,6 @@ import { useQueryClient } from '@tanstack/react-query'
 export const Login = () => {
   const [form, setForm] = useState<{emailOrUsername: string, password: string}>({emailOrUsername: "", password: ""})
   const queryClient = useQueryClient()
-  const [viewPassword, setViewPassword] = useState(false)
   const [loginError, setLoginError] = useState(false)
   const navigate = useNavigate()
 
@@ -39,23 +37,21 @@ export const Login = () => {
                 setLoginError(false)
                 setForm({...form, emailOrUsername: event.target.value})
               }}/>
-        <span className="account-input__password">
-        <input className="account-input__input account-input__input--fw" 
-               type={viewPassword ? "text" : "password"} placeholder="Password"
-               onChange={(event) => {
-                setLoginError(false)
-                setForm({...form, password: event.target.value})
-              }}/>
-          {viewPassword ? <IoIosEyeOff className="account-input__password__icon" onClick={() => setViewPassword(false)}/> : 
-                          <IoIosEye className="account-input__password__icon" onClick={() => setViewPassword(true)}/>}
-        </span>
+          <input className="account-input__input account-input__input--fw" 
+                type="password" placeholder="Password"
+                onChange={(event) => {
+                  setLoginError(false)
+                  setForm({...form, password: event.target.value})
+                }}/>
         {loginError &&
         <span className="account-input__login-error">
           <h3>Invalid Username or Password</h3>
         </span>}
         <span className="account-input__forgot"><a href="#">Forgot Password</a></span>
-        <button className="account-input__btn" onClick={() => handleFormSubmit()}>Sign In</button>
-        <span className="account-input__join-now">No Account? <a href="/account/register">Join Now</a></span>
+        <div className="sign-up-actions-wrapper">
+          <button className="account-input__btn" onClick={() => handleFormSubmit()}>Sign In</button>
+          <span className="account-input__join-now">No Account? <a href="/account/register">Join Now</a></span>
+        </div>
     </div>
   )
 }

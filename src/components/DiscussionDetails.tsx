@@ -154,7 +154,7 @@ export const DiscussionDetails = () => {
                         className="icon" onClick={() => handleSimilarDiscissionClick()}/>
                 </div>
             </div> 
-            <FollowButton username={discussion.appUser.username}/>
+            <FollowButton username={discussion.appUser.username} avatar={discussion.appUser.avatar}/>
          </div>    
         </div>
         </>}

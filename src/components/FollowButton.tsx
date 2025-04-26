@@ -1,12 +1,12 @@
-import Avatar from "../assets/images/avatar.webp"
 import { ToastContainer, toast } from 'react-toastify'
 import { LoginToastComponent } from "./CustomToasts/LoginToastComponent";
 import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../providers/global-provider";
 import apiClient from "../utils/services/dataServices"
 import { useQueryClient } from "@tanstack/react-query";
+import { generateAvatarUrl } from '../utils/helpers/helpers';
 
-export const FollowButton = ({username}: {username: string}) => {
+export const FollowButton = ({username, avatar}: {username: string, avatar: string}) => {
   const navigate = useNavigate()
   const { isLoggedIn, user } = useGlobalContext()
   const queryClient = useQueryClient()
@@ -36,7 +36,7 @@ export const FollowButton = ({username}: {username: string}) => {
     <>
     <ToastContainer position="top-center"/>
     <button className="btn btn--success btn--md btn--follow" onClick={handleClick}>
-        <img src={Avatar}/>{renderFollowString()} {username}
+        <img src={generateAvatarUrl(avatar)}/>{renderFollowString()} {username}
     </button>
     </>
   )

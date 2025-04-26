@@ -8,6 +8,7 @@ import { AllPosts } from "./AllPosts"
 import { ToastContainer, toast } from "react-toastify"
 import { IUser } from "../utils/interfaces/Interfaces"
 import apiClient, { updateUserSettings } from "../utils/services/dataServices"
+import { generateAvatarUrl } from "../utils/helpers/helpers"
 
 const CustomChangeInput = ({label, placeholder, type, field, password}: 
     {label: string, placeholder: string, type: string, field: string, password: string}) => {
@@ -59,7 +60,7 @@ export const Profile = ({user}: {user: IUser}) => {
     return (
         <div className="profile">
             <div className="profile__header">
-                <img className="profile__img" src={Avatar}/>
+                <img className="profile__img" src={generateAvatarUrl(user.avatar)}/>
                 <h3 className="profile__username">{user?.username}</h3>
             </div>
             <div className="profile__content">
@@ -156,7 +157,7 @@ export const UserList = ({type, profileUser, authenticated}: {type: "followers" 
                 <div className="friend">
                     <Link to={renderLink(user)}>
                         <div className="friend__info">
-                            <img src={Avatar}/>
+                            <img src={generateAvatarUrl(user.avatar)}/>
                             <h3>{user.username}</h3>
                         </div>
                     </Link>

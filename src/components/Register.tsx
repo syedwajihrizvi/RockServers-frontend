@@ -1,6 +1,14 @@
 import { useState } from "react"
 import apiClient from "../utils/services/dataServices"
 import { useNavigate } from "react-router-dom"
+import Avatar from "../assets/images/avatar.webp"
+import AvatarTwo from "../assets/images/avatar2.jpg"
+import AvatarThree from "../assets/images/avatar3.webp"
+import AvatarFour from "../assets/images/avatar4.jpg"
+import AvatarFive from "../assets/images/avatar5.jpg"
+import AvatarSix from "../assets/images/avatar6.jpg"
+import AvatarSeven from "../assets/images/avatar7.jpeg"
+import AvatarEight from "../assets/images/avatar8.jpg"
 
 interface RegisterForm {
   email?: string,
@@ -20,9 +28,15 @@ interface Errors {
   confirmPassword?: string
 }
 
+const avatars = [
+  Avatar, AvatarTwo, AvatarThree, AvatarFour, AvatarFive, AvatarSix, AvatarSeven, AvatarEight
+]
+
 export const Register = () => {
   const [register, setRegister] = useState<RegisterForm>({})
   const [errors, setErrors] = useState<Errors>({})
+  const [selectingAvatar, setSelectingAvatar] = useState(false)
+  const [avatarSelected, setAvatarSelected] = useState("")
   const navigate = useNavigate()
   const handleSubmit = () => {
     const { email, username, firstName, lastName, password, confirmPassword } = register
@@ -55,61 +69,102 @@ export const Register = () => {
               navigate('/account/login')}
             )
              .catch(err => console.log(err))
-    console.log(register)
+  }
+
+  const handleSelectingAvatar = () => {
+    setSelectingAvatar(false)
   }
 
   return (
-    <div className="account-input">
-      <div className="account-input__header">
-        <h1 className="account-input__heading">Sign Up Now</h1>
-        <p className="account-input__subtitle">Join the community and improve your Rockstar Experience!</p>
+    <div className="register-container">
+      {selectingAvatar &&
+      <div className="avatar-picker__wrapper">
+        <div className="avatar-picker">
+          {avatars.map((avt) => 
+            <img key={avt} onClick={() => setAvatarSelected(avatarSelected == avt ? "" : avt)}
+                 src={avt} style={{border: avt == avatarSelected ? "3px solid #03fc98" : ""}}/>)}
+        </div>
+        <div className="avatar-picker__actions">
+          <button className="btn btn--success btn--md" onClick={() => handleSelectingAvatar()}>Done</button>
+          <button onClick={() => setSelectingAvatar(false)} className="btn btn--danger btn--md">Cancel</button>
+        </div>  
+      </div>}
+      <div className="account-input" style={{opacity: selectingAvatar ? 0.1 : 1}}>
+        <div className="account-input__header">
+          <h1 className="account-input__heading">Sign Up Now</h1>
+          <p className="account-input__subtitle">Join the community and improve your Rockstar Experience!</p>
+        </div>
+        <div className="account-input__wrapper">
+          <input onChange={(event) => {
+            setErrors({...errors, email: ""}) 
+            setRegister({...register, email: event.target.value})}} type="text" 
+                className="account-input__input account-input__input--fw" placeholder="Enter your Email"/>
+          {errors.email && <p className="account-input__error">{errors.email}</p>}
+        </div>
+        <div className="account-input__wrapper">
+          <input onChange={(event) => {
+            setErrors({...errors, username: ""})
+            setRegister({...register, username: event.target.value})}} type="text" 
+                  className="account-input__input account-input__input--fw" placeholder="Enter your Username"/>
+          {errors.username && <p className="account-input__error">{errors.username}</p>}
+        </div>
+        <div className="account-input__wrapper">
+          <input onChange={(event) => {
+            setErrors({...errors, firstName: ""})
+            setRegister({...register, firstName: event.target.value})}} type="text" 
+                  className="account-input__input account-input__input--fw" placeholder="Enter your First Name"/>
+          {errors.firstName && <p className="account-input__error">{errors.firstName}</p>}
+        </div>
+        <div className="account-input__wrapper">
+          <input onChange={(event) => {
+            setErrors({...errors, lastName: ""})
+            setRegister({...register, lastName: event.target.value})}} type="text" 
+                  className="account-input__input account-input__input--fw" placeholder="Enter your Last Name"/>
+          {errors.lastName && <p className="account-input__error">{errors.lastName}</p>}
+        </div>
+        {!avatarSelected && <div className="account-input__profile-pic-chooser">
+          <div className="account-input__wrapper">
+            <label className="file-upload-wrapper btn btn--success btn--md">
+              Upload an Image
+              <input type="file" />
+            </label>
+          </div>
+          <h3 className="divider--heading">Or</h3>
+          <button className="btn btn--success btn--md" onClick={() => setSelectingAvatar(true)}>
+            Choose An Avatar
+          </button>
+        </div>}
+        {avatarSelected && 
+        <div className="avatar-preview__wrapper">
+          <img className="avatar-preview" src={avatarSelected}/>
+          <h3 className="divider--heading">Or</h3>
+          <button className="btn btn--success btn--md" onClick={() => setAvatarSelected("")}>
+            Choose new Profile Picture
+          </button>
+        </div>}
+        <div className="account-input__wrapper">
+          <input onChange={(event) => {
+            setErrors({...errors, password: ""})
+            setRegister({...register, password: event.target.value})}} 
+                  className="account-input__input account-input__input--fw" 
+                  type="password" placeholder="Enter Password"/>
+          {errors.password && <p className="account-input__error">{errors.password}</p>}
+        </div>
+        <div className="account-input__wrapper">
+          <input onChange={(event) => {
+            setErrors({...errors, confirmPassword: ""})
+            setRegister({...register, confirmPassword: event.target.value})}} 
+                  className="account-input__input account-input__input--fw" 
+                  type="password" placeholder="Confirm Password"/>
+          {errors.confirmPassword && <p className="account-input__error">{errors.confirmPassword}</p>}
+        </div>
+        <div className="sign-up-actions-wrapper">
+          <button className="account-input__btn" onClick={() => handleSubmit()}>Sign Up</button>
+          <span className="account-input__input account-input__input--fw">
+            Already have an account? <a href="/account/login">Sign In</a>
+          </span>
+        </div>
       </div>
-      <div className="account-input__wrapper">
-        <input onChange={(event) => {
-          setErrors({...errors, email: ""}) 
-          setRegister({...register, email: event.target.value})}} type="text" 
-               className="account-input__input account-input__input--fw" placeholder="Enter your Email"/>
-        {errors.email && <p className="account-input__error">{errors.email}</p>}
-      </div>
-      <div className="account-input__wrapper">
-        <input onChange={(event) => {
-          setErrors({...errors, username: ""})
-          setRegister({...register, username: event.target.value})}} type="text" 
-                className="account-input__input account-input__input--fw" placeholder="Enter your Username"/>
-        {errors.username && <p className="account-input__error">{errors.username}</p>}
-      </div>
-      <div className="account-input__wrapper">
-        <input onChange={(event) => {
-          setErrors({...errors, firstName: ""})
-          setRegister({...register, firstName: event.target.value})}} type="text" 
-                className="account-input__input account-input__input--fw" placeholder="Enter your First Name"/>
-        {errors.firstName && <p className="account-input__error">{errors.firstName}</p>}
-      </div>
-      <div className="account-input__wrapper">
-        <input onChange={(event) => {
-          setErrors({...errors, lastName: ""})
-          setRegister({...register, lastName: event.target.value})}} type="text" 
-                className="account-input__input account-input__input--fw" placeholder="Enter your Last Name"/>
-        {errors.lastName && <p className="account-input__error">{errors.lastName}</p>}
-      </div>
-      <div className="account-input__wrapper">
-        <input onChange={(event) => {
-          setErrors({...errors, password: ""})
-          setRegister({...register, password: event.target.value})}} 
-                className="account-input__input account-input__input--fw" 
-                type="password" placeholder="Enter Password"/>
-        {errors.password && <p className="account-input__error">{errors.password}</p>}
-      </div>
-      <div className="account-input__wrapper">
-        <input onChange={(event) => {
-          setErrors({...errors, confirmPassword: ""})
-          setRegister({...register, confirmPassword: event.target.value})}} 
-                className="account-input__input account-input__input--fw" 
-                type="password" placeholder="Confirm Password"/>
-        {errors.confirmPassword && <p className="account-input__error">{errors.confirmPassword}</p>}
-      </div>
-        <button className="account-input__btn" onClick={() => handleSubmit()}>Sign Up</button>
-        <span className="account-input__input account-input__input--fw">Already have an account? <a href="/account/login">Sign In</a></span>
     </div>
   )
 }
