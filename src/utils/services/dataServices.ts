@@ -40,4 +40,14 @@ export const createDiscussion = (formData: FormData, customImage: boolean): Prom
             {"Authorization": `Bearer ${localStorage.getItem('x-auth-token')}`, 
              "Content-Type": "multipart/form-data"}})  
 }
+
+export const updateUserSettings = (formData: FormData, field: string): Promise<AxiosResponse> => {
+    return client.patch(
+        `/accounts/update/${field}`, 
+        formData, 
+        {headers: 
+            {"Authorization": `Bearer ${localStorage.getItem('x-auth-token')}`, 
+            "Content-Type": "multipart/form-data"}})
+}
+
 export default client

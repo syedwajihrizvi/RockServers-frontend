@@ -7,23 +7,30 @@ import { Skeleton } from "./Skeleton"
 import { AllPosts } from "./AllPosts"
 import { ToastContainer, toast } from "react-toastify"
 import { IUser } from "../utils/interfaces/Interfaces"
-import apiClient from "../utils/services/dataServices"
+import apiClient, { updateUserSettings } from "../utils/services/dataServices"
 
-const ConfirmationInput = () => {
-    return (
-        <div>
-            <h1>Please confirm password to change settings</h1>
-            <input type="password" placeholder="Enter current password"/>
-        </div>
-    )
-}
-
-const CustomChangeInput = ({label, placeholder, type, field}: 
-    {label: string, placeholder: string, type: string, field: string, renderConfirmation?: boolean}) => {
+const CustomChangeInput = ({label, placeholder, type, field, password}: 
+    {label: string, placeholder: string, type: string, field: string, password: string}) => {
     const [showActions, setShowActions] = useState(false)
     const [inputValue, setInputValue] = useState("")
+    const queryClient = useQueryClient()
     const handleSubmit = () => {
-        toast(ConfirmationInput())
+        const formData = new FormData()
+        formData.append("confirmPassword", password)
+        formData.append(field, inputValue)
+        toast.promise(
+            updateUserSettings(formData, field).then(() => {
+                toast.dismiss()
+                setShowActions(false)
+                setInputValue("")
+                queryClient.invalidateQueries({queryKey: ["me"]})
+            }),
+            {
+                pending: "Updating Information...",
+                success: "Updated successfully",
+                error: "Error updating user information"
+            }
+        )
     }
 
     return (
@@ -37,7 +44,10 @@ const CustomChangeInput = ({label, placeholder, type, field}:
                 {showActions &&
                 <div className="input-actions">
                     <button className="btn btn--success btn--xs" onClick={handleSubmit}>Submit</button>
-                    <button className="btn btn--danger btn--xs" onClick={() => setShowActions(false)}>Cancel</button>
+                    <button className="btn btn--danger btn--xs" onClick={() => {
+                        setInputValue("")
+                        setShowActions(false)
+                    }}>Cancel</button>
                 </div>}
             </div>
             <ToastContainer position="top-center"/>
@@ -93,9 +103,9 @@ const AccountSettings = ({user}: {user: IUser}) => {
         <div className="account-settings">
             {verified ? 
             <>
-                <CustomChangeInput label="Update Email" placeholder="Enter new email" type="text" field="email"/>
-                <CustomChangeInput label="Update Username" placeholder="Enter new username" type="text" field="username"/>
-                <CustomChangeInput label="Update Password" placeholder="Enter new password" type="password" field="password"/>
+                <CustomChangeInput label="Update Email" placeholder="Enter new email" type="text" field="email" password={password}/>
+                <CustomChangeInput label="Update Username" placeholder="Enter new username" type="text" field="username" password={password}/>
+                <CustomChangeInput label="Update Password" placeholder="Enter new password" type="password" field="password" password={password}/>
             </> :
             <>
                 <ToastContainer position="top-center"/>
@@ -115,8 +125,7 @@ const AccountSettings = ({user}: {user: IUser}) => {
 }
 
 export const UserList = ({type, profileUser, authenticated}: {type: "followers" | "following", profileUser: IUser, authenticated: boolean}) => {
-    const { isLoading, user: loggedInUser } = useGlobalContext()
-    console.log(`Logged in user: ${loggedInUser?.username}`)
+    const { user: loggedInUser } = useGlobalContext()
     const renderButton = (renderUser: IUser) => {
         if (type == "following") {
             return (
