@@ -1,19 +1,18 @@
 import { useRef, useState } from "react"
-import { IComment } from "../utils/interfaces/Interfaces"
+import { IComment, IUser } from "../utils/interfaces/Interfaces"
 import { Comment } from "./Comment"
 import { ToastContainer, toast } from 'react-toastify'
-import Avatar from "../assets/images/avatar.webp"
 import { MdFilterList } from "react-icons/md"
 import { useGlobalContext } from "../providers/global-provider"
-import { userDidLike } from "../utils/helpers/helpers"
+import { generateAvatarUrl, userDidLike } from "../utils/helpers/helpers"
 import apiClient from "../utils/services/dataServices"
 import { useQueryClient } from "@tanstack/react-query"
 import { LoginToastComponent } from "./CustomToasts/LoginToastComponent";
 import { useNavigate } from "react-router-dom"
 
-export const AddComment = ({customClass, handleAddComment, handleSubmitComment}: 
+export const AddComment = ({customClass, handleAddComment, handleSubmitComment, user}: 
     {customClass?: string, handleAddComment: () => void, 
-    handleSubmitComment: (commentContent: string | undefined) => void}) => {
+    handleSubmitComment: (commentContent: string | undefined) => void, user: IUser | undefined}) => {
     const [addingComment, setAddingComment] = useState(false)
     const [commentBody, setCommentBody] = useState("")
     const inputRef = useRef<HTMLInputElement>(null)
@@ -44,7 +43,7 @@ export const AddComment = ({customClass, handleAddComment, handleSubmitComment}:
     return (
         <div className={`card-details-card__comments__add-wrapper ${customClass ? customClass : ''}`}>
             <div className="card-details-card__comments__add">
-                <img src={Avatar} alt="Avatar"/>
+                <img src={generateAvatarUrl(user.avatar)} alt="Avatar"/>
                 <input type="text" placeholder="Add Comment..." 
                     onFocus={(event) => handleSetAddingComment(event.target)}
                     onChange={(event) => setCommentBody(event.target.value)}
@@ -103,7 +102,7 @@ export const Comments = ({comments, withViewAll, handleAddComment, handleSubmitC
             position="top-center"
             />
             <h1>{comments ? `${comments.length} Comments` : 'No Comments'}</h1>
-            <AddComment handleAddComment={handleAddComment} handleSubmitComment={handleSubmitComment}/>
+            {user && <AddComment handleAddComment={handleAddComment} handleSubmitComment={handleSubmitComment} user={user}/>}
             {comments && 
                 renderComments(comments).map(comment => (
                     <Comment key={comment.id} comment={comment} 
@@ -125,7 +124,7 @@ export const Comments = ({comments, withViewAll, handleAddComment, handleSubmitC
                              handleLike={handleCommentLike} commentType={commentType}/>
                 ))}
                 </div>
-                <AddComment customClass='with-x-padding' handleAddComment={handleAddComment} 
-                            handleSubmitComment={handleSubmitComment}/>
+                {user && <AddComment customClass='with-x-padding' handleAddComment={handleAddComment} 
+                            handleSubmitComment={handleSubmitComment} user={user}/>}
             </div>
 }

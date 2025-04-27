@@ -1,14 +1,10 @@
 import { useState } from "react"
 import apiClient from "../utils/services/dataServices"
 import { useNavigate } from "react-router-dom"
-import Avatar from "../assets/images/avatar.webp"
-import AvatarTwo from "../assets/images/avatar2.jpg"
-import AvatarThree from "../assets/images/avatar3.webp"
-import AvatarFour from "../assets/images/avatar4.jpg"
-import AvatarFive from "../assets/images/avatar5.jpg"
-import AvatarSix from "../assets/images/avatar6.jpg"
-import AvatarSeven from "../assets/images/avatar7.jpeg"
-import AvatarEight from "../assets/images/avatar8.jpg"
+import { useAvatars } from "../hooks/useAvatars"
+import { generateAvatarUrl } from "../utils/helpers/helpers"
+import { IAvatar } from "../utils/interfaces/Interfaces"
+
 
 interface RegisterForm {
   email?: string,
@@ -28,16 +24,24 @@ interface Errors {
   confirmPassword?: string
 }
 
-const avatars = [
-  Avatar, AvatarTwo, AvatarThree, AvatarFour, AvatarFive, AvatarSix, AvatarSeven, AvatarEight
-]
 
 export const Register = () => {
   const [register, setRegister] = useState<RegisterForm>({})
   const [errors, setErrors] = useState<Errors>({})
   const [selectingAvatar, setSelectingAvatar] = useState(false)
   const [avatarSelected, setAvatarSelected] = useState("")
+  const [imageUploaded, setImageUploaded] = useState<Blob | MediaSource | undefined>(undefined)
+  const { data: avatars } = useAvatars()
   const navigate = useNavigate()
+
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0]
+    if (!file)
+      return
+    setAvatarSelected("")
+    setImageUploaded(file)
+  }
+
   const handleSubmit = () => {
     const { email, username, firstName, lastName, password, confirmPassword } = register
     // Basic client side validation
@@ -59,10 +63,19 @@ export const Register = () => {
 
     const hasErrors = Object.values(newErrors).some((msg) => msg != "")
     if (hasErrors) return
-  
+    
     // Send request to create user
-    const requestData = {firstName, lastName, email, username, password}
-    apiClient.post("/accounts/register", requestData)
+    const formData = new FormData()
+    formData.append("firstName", firstName as string)
+    formData.append("lastname", lastName as string)
+    formData.append("email", email as string)
+    formData.append("username", username as string)
+    formData.append("password", password as string)
+    if (avatarSelected)
+      formData.append("avatar", avatarSelected)
+    else
+      formData.append("imageFile", imageUploaded as Blob)
+    apiClient.post("/accounts/register", formData)
              .then(res => {
               // TODO: Add toast to show successful creation
               console.log(res.data)
@@ -71,21 +84,39 @@ export const Register = () => {
              .catch(err => console.log(err))
   }
 
-  const handleSelectingAvatar = () => {
-    setSelectingAvatar(false)
+  console.log(`Image Uploaded: ${imageUploaded}`)
+  const handleSelectingAvatar = (avt: IAvatar) => {
+    console.log("Called")
+    setImageUploaded(undefined)
+    setAvatarSelected(avatarSelected == avt.name ? "" : avt.name)
+  }
+
+  const renderUploadedImagePreview = () => {
+    if (imageUploaded) {
+      const imageUrl = URL.createObjectURL(imageUploaded)
+      return (
+        <div className="avatar-preview__wrapper">
+        <img className="avatar-preview" src={imageUrl}/>
+        <h3 className="divider--heading">Or</h3>
+        <button className="btn btn--success btn--md" onClick={() => setImageUploaded(undefined)}>
+          Choose new Profile Picture
+        </button>
+      </div>
+      )
+    }
   }
 
   return (
     <div className="register-container">
       {selectingAvatar &&
       <div className="avatar-picker__wrapper">
-        <div className="avatar-picker">
+        { avatars && <div className="avatar-picker">
           {avatars.map((avt) => 
-            <img key={avt} onClick={() => setAvatarSelected(avatarSelected == avt ? "" : avt)}
-                 src={avt} style={{border: avt == avatarSelected ? "3px solid #03fc98" : ""}}/>)}
-        </div>
+            <img key={avt.id} onClick={() => handleSelectingAvatar(avt)}
+                 src={generateAvatarUrl(avt.name)} style={{border: avt.name == avatarSelected ? "3px solid #03fc98" : ""}}/>)}
+        </div>}
         <div className="avatar-picker__actions">
-          <button className="btn btn--success btn--md" onClick={() => handleSelectingAvatar()}>Done</button>
+          <button className="btn btn--success btn--md" onClick={() => setSelectingAvatar(false)}>Done</button>
           <button onClick={() => setSelectingAvatar(false)} className="btn btn--danger btn--md">Cancel</button>
         </div>  
       </div>}
@@ -122,11 +153,11 @@ export const Register = () => {
                   className="account-input__input account-input__input--fw" placeholder="Enter your Last Name"/>
           {errors.lastName && <p className="account-input__error">{errors.lastName}</p>}
         </div>
-        {!avatarSelected && <div className="account-input__profile-pic-chooser">
+        {!avatarSelected && !imageUploaded && <div className="account-input__profile-pic-chooser">
           <div className="account-input__wrapper">
             <label className="file-upload-wrapper btn btn--success btn--md">
               Upload an Image
-              <input type="file" />
+              <input type="file" onChange={handleFileUpload}/>
             </label>
           </div>
           <h3 className="divider--heading">Or</h3>
@@ -136,12 +167,13 @@ export const Register = () => {
         </div>}
         {avatarSelected && 
         <div className="avatar-preview__wrapper">
-          <img className="avatar-preview" src={avatarSelected}/>
+          <img className="avatar-preview" src={generateAvatarUrl(avatarSelected)}/>
           <h3 className="divider--heading">Or</h3>
           <button className="btn btn--success btn--md" onClick={() => setAvatarSelected("")}>
             Choose new Profile Picture
           </button>
         </div>}
+        {imageUploaded && renderUploadedImagePreview()}
         <div className="account-input__wrapper">
           <input onChange={(event) => {
             setErrors({...errors, password: ""})

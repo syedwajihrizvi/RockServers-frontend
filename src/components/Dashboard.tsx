@@ -1,7 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query"
 import { ReactNode, useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import Avatar from "../assets/images/avatar.webp"
 import { useGlobalContext } from "../providers/global-provider"
 import { Skeleton } from "./Skeleton"
 import { AllPosts } from "./AllPosts"

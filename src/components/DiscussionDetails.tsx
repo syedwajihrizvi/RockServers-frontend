@@ -1,8 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { useDiscussion } from '../hooks/useDiscussions'
 import { Skeleton } from './Skeleton'
-import { formatStringDate, generateImageUrl, userDidLike } from '../utils/helpers/helpers'
-import Avatar from "../assets/images/avatar.webp"
+import { formatStringDate, generateImageUrl, userDidLike, generateAvatarUrl } from '../utils/helpers/helpers'
 import { ToastContainer, toast } from 'react-toastify'
 
 import { Comments } from './Comments'
@@ -124,7 +123,7 @@ export const DiscussionDetails = () => {
                             <h3>{discussion.title}</h3>
                             <p>{discussion.content}</p>
                             <div className="card__user-info">
-                                <img className="card__avatar" src={Avatar} 
+                                <img className="card__avatar" src={generateAvatarUrl(discussion.appUser.avatar)} 
                                     alt="Avatar"/>
                                 <p>Posted by <span style={{fontWeight:'bold'}}>{discussion.appUser.username}</span> {formatStringDate(discussion.postedAt)}</p>
                             </div>

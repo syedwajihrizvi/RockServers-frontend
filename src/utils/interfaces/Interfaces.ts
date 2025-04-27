@@ -86,3 +86,8 @@ export interface IUser {
 export interface IImage {
     imagePath: string
 }
+
+export interface IAvatar {
+    id: number,
+    name: string
+}
