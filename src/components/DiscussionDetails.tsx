@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { useDiscussion } from '../hooks/useDiscussions'
 import { Skeleton } from './Skeleton'
-import { formatStringDate, generateImageUrl, userDidLike, generateAvatarUrl } from '../utils/helpers/helpers'
+import { formatStringDate, generateImageUrl, userDidLike, generateProfileImageUrl } from '../utils/helpers/helpers'
 import { ToastContainer, toast } from 'react-toastify'
 
 import { Comments } from './Comments'
@@ -123,7 +123,7 @@ export const DiscussionDetails = () => {
                             <h3>{discussion.title}</h3>
                             <p>{discussion.content}</p>
                             <div className="card__user-info">
-                                <img className="card__avatar" src={generateAvatarUrl(discussion.appUser.avatar)} 
+                                <img className="card__avatar" src={generateProfileImageUrl(discussion.appUser)} 
                                     alt="Avatar"/>
                                 <p>Posted by <span style={{fontWeight:'bold'}}>{discussion.appUser.username}</span> {formatStringDate(discussion.postedAt)}</p>
                             </div>
@@ -153,7 +153,7 @@ export const DiscussionDetails = () => {
                         className="icon" onClick={() => handleSimilarDiscissionClick()}/>
                 </div>
             </div> 
-            <FollowButton username={discussion.appUser.username} avatar={discussion.appUser.avatar}/>
+            <FollowButton user={discussion.appUser}/>
          </div>    
         </div>
         </>}

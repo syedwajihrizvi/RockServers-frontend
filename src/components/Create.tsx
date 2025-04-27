@@ -36,14 +36,16 @@ export const Create = () => {
     }
   }, [postData.gameId])
 
-  const handleFileUpload = (event) => {
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!event.target.files)
+      return
     const file = event.target.files[0]
     if (!file)
       return
     setPostData({...postData, imageUploaded: file, imageSelected: undefined})
   }
 
-  const handleMultipleFileUpload = (event) => {
+  const handleMultipleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files
     if (!files)
       return

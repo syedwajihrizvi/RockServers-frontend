@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom"
-import { formatStringDate, generateAvatarUrl, generateImageUrl, renderPartialContent } from '../utils/helpers/helpers'
+import { formatStringDate, generateProfileImageUrl, generateImageUrl, renderPartialContent } from '../utils/helpers/helpers'
 import { IDiscussion } from '../utils/interfaces/Interfaces'
 import { Engagements } from "./Engagements"
 import { useGlobalContext } from "../providers/global-provider"
@@ -22,7 +22,7 @@ export const DiscussionCard = ({discussion}: {discussion: IDiscussion}) => {
                 </p>
                 <div className="post-card__footer">
                   <div className="card__user-info">
-                    <img className="card__avatar" src={generateAvatarUrl(discussion.appUser.avatar)} alt="Avatar"/>
+                    <img className="card__avatar" src={generateProfileImageUrl(discussion.appUser)} alt="Avatar"/>
                     <p>Posted by <span style={{fontWeight:'bold'}}>{discussion.appUser.username}</span> {formatStringDate(discussion.postedAt)}</p>
                   </div>
                 </div>

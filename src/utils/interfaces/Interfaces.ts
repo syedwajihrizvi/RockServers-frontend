@@ -1,7 +1,6 @@
 export interface IComment {
     id: number,
-    appUserId: string,
-    avatar: string,
+    appUser: IUser,
     title: string,
     content: string,
     commentedBy: string,
@@ -25,10 +24,7 @@ export interface IPost {
     postedAt: string,
     gameId: number,
     gameName: string,
-    appUser: {
-        username: string,
-        avatar: string
-    },
+    appUser: IUser,
     platformName: string,
     comments: IComment[],
     sessions: ISession[],
@@ -48,10 +44,7 @@ export interface IDiscussion {
     content: string,
     imagePath: string,
     otherImages: string[],
-    appUser: {
-        username: string,
-        avatar: string
-    },
+    appUser: IUser,
     comments: IComment[],
     views: number,
     likes: number
@@ -74,6 +67,7 @@ export interface IUser {
     token: string,
     username: string,
     avatar: string,
+    profileImage: string,
     likedPosts: number[],
     likedDiscussions: number[],
     likedComments: number[],

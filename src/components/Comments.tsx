@@ -4,7 +4,7 @@ import { Comment } from "./Comment"
 import { ToastContainer, toast } from 'react-toastify'
 import { MdFilterList } from "react-icons/md"
 import { useGlobalContext } from "../providers/global-provider"
-import { generateAvatarUrl, userDidLike } from "../utils/helpers/helpers"
+import { generateProfileImageUrl, userDidLike } from "../utils/helpers/helpers"
 import apiClient from "../utils/services/dataServices"
 import { useQueryClient } from "@tanstack/react-query"
 import { LoginToastComponent } from "./CustomToasts/LoginToastComponent";
@@ -40,10 +40,10 @@ export const AddComment = ({customClass, handleAddComment, handleSubmitComment, 
         setAddingComment(false)
     }
 
-    return (
+    return user && (
         <div className={`card-details-card__comments__add-wrapper ${customClass ? customClass : ''}`}>
             <div className="card-details-card__comments__add">
-                <img src={generateAvatarUrl(user.avatar)} alt="Avatar"/>
+                <img src={generateProfileImageUrl(user)} alt="Avatar"/>
                 <input type="text" placeholder="Add Comment..." 
                     onFocus={(event) => handleSetAddingComment(event.target)}
                     onChange={(event) => setCommentBody(event.target.value)}

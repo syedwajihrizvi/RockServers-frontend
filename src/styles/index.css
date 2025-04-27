@@ -276,6 +276,7 @@ html, body, #root {
   width: 20px;
   height: 20px;
   border-radius: 100%;
+  object-fit: cover;
 }
 
 .post-card__rating--black p {
@@ -478,6 +479,7 @@ html, body, #root {
   width: 3rem;
   height: 3rem;
   border-radius: 100%;
+  object-fit: cover;
 }
 
 .button-group {
@@ -846,6 +848,7 @@ html, body, #root {
   width: 25px;
   height: 25px;
   border-radius: 100%;
+  object-fit: cover;
 }
 
 .comment__content__user-info h3 {

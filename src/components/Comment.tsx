@@ -4,25 +4,25 @@ import { useGlobalContext } from "../providers/global-provider"
 import apiClient from "../utils/services/dataServices"
 import { useQueryClient } from "@tanstack/react-query"
 import { useParams } from "react-router-dom"
-import { formatStringDate, generateAvatarUrl } from "../utils/helpers/helpers"
+import { formatStringDate, generateProfileImageUrl } from "../utils/helpers/helpers"
 
 export const Comment = ({comment, userLiked, commentType, handleLike}: 
 {comment: IComment, userLiked: boolean, commentType: "comments" | "discussionComments", handleLike: (commentId: number | undefined) => void}) => {
  const queryClient = useQueryClient()
  const {id: contentId} = useParams()
- const { user, isLoggedIn } = useGlobalContext()
+ const { isLoading, user, isLoggedIn } = useGlobalContext()
 
  const handleDeleteComment = () => {
     apiClient.delete(`/${commentType}/${comment.id}`)
              .then(() => {queryClient.invalidateQueries({queryKey: [commentType, parseInt(contentId as string)]})})
              .catch(err => console.log(err))
  }
- 
-  return (
+  
+  return !isLoading && (
     <div className="comment">
         <div className="comment__content">
             <div className="comment__content__user-info">
-                <img src={generateAvatarUrl(comment.avatar)} alt="Comment User Avatar"/>
+                <img src={generateProfileImageUrl(comment.appUser)} alt="Comment User Avatar"/>
             </div>
             <div className="comment__content__content">
                 <h5 className="comment__content__content__user">{comment.commentedBy}</h5>
@@ -32,7 +32,7 @@ export const Comment = ({comment, userLiked, commentType, handleLike}:
         </div>
         <div className="comment__engagement">
             <span>
-                {isLoggedIn && user && comment.appUserId == user.id &&
+                {isLoggedIn && user && comment.appUser.id == user.id &&
                 <FaTrash fontSize={12} className="icon" color='black' onClick={handleDeleteComment}/>}
                 {userLiked ? 
                 <FaHeart fontSize={12} className="icon" color='red' onClick={() => handleLike(comment.id)}/> : 

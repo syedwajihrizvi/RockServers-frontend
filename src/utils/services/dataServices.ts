@@ -50,4 +50,8 @@ export const updateUserSettings = (formData: FormData, field: string): Promise<A
             "Content-Type": "multipart/form-data"}})
 }
 
+export const registerUser = (formData: FormData): Promise<AxiosResponse> => {
+    return client.post("/accounts/register", formData)
+}
+
 export default client

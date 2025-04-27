@@ -1,9 +1,10 @@
 import { useState } from "react"
-import apiClient from "../utils/services/dataServices"
+import { registerUser } from "../utils/services/dataServices"
 import { useNavigate } from "react-router-dom"
 import { useAvatars } from "../hooks/useAvatars"
-import { generateAvatarUrl } from "../utils/helpers/helpers"
+import { generateAvatarImageUrl } from "../utils/helpers/helpers"
 import { IAvatar } from "../utils/interfaces/Interfaces"
+import { toast, ToastContainer } from "react-toastify"
 
 
 interface RegisterForm {
@@ -34,7 +35,9 @@ export const Register = () => {
   const { data: avatars } = useAvatars()
   const navigate = useNavigate()
 
-  const handleFileUpload = (event) => {
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!event.target.files)
+      return
     const file = event.target.files[0]
     if (!file)
       return
@@ -75,18 +78,20 @@ export const Register = () => {
       formData.append("avatar", avatarSelected)
     else
       formData.append("imageFile", imageUploaded as Blob)
-    apiClient.post("/accounts/register", formData)
-             .then(res => {
-              // TODO: Add toast to show successful creation
-              console.log(res.data)
-              navigate('/account/login')}
-            )
-             .catch(err => console.log(err))
+    toast.promise(
+      registerUser(formData).then(() => {
+        toast.dismiss()
+        navigate('/account/login')
+      }),
+      {
+        pending: "Signing Up...",
+        success: "Successfully created account",
+        error: "An unexpected error occured"
+      }
+    )
   }
 
-  console.log(`Image Uploaded: ${imageUploaded}`)
   const handleSelectingAvatar = (avt: IAvatar) => {
-    console.log("Called")
     setImageUploaded(undefined)
     setAvatarSelected(avatarSelected == avt.name ? "" : avt.name)
   }
@@ -108,12 +113,13 @@ export const Register = () => {
 
   return (
     <div className="register-container">
+      <ToastContainer position="top-center"/>
       {selectingAvatar &&
       <div className="avatar-picker__wrapper">
         { avatars && <div className="avatar-picker">
           {avatars.map((avt) => 
             <img key={avt.id} onClick={() => handleSelectingAvatar(avt)}
-                 src={generateAvatarUrl(avt.name)} style={{border: avt.name == avatarSelected ? "3px solid #03fc98" : ""}}/>)}
+                 src={generateAvatarImageUrl(avt.name)} style={{border: avt.name == avatarSelected ? "3px solid #03fc98" : ""}}/>)}
         </div>}
         <div className="avatar-picker__actions">
           <button className="btn btn--success btn--md" onClick={() => setSelectingAvatar(false)}>Done</button>
@@ -167,7 +173,7 @@ export const Register = () => {
         </div>}
         {avatarSelected && 
         <div className="avatar-preview__wrapper">
-          <img className="avatar-preview" src={generateAvatarUrl(avatarSelected)}/>
+          <img className="avatar-preview" src={generateAvatarImageUrl(avatarSelected)}/>
           <h3 className="divider--heading">Or</h3>
           <button className="btn btn--success btn--md" onClick={() => setAvatarSelected("")}>
             Choose new Profile Picture

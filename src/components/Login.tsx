@@ -16,10 +16,8 @@ export const Login = () => {
       setLoginError(true)
     apiClient.post<IUser>("/accounts/login", {emailOrUsername, password})
     .then(res => {
-      const jwt = res.data.token
-      localStorage.setItem('x-auth-token', jwt)
-      queryClient.invalidateQueries({ queryKey: ['me']})
-      navigate('/')
+      localStorage.setItem('x-auth-token', res.data.token)
+      queryClient.refetchQueries({ queryKey: ['me']}).then(() => navigate('/'))
       
     })
     .catch(() => setLoginError(true))

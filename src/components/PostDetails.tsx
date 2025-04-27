@@ -5,7 +5,7 @@ import { CiCirclePlus } from "react-icons/ci";
 import { ToastContainer, toast } from 'react-toastify'
 
 import { IPost } from "../utils/interfaces/Interfaces"
-import { formatStringDate, generateAvatarUrl, generateImageUrl, getDateDifference, userDidLike } from "../utils/helpers/helpers";
+import { formatStringDate, generateProfileImageUrl, generateImageUrl, getDateDifference, userDidLike } from "../utils/helpers/helpers";
 import useQueryStore from "../stores/useQueryStore"
 import { Engagements } from "./Engagements"
 import { Skeleton } from "./Skeleton"
@@ -129,7 +129,7 @@ export const PostDetails = () => {
                         <p>{post.description}</p>
                         <Link to={`/profile/${post.appUser.username}`}>
                             <div className="card__user-info">
-                                <img className="card__avatar" src={generateAvatarUrl(post.appUser.avatar)} 
+                                <img className="card__avatar" src={generateProfileImageUrl(post.appUser)} 
                                     alt="Avatar"/>
                                 <p>Posted by <span style={{fontWeight:'bold'}}>{post.appUser.username}</span> {formatStringDate(post.postedAt)}</p>
                             </div>
@@ -160,7 +160,7 @@ export const PostDetails = () => {
                         fontSize={40} color="white" 
                         className="icon" onClick={() => handleSimilarPostClick()}/>
                 </div>
-                <FollowButton username={post.appUser.username} avatar={post.appUser.avatar}/>
+                <FollowButton user={post.appUser}/>
                 {successfullSessions && <div>
                     {successfullSessions.length > 0 ? 
                     <div className="post-session-history">

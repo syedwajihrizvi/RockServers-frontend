@@ -1,10 +1,15 @@
 import { formatDistanceToNow } from 'date-fns'
-import { IPost } from "../interfaces/Interfaces"
+import { IPost, IUser } from "../interfaces/Interfaces"
 
 export const generateImageUrl = (image: string) => 
     `http://localhost:5191/uploads/post_images/${image}.webp`
 
-export const generateAvatarUrl = (image: string) =>
+export const generateProfileImageUrl = (user: IUser) =>
+    user.avatar ? 
+        `http://localhost:5191/uploads/avatar_images/${user.avatar}.webp` : 
+        `http://localhost:5191/uploads/profile_images/${user.profileImage}.webp`
+
+export const generateAvatarImageUrl = (image: string) =>
     `http://localhost:5191/uploads/avatar_images/${image}.webp`
 
 export const capitalize = (word: string) =>

@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom"
-import { generateImageUrl } from "../utils/helpers/helpers"
+import { generateImageUrl, generateProfileImageUrl } from "../utils/helpers/helpers"
 import { IDiscussion, IPost } from "../utils/interfaces/Interfaces"
 
 export const PreviewCard = ({post}: {post: IPost | IDiscussion}) => {
@@ -10,7 +10,7 @@ export const PreviewCard = ({post}: {post: IPost | IDiscussion}) => {
             <h4>4.2</h4>
         </div>
         <div className="preview-card__user-info">
-            <img src={post.appUser.avatar} alt="User Info" />
+            <img src={generateProfileImageUrl(post.appUser)} alt="User Info" />
         </div>
         <img src={generateImageUrl(post.imagePath)}/>
         <div className="preview-card__title">
