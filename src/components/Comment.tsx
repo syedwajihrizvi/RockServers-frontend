@@ -23,12 +23,32 @@ export const Comment = ({comment, userLiked, commentType, handleLike, handleRepl
  
  const renderViewReplies = () =>
     !viewReplies ? 
-                <p onClick={() => setViewReplies(true)}>View {comment.replies.length} replies</p> : 
-                <p onClick={() => setViewReplies(false)}>Hide Replies</p>
+                <p className="view-replies" onClick={() => setViewReplies(true)}>View {comment.replies.length} replies</p> : 
+                <p className="view-replies" onClick={() => setViewReplies(false)}>Hide Replies</p>
 
   const renderReplies = (replies: IReply[]) =>
-    <div>
-        {replies.map(reply => <p>{reply.content}</p>)}
+    <div className="replies">
+        {replies.map(reply => 
+            <div className="reply__wrapper">
+                <div className="reply">
+                    <img className="reply__avatar" src={generateProfileImageUrl(reply.appUser)}/>
+                    <div className="reply__body">
+                        <h3 className="comment__content__content__user">{reply.appUser.username}</h3>
+                        <p className="comment__content__content__comment">{reply.content}</p>
+                        <p className="comment__content__content__date">{formatStringDate(reply.repliedAt)}</p>
+                    </div>
+                </div>
+                <div className="comment__engagement">
+                <span>
+                    {isLoggedIn && user && reply.appUser.id == user.id &&
+                    <FaTrash fontSize={12} className="icon" color='black' onClick={handleDeleteComment}/>}
+                    {userLiked ? 
+                    <FaHeart fontSize={12} className="icon" color='red'/> : 
+                    <FaRegHeart fontSize={12} className="icon" color='red'/>}
+                    <p>{reply.likes}</p>
+                </span>
+        </div>
+            </div>)}
     </div>
 
   return !isLoading && (

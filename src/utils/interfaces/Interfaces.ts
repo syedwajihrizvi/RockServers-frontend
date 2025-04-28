@@ -1,7 +1,9 @@
 export interface IReply {
     id: number,
     content: string,
-    appUser: IUser
+    appUser: IUser,
+    repliedAt: string,
+    likes: number
 }
 
 export interface IComment {

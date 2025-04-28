@@ -887,6 +887,46 @@ html, body, #root {
   cursor: pointer
 }
 
+.view-replies {
+  font-weight: bold;
+  cursor: pointer
+}
+
+.replies {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem
+}
+
+.reply__wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.reply {
+  display: flex;
+  gap: 1rem
+}
+
+.reply__user {
+  margin: 0;
+
+}
+
+.reply__content {
+  margin: 0;
+  margin-top: 0.3rem;
+  font-size: 0.8rem;
+}
+
+.reply__avatar {
+  object-fit: cover;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 100%;
+}
+
 .comment__content__content__comment {
   margin: 0;
   font-size: 1.2rem;
@@ -899,17 +939,19 @@ html, body, #root {
 
 .comment__engagement {
   display: flex;
-  gap: 1rem
+  gap: 1rem;
 }
 
 .comment__engagement p {
-  margin: 0
+  margin: 0;
+  font-size: 1rem;
 }
 .comment__engagement span {
   display: flex;
   justify-content: center;
   text-wrap: nowrap;
-  gap: 0.5rem
+  gap: 0.5rem;
+  align-items: center;
 }
 
 .comment__engagement .icon{
