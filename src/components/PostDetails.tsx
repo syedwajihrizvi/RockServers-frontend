@@ -4,7 +4,7 @@ import apiClient from "../utils/services/dataServices"
 import { CiCirclePlus } from "react-icons/ci";
 import { ToastContainer, toast } from 'react-toastify'
 
-import { IPost } from "../utils/interfaces/Interfaces"
+import { IComment, IPost } from "../utils/interfaces/Interfaces"
 import { formatStringDate, generateProfileImageUrl, generateImageUrl, getDateDifference, userDidLike } from "../utils/helpers/helpers";
 import useQueryStore from "../stores/useQueryStore"
 import { Engagements } from "./Engagements"
@@ -94,14 +94,27 @@ export const PostDetails = () => {
         toast(LoginToastComponent({action: "Comment on this Post", handleClick: handleToastButtonClick}), {autoClose: 5000})
   }
 
-  const handleSubmitComment = (commentContent: string | undefined) => {
+  const handleSubmitComment = (commentContent: string | undefined, comment: IComment | null) => {
     const jwtToken = localStorage.getItem('x-auth-token')
-    apiClient.post('/comments', { title: "Title", content: commentContent, postId: postId},
-                  { headers: {Authorization: `Bearer ${jwtToken}`}})
-             .then(() => {
-                queryClient.invalidateQueries({ queryKey: ["comments", post?.id]})
-            })
-             .catch(err => console.log(err))
+    console.log(comment)
+    if (comment) {
+        apiClient.patch(
+            `/comments/${comment.id}/reply`, 
+            {content: commentContent }, 
+            {headers: {Authorization: `Bearer ${jwtToken}`}})
+            .then(res => console.log(res.data))
+            .catch(err => console.log(err))
+        console.log("Ran")
+    }
+    else {
+        console.log("Comment submitted was not for a reply")
+        apiClient.post('/comments', { title: "Title", content: commentContent, postId: postId},
+                    { headers: {Authorization: `Bearer ${jwtToken}`}})
+                .then(() => {
+                    queryClient.invalidateQueries({ queryKey: ["comments", post?.id]})
+                })
+                .catch(err => console.log(err))
+    }
   }
 
   return (

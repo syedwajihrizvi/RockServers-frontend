@@ -118,6 +118,16 @@ html, body, #root {
 }
 
 /* Posts */
+.no-posts__heading {
+  font-size: 3rem;
+  color: white
+}
+
+.no-posts__link {
+  text-decoration: none;
+  color: black
+}
+
 .post-grid__title {
   color: white;
   font-size: 3rem;
@@ -863,6 +873,18 @@ html, body, #root {
   margin: 0;
   font-weight: bold;
   font-size: 1.2rem;
+}
+
+.comment__content__content__actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem
+}
+
+.comment__content__content__reply {
+  margin: 0;
+  font-weight: bold;
+  cursor: pointer
 }
 
 .comment__content__content__comment {

@@ -1,15 +1,18 @@
-import { IComment } from "../utils/interfaces/Interfaces"
+import { IComment, IReply } from "../utils/interfaces/Interfaces"
 import { FaHeart, FaRegHeart, FaTrash} from "react-icons/fa"
 import { useGlobalContext } from "../providers/global-provider"
 import apiClient from "../utils/services/dataServices"
 import { useQueryClient } from "@tanstack/react-query"
 import { useParams } from "react-router-dom"
 import { formatStringDate, generateProfileImageUrl } from "../utils/helpers/helpers"
+import { useState } from "react"
 
-export const Comment = ({comment, userLiked, commentType, handleLike}: 
-{comment: IComment, userLiked: boolean, commentType: "comments" | "discussionComments", handleLike: (commentId: number | undefined) => void}) => {
+export const Comment = ({comment, userLiked, commentType, handleLike, handleReplyClick}: 
+{comment: IComment, userLiked: boolean, commentType: "comments" | "discussionComments", 
+    handleLike: (commentId: number | undefined) => void, handleReplyClick: (comment: IComment) => void}) => {
  const queryClient = useQueryClient()
  const {id: contentId} = useParams()
+ const [viewReplies, setViewReplies] = useState(false)
  const { isLoading, user, isLoggedIn } = useGlobalContext()
 
  const handleDeleteComment = () => {
@@ -17,7 +20,17 @@ export const Comment = ({comment, userLiked, commentType, handleLike}:
              .then(() => {queryClient.invalidateQueries({queryKey: [commentType, parseInt(contentId as string)]})})
              .catch(err => console.log(err))
  }
-  
+ 
+ const renderViewReplies = () =>
+    !viewReplies ? 
+                <p onClick={() => setViewReplies(true)}>View {comment.replies.length} replies</p> : 
+                <p onClick={() => setViewReplies(false)}>Hide Replies</p>
+
+  const renderReplies = (replies: IReply[]) =>
+    <div>
+        {replies.map(reply => <p>{reply.content}</p>)}
+    </div>
+
   return !isLoading && (
     <div className="comment">
         <div className="comment__content">
@@ -27,7 +40,12 @@ export const Comment = ({comment, userLiked, commentType, handleLike}:
             <div className="comment__content__content">
                 <h5 className="comment__content__content__user">{comment.commentedBy}</h5>
                 <p className="comment__content__content__comment">{comment.content}</p>
-                <p className="comment__content__content__date">{formatStringDate(comment.commentedAt)}</p>
+                <span className="comment__content__content__actions">
+                    <p className="comment__content__content__date">{formatStringDate(comment.commentedAt)}</p>
+                    <p className="comment__content__content__reply" onClick={() => handleReplyClick(comment)}>Reply</p>
+                </span>
+                {comment.replies && comment.replies.length > 0 && renderViewReplies()}
+                {viewReplies && renderReplies(comment.replies)}
             </div>
         </div>
         <div className="comment__engagement">

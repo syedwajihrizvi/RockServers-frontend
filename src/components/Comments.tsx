@@ -1,4 +1,4 @@
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { IComment, IUser } from "../utils/interfaces/Interfaces"
 import { Comment } from "./Comment"
 import { ToastContainer, toast } from 'react-toastify'
@@ -10,13 +10,20 @@ import { useQueryClient } from "@tanstack/react-query"
 import { LoginToastComponent } from "./CustomToasts/LoginToastComponent";
 import { useNavigate } from "react-router-dom"
 
-export const AddComment = ({customClass, handleAddComment, handleSubmitComment, user}: 
+export const AddComment = ({customClass, handleAddComment, handleSubmitComment, user, comment, handleSetComment}: 
     {customClass?: string, handleAddComment: () => void, 
-    handleSubmitComment: (commentContent: string | undefined) => void, user: IUser | undefined}) => {
-    const [addingComment, setAddingComment] = useState(false)
+    handleSubmitComment: (commentContent: string | undefined, comment: IComment | null) => void, user: IUser | undefined, comment: IComment | null, handleSetComment: () => void}) => {
+    const [addingComment, setAddingComment] = useState(comment? true : false)
     const [commentBody, setCommentBody] = useState("")
     const inputRef = useRef<HTMLInputElement>(null)
     const { isLoggedIn } = useGlobalContext()
+    
+    useEffect(() => {
+        if (comment)
+            setAddingComment(true)
+        else
+            setAddingComment(false)
+    }, [comment])
 
     const handleSetAddingComment = (target: HTMLInputElement) => {
         if (!isLoggedIn) {
@@ -30,13 +37,15 @@ export const AddComment = ({customClass, handleAddComment, handleSubmitComment, 
     const handleCancelClick = () => {
         if (inputRef && inputRef.current)
             inputRef.current.value = ""
+        handleSetComment()
         setAddingComment(false)      
     }
 
     const handleSubmitClick = () => {
-        handleSubmitComment(commentBody)
+        handleSubmitComment(commentBody, comment)
         if (inputRef && inputRef.current)
             inputRef.current.value = ""
+        handleSetComment()
         setAddingComment(false)
     }
 
@@ -44,17 +53,17 @@ export const AddComment = ({customClass, handleAddComment, handleSubmitComment, 
         <div className={`card-details-card__comments__add-wrapper ${customClass ? customClass : ''}`}>
             <div className="card-details-card__comments__add">
                 <img src={generateProfileImageUrl(user)} alt="Avatar"/>
-                <input type="text" placeholder="Add Comment..." 
+                <input type="text" placeholder={comment ? `Reply to ${comment.commentedBy}` : "Add Comment..."} 
                     onFocus={(event) => handleSetAddingComment(event.target)}
                     onChange={(event) => setCommentBody(event.target.value)}
                     ref={inputRef}/>
             </div>
             <div className={`button-group add-comment add-comment--${addingComment ?  'shown' : 'hidden'}`}>
-                <button className="btn btn--xs btn--success" 
-                        onClick={() => handleSubmitClick()}>Submit</button>
-                <button className="btn btn--xs btn--danger" 
-                        onClick={() => handleCancelClick()}>
-                            Cancel
+                <button className="btn btn--xs btn--success" onClick={() => handleSubmitClick()}>
+                    Submit
+                </button>
+                <button className="btn btn--xs btn--danger" onClick={() => handleCancelClick()}>
+                    Cancel
                 </button>
             </div>
         </div>
@@ -64,9 +73,10 @@ export const AddComment = ({customClass, handleAddComment, handleSubmitComment, 
 export const Comments = ({comments, withViewAll, handleAddComment, handleSubmitComment, commentType}: 
     {comments: IComment[], withViewAll: boolean, 
      handleAddComment: () => void, 
-     handleSubmitComment: (commentContent: string | undefined) => void,
+     handleSubmitComment: (commentContent: string | undefined, comment: IComment | null) => void,
      commentType: "comments" | "discussionComments"}) => {
     const [viewAll, setViewAll] = useState(false)
+    const [replying, setReplying] = useState<IComment | null>(null)
     const { user, isLoggedIn } = useGlobalContext()
     const queryClient = useQueryClient()
     const navigate = useNavigate()
@@ -78,6 +88,10 @@ export const Comments = ({comments, withViewAll, handleAddComment, handleSubmitC
 
     const handleToastButtonClick = () => {
         navigate('/account/login')
+    }
+
+    const handleReplyClick = (comment: IComment) => {
+        setReplying(comment)
     }
 
     const handleCommentLike = (commentId: number | undefined) => {
@@ -102,12 +116,15 @@ export const Comments = ({comments, withViewAll, handleAddComment, handleSubmitC
             position="top-center"
             />
             <h1>{comments ? `${comments.length} Comments` : 'No Comments'}</h1>
-            {user && <AddComment handleAddComment={handleAddComment} handleSubmitComment={handleSubmitComment} user={user}/>}
+            {user && 
+            <AddComment handleAddComment={handleAddComment} handleSubmitComment={handleSubmitComment} 
+                        user={user} comment={replying} handleSetComment={() => setReplying(null)}/>}
             {comments && 
                 renderComments(comments).map(comment => (
                     <Comment key={comment.id} comment={comment} 
                              userLiked={user? userDidLike(user.likedComments, comment.id) : false}
-                             handleLike={handleCommentLike} commentType={commentType}/>
+                             handleLike={handleCommentLike} commentType={commentType}
+                             handleReplyClick={handleReplyClick}/>
             ))}
             {comments && comments.length > 2 && 
                 <div className="comment__view-all">
@@ -121,10 +138,13 @@ export const Comments = ({comments, withViewAll, handleAddComment, handleSubmitC
                 {renderComments(comments).map(comment => (
                     <Comment key={comment.id} comment={comment} 
                              userLiked={user? userDidLike(commentType == 'comments' ? user.likedComments : user.likedDiscussionComments, comment.id) : false}
-                             handleLike={handleCommentLike} commentType={commentType}/>
+                             handleLike={handleCommentLike} commentType={commentType}
+                             handleReplyClick={handleReplyClick}/>
                 ))}
                 </div>
-                {user && <AddComment customClass='with-x-padding' handleAddComment={handleAddComment} 
-                            handleSubmitComment={handleSubmitComment} user={user}/>}
+                {user && 
+                <AddComment customClass='with-x-padding' handleAddComment={handleAddComment} 
+                        handleSubmitComment={handleSubmitComment} 
+                        user={user} comment={replying} handleSetComment={() => setReplying(null)}/>}
             </div>
 }

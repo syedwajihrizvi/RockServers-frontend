@@ -171,7 +171,13 @@ export const UserList = ({type, profileUser, authenticated}: {type: "followers" 
 
 export const Posts = ({user}: {user: IUser}) => {
     return (
-        <AllPosts userId={user.id}/>
+        user.totalPostings > 0 ? <AllPosts userId={user.id}/> : 
+        <div className="no-posts">
+            <h2 className="no-posts__heading">You have no posts. Create one</h2>
+            <Link to="/create" className="no-posts__link">
+                <button className="btn btn--success btn--md">Create</button>
+            </Link>
+        </div>
     )
 }
 

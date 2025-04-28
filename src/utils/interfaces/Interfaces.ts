@@ -1,3 +1,9 @@
+export interface IReply {
+    id: number,
+    content: string,
+    appUser: IUser
+}
+
 export interface IComment {
     id: number,
     appUser: IUser,
@@ -6,7 +12,8 @@ export interface IComment {
     commentedBy: string,
     commentedAt: string,
     likes: number,
-    dislikes: number
+    dislikes: number,
+    replies: IReply[]
 }
 
 export interface ISession {
