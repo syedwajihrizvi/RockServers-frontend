@@ -9,7 +9,6 @@ export interface IReply {
 export interface IComment {
     id: number,
     appUser: IUser,
-    title: string,
     content: string,
     commentedBy: string,
     commentedAt: string,

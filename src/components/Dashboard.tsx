@@ -123,22 +123,38 @@ const AccountSettings = ({user}: {user: IUser}) => {
     )
 }
 
-export const UserList = ({type, profileUser, authenticated}: {type: "followers" | "following", profileUser: IUser, authenticated: boolean}) => {
+export const UserList = ({type, profileUser, authenticated}: 
+    {type: "followers" | "following", profileUser: IUser, authenticated: boolean}) => {
     const { user: loggedInUser } = useGlobalContext()
+    const queryClient = useQueryClient()
     const renderButton = (renderUser: IUser) => {
+
+        const handleFollow = () => {
+            const formData = new FormData()
+            formData.append("Username", renderUser.username.trim())
+            apiClient.patch('/accounts/follow', formData, 
+                {headers: 
+                    {
+                        'Authorization': `Bearer ${localStorage.getItem('x-auth-token')}`, 
+                        "Content-Type": "multipart/form-data"}})
+                .then(() => queryClient.invalidateQueries({queryKey: ["me"]}))
+                .catch(err => console.log(err))
+        }
+
         if (type == "following") {
             return (
                 profileUser.followers.find(u => u.id == renderUser.id) ?
                 <button className="btn btn--success btn--xs">Follows You</button> :
-                <button className="btn btn--success btn--xs">Unfollow</button>)
+                <button onClick={handleFollow} className="btn btn--success btn--xs">Unfollow</button>)
         } else {
             return (
                 profileUser.following.find(u => u.id == renderUser.id) ? 
                 <button className="btn btn--success btn--xs">Follows You</button> :
-                <button className="btn btn--success btn--xs">Follow Back</button>
+                <button onClick={handleFollow} className="btn btn--success btn--xs">Follow Back</button>
             )
         }
     }
+
     const userList = type == "following" ? profileUser.following : profileUser.followers
     if (userList.length == 0)
         return (

@@ -35,10 +35,10 @@ export const FollowButton = ({user}: {user: IUser}) => {
 
   return (
     <>
-    <ToastContainer position="top-center"/>
-    <button className="btn btn--success btn--md btn--follow" onClick={handleClick}>
-        <img src={generateProfileImageUrl(user)}/>{renderFollowString()} {user.username}
-    </button>
+      <ToastContainer position="top-center"/>
+      {loggedInUser?.username!= user.username && <button className="btn btn--success btn--md btn--follow" onClick={handleClick}>
+          <img src={generateProfileImageUrl(user)}/>{renderFollowString()} {user.username}
+      </button>}
     </>
   )
 }

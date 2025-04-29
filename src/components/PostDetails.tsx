@@ -96,18 +96,17 @@ export const PostDetails = () => {
 
   const handleSubmitComment = (commentContent: string | undefined, comment: IComment | null) => {
     const jwtToken = localStorage.getItem('x-auth-token')
-    console.log(comment)
     if (comment) {
         apiClient.patch(
             `/comments/${comment.id}/reply`, 
             {content: commentContent }, 
             {headers: {Authorization: `Bearer ${jwtToken}`}})
-            .then(res => console.log(res.data))
+            .then(() => {
+                queryClient.invalidateQueries({ queryKey: ["comments", post?.id]})
+            })
             .catch(err => console.log(err))
-        console.log("Ran")
     }
     else {
-        console.log("Comment submitted was not for a reply")
         apiClient.post('/comments', { title: "Title", content: commentContent, postId: postId},
                     { headers: {Authorization: `Bearer ${jwtToken}`}})
                 .then(() => {

@@ -7,7 +7,7 @@ import { ToastContainer, toast } from 'react-toastify'
 import { Comments } from './Comments'
 import { Engagements } from './Engagements'
 import { useEffect, useState } from 'react'
-import { IDiscussion } from '../utils/interfaces/Interfaces'
+import { IComment, IDiscussion } from '../utils/interfaces/Interfaces'
 import { CiCirclePlus } from 'react-icons/ci'
 import { PreviewCard } from './PreviewCard'
 import apiClient from "../utils/services/dataServices"
@@ -88,14 +88,25 @@ export const DiscussionDetails = () => {
         toast(LoginToastComponent({action: "Comment on this Post", handleClick: handleToastButtonClick}), {autoClose: 5000})
   }
 
-  const handleSubmitComment = (commentContent: string | undefined) => {
+  const handleSubmitComment = (commentContent: string | undefined, comment: IComment | null) => {
     const jwtToken = localStorage.getItem('x-auth-token')
-    apiClient.post('/discussionComments', { content: commentContent, discussionId: discussion?.id},
-                  { headers: {Authorization: `Bearer ${jwtToken}`}})
-             .then(() => {
+    if (comment) {
+        apiClient.patch(
+            `/discussionComments/${comment.id}/reply`, 
+            {content: commentContent }, 
+            {headers: {Authorization: `Bearer ${jwtToken}`}})
+            .then(() => {
                 queryClient.invalidateQueries({ queryKey: ["discussionComments", discussion?.id]})
             })
-             .catch(err => console.log(err))
+            .catch(err => console.log(err))
+    } else {
+        apiClient.post('/discussionComments', { content: commentContent, discussionId: discussion?.id},
+            { headers: {Authorization: `Bearer ${jwtToken}`}})
+       .then(() => {
+          queryClient.invalidateQueries({ queryKey: ["discussionComments", discussion?.id]})
+      })
+       .catch(err => console.log(err))
+    }
   }
   return (
     <div className="card-details__container">
@@ -133,7 +144,8 @@ export const DiscussionDetails = () => {
                                      userLiked={userDidLike(user?.likedDiscussions, discussion.id)}/>
                     </div>
                 </div>
-                {discussionComments && <Comments comments={discussionComments} 
+                {discussionComments && 
+                <Comments comments={discussionComments} 
                           withViewAll={false} handleAddComment={handleDiscussionComment}
                           handleSubmitComment={handleSubmitComment}
                           commentType="discussionComments"/>}
