@@ -27,7 +27,44 @@ export const Comment = ({comment, userLiked, commentType, handleLike, handleRepl
                 <p className="view-replies" onClick={() => setViewReplies(false)}>Hide Replies</p>
 
   const renderReplies = (replies: IReply[]) =>
-    <div className="replies">
+  {
+    const handleReplyLike = (replyId: number) => {
+        apiClient.patch(
+            `/${commentType}/${comment.id}/${replyId}/updateLikes`, 
+            null, 
+            {headers: {'Authorization': `Bearer ${localStorage.getItem('x-auth-token')}`}})
+            .then(() => {
+                queryClient.invalidateQueries({queryKey: ["me"]})
+                queryClient.invalidateQueries({queryKey: [commentType]})    
+            })
+            .catch(err => console.log(err))
+    }
+
+    const handleDeleteReply = (replyId: number) => {
+        apiClient.delete(
+            `/${commentType}/${comment.id}/${replyId}`, 
+            {headers: {'Authorization': `Bearer ${localStorage.getItem('x-auth-token')}`}})
+            .then(() => {
+                queryClient.invalidateQueries({queryKey: ["me"]})
+                queryClient.invalidateQueries({queryKey: [commentType]})    
+            })
+            .catch(err => console.log(err))
+    }
+
+    const userLikedReply = (replyId: number): boolean => {
+        if (commentType == "comments") {
+            if (user && user.likedPostReplys)
+                return user.likedPostReplys.includes(replyId)
+            return false;        
+        } else {
+            if (user && user.likedDiscussionReplys)
+                return user.likedDiscussionReplys.includes(replyId)
+            return false
+        }
+    }
+        
+    return (
+        <div className="replies">
         {replies.map(reply => 
             <div className="reply__wrapper">
                 <div className="reply">
@@ -41,15 +78,17 @@ export const Comment = ({comment, userLiked, commentType, handleLike, handleRepl
                 <div className="comment__engagement">
                 <span>
                     {isLoggedIn && user && reply.appUser.id == user.id &&
-                    <FaTrash fontSize={12} className="icon" color='black' onClick={handleDeleteComment}/>}
-                    {userLiked ? 
-                    <FaHeart fontSize={12} className="icon" color='red'/> : 
-                    <FaRegHeart fontSize={12} className="icon" color='red'/>}
+                    <FaTrash fontSize={12} className="icon" color='black' onClick={() => handleDeleteReply(reply.id)}/>}
+                    {userLikedReply(reply.id) ? 
+                    <FaHeart fontSize={12} className="icon" color='red' onClick={() => handleReplyLike(reply.id)}/> : 
+                    <FaRegHeart fontSize={12} className="icon" color='red' onClick={() => handleReplyLike(reply.id)}/>}
                     <p>{reply.likes}</p>
                 </span>
         </div>
             </div>)}
     </div>
+    )
+  }
 
   return !isLoading && (
     <div className="comment">
