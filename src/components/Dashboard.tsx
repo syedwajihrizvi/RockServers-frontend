@@ -8,6 +8,7 @@ import { ToastContainer, toast } from "react-toastify"
 import { IUser } from "../utils/interfaces/Interfaces"
 import apiClient, { updateUserSettings } from "../utils/services/dataServices"
 import { generateProfileImageUrl } from "../utils/helpers/helpers"
+import Avatar from "../assets/images/avatar.jpg"
 
 const CustomChangeInput = ({label, placeholder, type, field, password}: 
     {label: string, placeholder: string, type: string, field: string, password: string}) => {
@@ -198,8 +199,25 @@ export const Posts = ({user}: {user: IUser}) => {
 }
 
 const Notifications = ({user}: {user: IUser}) => {
+    console.log(user.username)
+    const notifications = [
+        {id: 1, content: "@user started following you.", time: "2hr ago", read: true},
+        {id: 2, content: "@user commented on your post POST_TITLE.", time: "2hr ago", read: true},
+        {id: 3, content: "@user liked your post POST_TITLE.", time: "2hr ago", read: true},
+        {id: 4, content: "@user started following you.", time: "2hr ago", read: true}
+    ]
     return (
-        <h1>Notifications for {user.username}</h1>
+        <div className="notifications">
+            {notifications.map(notification => (
+                <div className="notification">
+                    <div className="notification__content">
+                        <img src={Avatar} />
+                        <p className="notification__content__msg">{notification.content}</p>
+                    </div>
+                    <p className="notification__content__time">{notification.time}</p>
+                </div>
+            ))}
+        </div>
     )
 }
 
