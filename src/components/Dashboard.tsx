@@ -5,10 +5,10 @@ import { useGlobalContext } from "../providers/global-provider"
 import { Skeleton } from "./Skeleton"
 import { AllPosts } from "./AllPosts"
 import { ToastContainer, toast } from "react-toastify"
-import { IUser } from "../utils/interfaces/Interfaces"
+import { INotification, IUser } from "../utils/interfaces/Interfaces"
 import apiClient, { updateUserSettings } from "../utils/services/dataServices"
-import { generateProfileImageUrl } from "../utils/helpers/helpers"
-import Avatar from "../assets/images/avatar.jpg"
+import { formatStringDate, generateProfileImageUrl } from "../utils/helpers/helpers"
+import { useNotifications } from "../hooks/useNotifications"
 
 const CustomChangeInput = ({label, placeholder, type, field, password}: 
     {label: string, placeholder: string, type: string, field: string, password: string}) => {
@@ -199,26 +199,56 @@ export const Posts = ({user}: {user: IUser}) => {
 }
 
 const Notifications = ({user}: {user: IUser}) => {
-    console.log(user.username)
-    const notifications = [
-        {id: 1, content: "@user started following you.", time: "2hr ago", read: true},
-        {id: 2, content: "@user commented on your post POST_TITLE.", time: "2hr ago", read: true},
-        {id: 3, content: "@user liked your post POST_TITLE.", time: "2hr ago", read: true},
-        {id: 4, content: "@user started following you.", time: "2hr ago", read: true}
-    ]
-    return (
-        <div className="notifications">
-            {notifications.map(notification => (
+    const { data: notifications } = useNotifications()
+
+    const renderContentType = (contentType: number, entityContent: string) => {
+        if (contentType == 0)
+            return "started following you."
+        else if (contentType == 1 || contentType == 2)
+            return `liked your comment on ${entityContent}.`
+        else if (contentType == 3)
+            return `liked your post: ${entityContent}.`
+        else if (contentType == 4)
+            return `liked your discussion: ${entityContent}`
+    }
+
+    const renderNotificationUrl = (notification: INotification) => {
+        const {type: contentType, entityId, engager} = notification
+        if (contentType == 0)
+            return `/profile/${engager.username}`
+        else if (contentType == 1)
+            return `/posts/${entityId}`
+        else if (contentType == 2)
+            return `/discussions/${entityId}`
+        else if (contentType == 3)
+            return `/posts/${entityId}`
+        else if (contentType == 4)
+            return `/discussions/${entityId}`
+        else
+            return ""
+    }
+
+    const renderNotification = (notification: INotification) => {
+        return (
+            <Link to={renderNotificationUrl(notification)} style={{textDecoration: "none"}}>
                 <div className="notification">
+                    {!notification.isRead && <div className="notification__read"/>}
                     <div className="notification__content">
-                        <img src={Avatar} />
-                        <p className="notification__content__msg">{notification.content}</p>
+                        <img src={generateProfileImageUrl(notification.engager)} />
+                        <p className="notification__content__msg">
+                            {`@${notification.engager.username} ${renderContentType(notification.type, notification.entityContent)}`}
+                        </p>
                     </div>
-                    <p className="notification__content__time">{notification.time}</p>
+                    <p className="notification__content__time">{formatStringDate(notification.createdAt)}</p>
                 </div>
-            ))}
-        </div>
-    )
+            </Link>
+        )
+    }
+
+    return notifications && notifications.length > 0 ?
+    <div className="notifications">
+    {notifications.map(notification => (renderNotification(notification)))}
+</div> : <h2>You have no Notifications</h2>
 }
 
 export const Dashboard = ({renderComponent, navComponents, user}: {renderComponent: (viewComponent: string, user: IUser) => ReactNode, navComponents: string[], user: IUser}) => {

@@ -95,3 +95,14 @@ export interface IAvatar {
     id: number,
     name: string
 }
+
+export interface INotification {
+    id: number,
+    type: number,
+    engager: IUser,
+    target: IUser,
+    entityId: number | null,
+    entityContent: string,
+    createdAt: string,
+    isRead: boolean
+}

@@ -1898,8 +1898,25 @@ html, body, #root {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
+  transition: scale 0.3s;
+  cursor: pointer;
 }
 
+.notification:hover {
+  scale: 1.005
+}
+
+.notification__read {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 100%;
+  background-color: #03fc98;
+  position: absolute;
+  top: -10%;
+  right: 0;
+  z-index: 100;
+}
 .notification__content {
   display: flex;
   gap: 1rem;
