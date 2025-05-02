@@ -10,6 +10,7 @@ import apiClient, { updateUserSettings } from "../utils/services/dataServices"
 import { formatStringDate, generateProfileImageUrl } from "../utils/helpers/helpers"
 import { useNotifications } from "../hooks/useNotifications"
 import { FollowButton } from "./FollowButton"
+import { Navbar } from "./Navbar"
 
 const CustomChangeInput = ({label, placeholder, type, field, password}: 
     {label: string, placeholder: string, type: string, field: string, password: string}) => {
@@ -203,7 +204,7 @@ export const Posts = ({user}: {user: IUser}) => {
 
 const Notifications = ({user}: {user: IUser}) => {
     const { data: notifications } = useNotifications()
-
+    const queryClient = useQueryClient()
     const renderContentType = (contentType: number, entityContent: string) => {
         if (contentType == Notification.Follow)
             return "started following you."
@@ -264,10 +265,17 @@ const Notifications = ({user}: {user: IUser}) => {
         )
     }
 
+    const handleDelete = () => {
+        apiClient.delete(
+            '/notifications', {headers: {Authorization: `Bearer ${localStorage.getItem('x-auth-token')}`}})
+            .then(() => queryClient.invalidateQueries({queryKey: ["notifications"]}))
+    }
+
     return notifications && notifications.length > 0 ?
     <div className="notifications">
-    {notifications.map(notification => (renderNotification(notification)))}
-</div> : <h2>You have no Notifications</h2>
+        <button className="btn btn--md btn--success btn--delete" onClick={handleDelete}>Clear All</button>
+        {notifications.map(notification => (renderNotification(notification)))}
+    </div> : <h2>You have no Notifications</h2>
 }
 
 export const Dashboard = ({renderComponent, navComponents, user}: {renderComponent: (viewComponent: string, user: IUser) => ReactNode, navComponents: string[], user: IUser}) => {
@@ -328,5 +336,8 @@ export const UserProfileDashboard = () => {
       }
       return isLoading ? 
         <Skeleton/> :
-        <Dashboard renderComponent={renderComponent} navComponents={navComponents} user={user as IUser}/>     
+        <>
+            <Navbar/>
+            <Dashboard renderComponent={renderComponent} navComponents={navComponents} user={user as IUser}/>
+        </>     
 }

@@ -3,6 +3,7 @@ import { useProfile } from "../hooks/useUser"
 import { Dashboard, Posts, UserList } from "./Dashboard"
 import { IUser } from "../utils/interfaces/Interfaces"
 import { Skeleton } from "./Skeleton"
+import { Navbar } from "./Navbar"
 
 export const ViewProfile = () => {
   const params = useParams()
@@ -20,7 +21,10 @@ export const ViewProfile = () => {
         }
       }
 
-  return isLoading ? <Skeleton/> : (
-    <Dashboard renderComponent={renderComponent} navComponents={navComponents} user={profileToView as IUser}/>
-  )
+  return isLoading ? 
+    <Skeleton/> :
+    <>
+      <Navbar/>
+      <Dashboard renderComponent={renderComponent} navComponents={navComponents} user={profileToView as IUser}/>
+    </>
 }

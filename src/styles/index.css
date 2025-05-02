@@ -1899,6 +1899,10 @@ html, body, #root {
   gap: 1rem;  
 }
 
+.btn--delete {
+  text-align: center;
+}
+
 .notification {
   background-color: var(--secondary);
   padding: 0.5rem;
