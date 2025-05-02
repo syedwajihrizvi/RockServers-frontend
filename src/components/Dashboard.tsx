@@ -9,6 +9,7 @@ import { INotification, IUser, Notification} from "../utils/interfaces/Interface
 import apiClient, { updateUserSettings } from "../utils/services/dataServices"
 import { formatStringDate, generateProfileImageUrl } from "../utils/helpers/helpers"
 import { useNotifications } from "../hooks/useNotifications"
+import { FollowButton } from "./FollowButton"
 
 const CustomChangeInput = ({label, placeholder, type, field, password}: 
     {label: string, placeholder: string, type: string, field: string, password: string}) => {
@@ -61,7 +62,10 @@ export const Profile = ({user}: {user: IUser}) => {
         <div className="profile">
             <div className="profile__header">
                 <img className="profile__img" src={generateProfileImageUrl(user)}/>
-                <h3 className="profile__username">{user?.username}</h3>
+                <div className="profile__actions">
+                    <h3 className="profile__username">{user?.username}</h3>
+                    <FollowButton user={user} removeImage={true}/>
+                </div>
             </div>
             <div className="profile__content">
                 <div className="profile__info">
@@ -162,7 +166,6 @@ export const UserList = ({type, profileUser, authenticated}:
     type == "following" ? 
     <h1 className="user-list-empty-heading">You are not following anyone</h1> : 
     <h1 className="user-list-empty-heading">You currently have no followers</h1>)
-    console.log(profileUser.username)
     const renderLink = (user: IUser) =>
         user.username == loggedInUser?.username ? "/dashboard/settings" : `/profile/${user.username}`
 

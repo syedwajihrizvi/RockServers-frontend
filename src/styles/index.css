@@ -485,11 +485,19 @@ html, body, #root {
   padding: 1rem;
 }
 
-.btn--follow img {
-  width: 3rem;
-  height: 3rem;
+.btn--follow--icon-only {
+  padding: 0
+}
+
+.btn--follow__img--md {
   border-radius: 100%;
   object-fit: cover;
+}
+
+.btn--follow__img--md {
+  width: 3rem;
+  height: 3rem;
+
 }
 
 .button-group {
@@ -1956,6 +1964,12 @@ html, body, #root {
   left: 50%;
   transform: translateX(-50%);
   text-align: center;
+}
+
+.profile__actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .profile__img {

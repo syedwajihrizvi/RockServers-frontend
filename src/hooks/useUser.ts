@@ -22,12 +22,12 @@ export const useUser = () => {
     })
 }
 
-export const useProfile = (appUserId: string) => {
+export const useProfile = (username: string) => {
     const fetchUser = () =>
-        apiClient.get<IUser>(`/accounts/profile/${appUserId}`)
+        apiClient.get<IUser>(`/accounts/profile/${username}`)
         .then(res => res.data)
     return useQuery<IUser, Error>({
-        queryKey: ['profile', appUserId],
+        queryKey: ['profile', username],
         queryFn: fetchUser,
         retry: false
     })

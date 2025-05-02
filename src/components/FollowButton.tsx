@@ -1,3 +1,4 @@
+import { RiUserFollowFill, RiUserUnfollowFill } from "react-icons/ri";
 import { ToastContainer, toast } from 'react-toastify'
 import { LoginToastComponent } from "./CustomToasts/LoginToastComponent";
 import { useNavigate } from "react-router-dom";
@@ -7,7 +8,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { generateProfileImageUrl } from '../utils/helpers/helpers';
 import { IUser } from '../utils/interfaces/Interfaces';
 
-export const FollowButton = ({user}: {user: IUser}) => {
+export const FollowButton = ({user, removeImage}: 
+  {user: IUser, removeImage?: boolean}) => {
   const navigate = useNavigate()
   const { isLoggedIn, user: loggedInUser } = useGlobalContext()
   const queryClient = useQueryClient()
@@ -28,16 +30,35 @@ export const FollowButton = ({user}: {user: IUser}) => {
                       formdata, 
                       {headers: 
                         {'Authorization': `Bearer ${localStorage.getItem('x-auth-token')}`, "Content-Type": "multipart/form-data"}})
-                        .then(() => queryClient.invalidateQueries({queryKey: ["me"]}))
+                        .then(() => {
+                          queryClient.invalidateQueries({queryKey: ["me"]})
+                          queryClient.invalidateQueries({queryKey: ["profile", user.username]})
+                        })
                         .catch(err => console.log(err))
     }
   }
 
+  const renderIconOnly = () => {
+    return userFollows ? 
+          <RiUserUnfollowFill color="red" fontSize={18}/> : 
+          <RiUserFollowFill color="#03fc98" fontSize={18}/>
+  }
+
+  const renderWithProfileImage = () => {
+    return (
+      <>
+        <img className="btn--follow__img--md" src={generateProfileImageUrl(user)}/> {renderFollowString()} {user.username}
+      </>
+    )
+  }
   return (
     <>
       <ToastContainer position="top-center"/>
-      {loggedInUser?.username!= user.username && <button className="btn btn--success btn--md btn--follow" onClick={handleClick}>
-          <img src={generateProfileImageUrl(user)}/>{renderFollowString()} {user.username}
+      {loggedInUser?.username!= user.username && 
+      <button className={`btn ${removeImage ? "btn--sm" : "btn--success btn--md"} ${removeImage ? "btn--follow" : "btn--follow--icon-only"}`} onClick={handleClick}>
+          {removeImage ? 
+           renderIconOnly():
+           renderWithProfileImage()}      
       </button>}
     </>
   )
