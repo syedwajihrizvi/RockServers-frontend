@@ -55,7 +55,7 @@ export const FollowButton = ({user, removeImage}:
     <>
       <ToastContainer position="top-center"/>
       {loggedInUser?.username!= user.username && 
-      <button className={`btn ${removeImage ? "btn--sm" : "btn--success btn--md"} ${removeImage ? "btn--follow" : "btn--follow--icon-only"}`} onClick={handleClick}>
+      <button className={`btn ${removeImage ? "btn--sm " : "btn--success btn--md "} ${removeImage ? "btn--follow--icon-only" : "btn--follow"}`} onClick={handleClick}>
           {removeImage ? 
            renderIconOnly():
            renderWithProfileImage()}      

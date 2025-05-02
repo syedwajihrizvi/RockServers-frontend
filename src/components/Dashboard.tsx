@@ -165,8 +165,12 @@ export const UserList = ({type, profileUser, authenticated}:
     if (userList.length == 0)
         return (
     type == "following" ? 
-    <h1 className="user-list-empty-heading">You are not following anyone</h1> : 
-    <h1 className="user-list-empty-heading">You currently have no followers</h1>)
+    <h1 className="user-list-empty-heading">
+        {authenticated ? "You are not following anyone" : `${profileUser.username} is not following anyone.` }
+    </h1> : 
+    <h1 className="user-list-empty-heading">
+        {authenticated ? "You currently have no followers" : `${profileUser.username} has no followers.`}
+    </h1>)
     const renderLink = (user: IUser) =>
         user.username == loggedInUser?.username ? "/dashboard/settings" : `/profile/${user.username}`
 
@@ -190,11 +194,14 @@ export const UserList = ({type, profileUser, authenticated}:
     )
 }
 
-export const Posts = ({user}: {user: IUser}) => {
+export const Posts = ({user, viewingProfile}: {user: IUser, viewingProfile?: boolean}) => {
+    
     return (
         user.totalPostings > 0 ? <AllPosts userId={user.id}/> : 
         <div className="no-posts">
-            <h2 className="no-posts__heading">You have no posts. Create one</h2>
+            <h2 className="no-posts__heading">
+                {!viewingProfile ? "You have no posts. Create one" : "No Posts."}
+            </h2>
             <Link to="/create" className="no-posts__link">
                 <button className="btn btn--success btn--md">Create</button>
             </Link>
@@ -202,7 +209,7 @@ export const Posts = ({user}: {user: IUser}) => {
     )
 }
 
-const Notifications = ({user}: {user: IUser}) => {
+const Notifications = () => {
     const { data: notifications } = useNotifications()
     const queryClient = useQueryClient()
     const renderContentType = (contentType: number, entityContent: string) => {
@@ -329,7 +336,7 @@ export const UserProfileDashboard = () => {
             case "posts":
                 return <Posts user={user}/>
             case "notifications":
-                return <Notifications user={user}/>
+                return <Notifications/>
             default:
                 return <AccountSettings user={user}/>
         }
