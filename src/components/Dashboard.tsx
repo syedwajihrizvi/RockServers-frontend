@@ -5,7 +5,7 @@ import { useGlobalContext } from "../providers/global-provider"
 import { Skeleton } from "./Skeleton"
 import { AllPosts } from "./AllPosts"
 import { ToastContainer, toast } from "react-toastify"
-import { INotification, IUser } from "../utils/interfaces/Interfaces"
+import { INotification, IUser, Notification} from "../utils/interfaces/Interfaces"
 import apiClient, { updateUserSettings } from "../utils/services/dataServices"
 import { formatStringDate, generateProfileImageUrl } from "../utils/helpers/helpers"
 import { useNotifications } from "../hooks/useNotifications"
@@ -202,27 +202,43 @@ const Notifications = ({user}: {user: IUser}) => {
     const { data: notifications } = useNotifications()
 
     const renderContentType = (contentType: number, entityContent: string) => {
-        if (contentType == 0)
+        if (contentType == Notification.Follow)
             return "started following you."
-        else if (contentType == 1 || contentType == 2)
+        else if (contentType == Notification.PostCommentLike || contentType == Notification.DiscussionCommentLike)
             return `liked your comment on ${entityContent}.`
-        else if (contentType == 3)
+        else if (contentType == Notification.PostLike)
             return `liked your post: ${entityContent}.`
-        else if (contentType == 4)
+        else if (contentType == Notification.DiscussionLike)
             return `liked your discussion: ${entityContent}`
+        else if (contentType == Notification.PostComment || contentType == Notification.DiscussionComment)
+            return `commented on your post: ${entityContent}`
+        else if (contentType == Notification.PostCommentReplyLike || contentType == Notification.DiscussionCommentReplyLike)
+            return `liked your reply on ${entityContent}`
+        else
+            return `replied to your comment on ${entityContent}`
     }
 
     const renderNotificationUrl = (notification: INotification) => {
         const {type: contentType, entityId, engager} = notification
-        if (contentType == 0)
+        if (contentType == Notification.Follow)
             return `/profile/${engager.username}`
-        else if (contentType == 1)
+        else if (contentType == Notification.PostComment)
             return `/posts/${entityId}`
-        else if (contentType == 2)
+        else if (contentType == Notification.PostCommentLike)
+            return `/posts/${entityId}`
+        else if (contentType == Notification.DiscussionCommentLike)
             return `/discussions/${entityId}`
-        else if (contentType == 3)
+        else if (contentType == Notification.PostLike)
             return `/posts/${entityId}`
-        else if (contentType == 4)
+        else if (contentType == Notification.DiscussionComment)
+            return `/discussions/${entityId}`
+        else if (contentType == Notification.PostCommentReplyLike)
+            return `/discussions/${entityId}`
+        else if (contentType == Notification.DiscussionCommentReplyLike)
+            return `/discussions/${entityId}`
+        else if (contentType == Notification.ReplyPostComment)
+            return `/discussions/${entityId}`
+        else if (contentType == Notification.ReplyDiscussionComment)
             return `/discussions/${entityId}`
         else
             return ""

@@ -106,3 +106,17 @@ export interface INotification {
     createdAt: string,
     isRead: boolean
 }
+
+export enum Notification {
+    Follow,
+    PostCommentLike,
+    DiscussionCommentLike,
+    PostLike,
+    DiscussionLike,
+    PostComment,
+    DiscussionComment,
+    PostCommentReplyLike,
+    DiscussionCommentReplyLike,
+    ReplyPostComment,
+    ReplyDiscussionComment
+}
