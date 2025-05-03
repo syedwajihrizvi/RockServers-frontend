@@ -41,10 +41,12 @@ export const DiscussionDetails = () => {
 
   useEffect(() => {
     if (discussion) {
-        const { thumbnailPath, thumbnailType } = discussion
-        setOtherImages([...discussion.otherImages ? discussion.otherImages : []])
-        if (discussion.otherImages && thumbnailType == ThumbnailType.Image)
-            setOtherImages([...otherImages, thumbnailPath])
+        const { thumbnailPath, thumbnailType, } = discussion
+        if (discussion.otherImages) {
+            setOtherImages([
+                ...discussion.otherImages, 
+                ...(thumbnailType == ThumbnailType.Image ? [thumbnailPath] : [])])
+        }
         setVideoPaths([...discussion.videoPaths ? discussion.videoPaths : []])
         if (discussion.videoPaths && thumbnailType == ThumbnailType.Video)
             setVideoPaths([...videoPaths, thumbnailPath])
@@ -52,6 +54,8 @@ export const DiscussionDetails = () => {
     }
   }, [isLoading, discussion])
 
+  console.log(discussion?.otherImages)
+  console.log(otherImages)
   useEffect(() => {
     if (discussion) {
         setIsLoadingSimilarDiscussions(true)
@@ -187,13 +191,13 @@ export const DiscussionDetails = () => {
             </div>
             <div>
             <div className="similar-posts">
-                <h3 className="similar-posts__heading">{`Similar Posts for ${discussion.gameName}`}</h3>
+                <h3 className="similar-posts__heading">{`Similar Discussions for ${discussion.gameName}`}</h3>
                 <div className="similar-posts__content">
                     {isLoadingSimilarDiscussions &&
                     [...Array(3).keys()].map((key) => 
                         <Skeleton key={`discussionSkeleton${key}`} customClass="skeleton skeleton--dynamic"/>)}
                     {!isLoadingSimilarDiscussions && similarDiscussions && 
-                    similarDiscussions.map(post => <PreviewCard key={post.id} post={post}/>)
+                    similarDiscussions.map(post => <PreviewCard key={post.id} preview={post} type="discussions"/>)
                     }
                     <CiCirclePlus 
                         fontSize={40} color="white" 

@@ -256,6 +256,7 @@ html, body, #root {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 100;
 }
 
 .post-card__rating--sm {
@@ -696,7 +697,7 @@ html, body, #root {
   position: relative;
 }
 
-.post-details__img {
+.post-details__img, .post-details__video {
   object-fit: cover;
   width: 100%;
   min-width: 250px;

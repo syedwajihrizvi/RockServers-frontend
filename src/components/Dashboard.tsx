@@ -323,19 +323,19 @@ export const Dashboard = ({renderComponent, navComponents, user}: {renderCompone
 }
 
 export const UserProfileDashboard = () => {
-    const navComponents = ["settings", "followers", "following", "posts", "notifications"]
+    const navComponents = ["Settings", "Followers", "Following", "My Posts", "Notifications"]
     const { isLoading, user } = useGlobalContext()
     const renderComponent = (viewComponent: string, user: IUser) => {
         switch (viewComponent) {
-            case "settings":
+            case "Settings":
                 return <AccountSettings user={user}/>
-            case "followers":
+            case "Followers":
                 return <UserList type="followers" profileUser={user} authenticated={true}/>
-            case "following":
+            case "Following":
                 return <UserList type="following" profileUser={user} authenticated={true}/>
-            case "posts":
+            case "My Posts":
                 return <Posts user={user}/>
-            case "notifications":
+            case "Notifications":
                 return <Notifications/>
             default:
                 return <AccountSettings user={user}/>

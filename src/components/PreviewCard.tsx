@@ -1,21 +1,22 @@
-import { useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { generateImageUrl, generateProfileImageUrl } from "../utils/helpers/helpers"
 import { IDiscussion, IPost } from "../utils/interfaces/Interfaces"
 
-export const PreviewCard = ({post}: {post: IPost | IDiscussion}) => {
-  const navigate = useNavigate()
+export const PreviewCard = ({preview, type}: {preview: IPost | IDiscussion, type: "discussions" | "posts"}) => {
   return (
-    <div className="preview-card" onClick={() => navigate(`/${post.id}`)}>
+    <Link to={`/${type}/${preview.id}`}>
+      <div className="preview-card">
         <div className="post-card__rating post-card__rating--green post-card__rating--sm">
             <h4>4.2</h4>
         </div>
         <div className="preview-card__user-info">
-            <img src={generateProfileImageUrl(post.appUser)} alt="User Info" />
+            <img src={generateProfileImageUrl(preview.appUser)} alt="User Info" />
         </div>
-        <img src={generateImageUrl(post.thumbnailPath)}/>
+        <img src={generateImageUrl(preview.thumbnailPath)}/>
         <div className="preview-card__title">
-            <h3>{post.title}</h3>
+            <h3>{preview.title}</h3>
         </div>
-    </div>
+      </div>
+    </Link>
   )
 }

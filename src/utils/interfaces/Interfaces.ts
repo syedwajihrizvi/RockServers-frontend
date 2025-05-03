@@ -38,6 +38,7 @@ export interface IPost {
     sessions: ISession[],
     activeSession: boolean,
     thumbnailPath: string,
+    thumbnailType: ThumbnailType
     views: number,
     likes: number,
     dislikes: number

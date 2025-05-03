@@ -4,8 +4,8 @@ import apiClient from "../utils/services/dataServices"
 import { CiCirclePlus } from "react-icons/ci";
 import { ToastContainer, toast } from 'react-toastify'
 
-import { IComment, IPost } from "../utils/interfaces/Interfaces"
-import { formatStringDate, generateProfileImageUrl, generateImageUrl, getDateDifference, userDidLike } from "../utils/helpers/helpers";
+import { IComment, IPost, ThumbnailType } from "../utils/interfaces/Interfaces"
+import { formatStringDate, generateProfileImageUrl, generateImageUrl, getDateDifference, userDidLike, generateVideoUrl } from "../utils/helpers/helpers";
 import useQueryStore from "../stores/useQueryStore"
 import { Engagements } from "./Engagements"
 import { Skeleton } from "./Skeleton"
@@ -116,11 +116,16 @@ export const PostDetails = () => {
     }
   }
 
+    const renderPostCardThumbnail = (post: IPost) =>
+      post.thumbnailType == ThumbnailType.Image ?
+                            <img className="post-details__img" src={generateImageUrl(post.thumbnailPath)}/> :
+                            <video className="post-details__video" autoPlay={true} loop={true} controls={true}>
+                                <source src={generateVideoUrl(post.thumbnailPath)} type="video/mp4"/>
+                              </video>
+
   return (
     <div className="card-details__container">
-        <ToastContainer
-            position="top-center"
-            />
+        <ToastContainer position="top-center"/>
         {isLoading && <Skeleton customClass="skeleton--lg"/>}
         {!isLoading && post && 
         <div className="card-details-card__wrapper post-details__wrapper">
@@ -133,7 +138,7 @@ export const PostDetails = () => {
                         {toPlatformIcon(post.platformName, 30, "white")}
                     </div>
                     {renderJoinButton()}
-                    <img src={generateImageUrl(post.thumbnailPath)} alt="post Image" className="post-details__img" />
+                    {renderPostCardThumbnail(post)}
                 </div>
                 <div className="card-details-card__content">
                     <div className="card-details-card__content__info">
@@ -166,7 +171,7 @@ export const PostDetails = () => {
                     [...Array(3).keys()].map((key) => 
                         <Skeleton key={key} customClass="skeleton skeleton--dynamic"/>)}
                     {!isLoadingSimilarPosts && similarPosts && 
-                    similarPosts.map(post => <PreviewCard key={post.id} post={post}/>)
+                    similarPosts.map(post => <PreviewCard key={post.id} preview={post} type="posts"/>)
                     }
                     <CiCirclePlus 
                         fontSize={40} color="white" 

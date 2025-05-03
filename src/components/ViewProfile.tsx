@@ -8,13 +8,13 @@ import { Navbar } from "./Navbar"
 export const ViewProfile = () => {
   const params = useParams()
   const {data: profileToView, isLoading} = useProfile(params.username as string)
-  const navComponents = ["posts", "followers", "following"]
+  const navComponents = ["Posts", "Followers", "Following"]
 
     const renderComponent = (viewComponent: string) => {
         switch (viewComponent) {
-            case "followers":
+            case "Followers":
                 return <UserList type="followers" profileUser={profileToView as IUser} authenticated={false}/>
-            case "following":
+            case "Following":
                 return <UserList type="following" profileUser={profileToView as IUser} authenticated={false}/>
             default:
                 return <Posts user={profileToView as IUser} viewingProfile={true}/>

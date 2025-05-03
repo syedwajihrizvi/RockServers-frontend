@@ -4,7 +4,7 @@ import { MdCancel } from "react-icons/md";
 import { useEffect, useRef, useState } from "react"
 import { useGames } from "../hooks/useGames";
 import { IImage } from "../utils/interfaces/Interfaces";
-import apiClient, { createDiscussion, createPostWithSelectedImage, createPostWithUploadedImage } from "../utils/services/dataServices"
+import apiClient, { createDiscussion, createPost } from "../utils/services/dataServices"
 import { generateImageUrl, generateReadyImageUrl } from "../utils/helpers/helpers";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -21,7 +21,7 @@ interface PostData {
 }
 
 export const Create = () => {
-  const [creatingPost, setCreatingPost] = useState(true)
+  const [creatingPost, setCreatingPost] = useState(false)
   const [choosingImage, setChoosingImage] = useState(false)
   const [postData, setPostData] = useState<PostData>({startTime: new Date().toISOString().slice(0, 16)})
   const [gameImages, setGameImages] = useState<IImage[]>([])
@@ -120,32 +120,24 @@ export const Create = () => {
       toast.error("Please fill in all information")
     else {
       // Depends what type of request we are making
-      if (imageUploaded) {
+        const {thumbnailUploaded, thumbnailSelected} = postData 
         const formData = new FormData()
         formData.append("title", title as string)
         formData.append("description", description as string)
         formData.append("gameId", `${gameId}` as string)
         formData.append("platformId", `${platformId}` as string)
-        formData.append("imageFile", imageUploaded as Blob)
+        if (thumbnailUploaded)
+          formData.append("thumbnailFile", thumbnailUploaded as Blob)
+        else
+          formData.append("thumbnailPath", thumbnailSelected as string)
         toast.promise(
-          createPostWithUploadedImage(formData),
+          createPost(formData),
           {
             pending: "Uploading Post",
             success: "Post created successfully!",
             error: "An unexpected error occured"
           }
         ).then(res => navigate(`/posts/${res.data.id}`))
-      } else {
-        const imagePath = imageSelected as string
-        toast.promise(
-          createPostWithSelectedImage({title, description, gameId, platformId, imagePath}),
-          {
-            pending: "Uploading Post",
-            success: "Post created successfully!",
-            error: "An unexpected error occured"
-          }
-        ).then(res => navigate(`/posts/${res.data.id}`))
-      }
     }
   }
 
@@ -215,8 +207,8 @@ export const Create = () => {
       </div>}
       <div className="create-container" style={{opacity: choosingImage ? 0.6 : 1}}>
           <div className="create-type">
-              <button className="btn btn--success btn--md" onClick={() => setCreatingPost(true)}>Post a session</button>
-              <button className="btn btn--success btn--md" onClick={() => setCreatingPost(false)}>Discuss Something</button>
+              <button className="btn btn--success btn--md" style={{opacity: creatingPost ? 1 : 0.6}} onClick={() => setCreatingPost(true)}>Post a session</button>
+              <button className="btn btn--success btn--md" style={{opacity: creatingPost ? 0.6 : 1}} onClick={() => setCreatingPost(false)}>Discuss Something</button>
           </div>
           {!isLoadingGames && games && <div className="create-post">
             <div className="create-type">

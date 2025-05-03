@@ -1,7 +1,7 @@
-import { IPost } from "../utils/interfaces/Interfaces";
+import { IPost, ThumbnailType } from "../utils/interfaces/Interfaces";
 import { useNavigate } from "react-router-dom";
 import { Engagements } from "./Engagements";
-import { formatStringDate, generateProfileImageUrl, generateImageUrl,renderPartialContent } from "../utils/helpers/helpers";
+import { formatStringDate, generateProfileImageUrl, generateImageUrl,renderPartialContent, generateVideoUrl } from "../utils/helpers/helpers";
 import { toPlatformIcon } from "../utils/helpers/mappers";
 import { useGlobalContext } from "../providers/global-provider";
 
@@ -10,6 +10,14 @@ export const PostCard = ({post}: {post: IPost}) => {
   const navigate = useNavigate()
   const { user } = useGlobalContext()
 
+  const renderPostCardThumbnail = () =>
+    post.thumbnailType == ThumbnailType.Image ?
+                          <img className="post-card__img" src={generateImageUrl(post.thumbnailPath)}/> :
+                          <video className="post-card__video" autoPlay={true} loop={true} muted={true}>
+                              <source src={generateVideoUrl(post.thumbnailPath)} type="video/mp4"/>
+                            </video>
+
+
   return (
     <div className="post-card__wrapper" onClick={() => navigate(`/posts/${post.id}`)}>
         <div className="post-card__rating post-card__rating--black post-card__rating--md">
@@ -17,7 +25,7 @@ export const PostCard = ({post}: {post: IPost}) => {
         </div>
         {post.activeSession && <div className="post-card__active"/>}
         <div className="post-card">
-            <img className="post-card__img" src={generateImageUrl(post.thumbnailPath)}/>
+            {renderPostCardThumbnail()}
             <div className="post-card__content">
                 <span className="post-card__heading">
                     <h1 className="post-card__heading__title">{post.title}</h1>

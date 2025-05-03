@@ -5,7 +5,7 @@ export const generateReadyImageUrl = (image: string) =>
     `http://localhost:5191/ready_images/${image}.webp`
 
 export const generateImageUrl = (image: string) => 
-    `http://localhost:5191/uploads/post_images/${image}.webp`
+    `http://localhost:5191/uploads/images/${image}.webp`
 
 export const generateProfileImageUrl = (user: IUser) =>
     user.avatar ? 
@@ -13,7 +13,7 @@ export const generateProfileImageUrl = (user: IUser) =>
         `http://localhost:5191/uploads/profile_images/${user.profileImage}.webp`
 
 export const generateVideoUrl = (video: string) =>
-    `http://localhost:5191/uploads/discussion_videos/${video}`
+    `http://localhost:5191/uploads/videos/${video}`
 
 export const generateAvatarImageUrl = (image: string) =>
     `http://localhost:5191/uploads/avatar_images/${image}.webp`

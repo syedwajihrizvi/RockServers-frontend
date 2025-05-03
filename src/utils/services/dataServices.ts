@@ -6,30 +6,12 @@ const client = axios.create({
     baseURL: url,
 })
 
-type postData = {
-    title: string,
-    description: string,
-    gameId: number,
-    platformId: number,
-    imagePath: string
-}
-
-export const createPostWithUploadedImage = (formData: FormData): Promise<AxiosResponse> =>
+export const createPost = (formData: FormData): Promise<AxiosResponse> =>
     client.post(
-        '/posts/customImage', 
-        formData, 
-        { headers: 
-            {"Authorization": `Bearer ${localStorage.getItem('x-auth-token')}`,
-             "Content-Type": "multipart/form-data"}
-        }) 
-
-export const createPostWithSelectedImage = (data: postData): Promise<AxiosResponse> =>
-    client.post(
-        '/posts', 
-        data, 
+        '/posts', formData, 
         { headers: 
             {"Authorization": `Bearer ${localStorage.getItem('x-auth-token')}`, 
-              "Content-Type": 'application/json'}
+              "Content-Type": 'multipart/form-data'}
         })
 
 export const createDiscussion = (formData: FormData): Promise<AxiosResponse> => {
