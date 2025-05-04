@@ -11,6 +11,9 @@ import { Create } from "../components/Create";
 import { NotFound } from "../components/NotFound";
 import { UserProfileDashboard } from "../components/Dashboard";
 import { ViewProfile } from "../components/ViewProfile";
+import { EditPost } from "../components/EditPost";
+import { EditDiscussion } from "../components/EditDiscussion";
+import { Edit } from "../components/Edit";
 
 const router = createBrowserRouter([
     {
@@ -32,6 +35,20 @@ const router = createBrowserRouter([
             {
                 path: 'create',
                 element: <Create/>
+            },
+            {
+                path: 'edit',
+                element: <Edit/>,
+                children: [
+                    {
+                        path: 'posts/:id',
+                        element: <EditPost/>
+                    },
+                    {
+                        path: 'discussions/:id',
+                        element: <EditDiscussion/>
+                    }
+                ]
             }
         ]
     },

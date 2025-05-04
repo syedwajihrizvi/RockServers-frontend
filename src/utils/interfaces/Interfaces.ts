@@ -128,3 +128,24 @@ export enum ThumbnailType {
     Image,
     Video
 }
+
+export interface PostData {
+  title?: string;
+  description?: string;
+  gameId?: number;
+  platformId?: number;
+  startTime?: string;
+  thumbnailSelected?: string;
+  thumbnailUploaded?: Blob | MediaSource;
+  otherMedia?: File[];
+}
+
+export interface PatchDataForPost {
+    title?: string,
+    description?: string,
+    gameId?: number,
+    platformId?: string,
+    startTime?: string,
+    thumbnailSelected?: string,
+    thumbnailType?: string,
+}

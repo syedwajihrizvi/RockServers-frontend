@@ -56,3 +56,6 @@ export const formatSecondsToString = (totalSeconds: number): string => {
 export const userDidLike = (likes: number[] | undefined, target: number) => {
     return likes ? likes.includes(target) : false
 }
+
+export const fileIsVideo = (file: File) => 
+    file && file.type.includes("video")

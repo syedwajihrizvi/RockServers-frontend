@@ -20,6 +20,7 @@ import { useSessions } from "../hooks/useSessions";
 import { useComment } from "../hooks/useComments";
 import { FollowButton } from "./FollowButton";
 import { DeleteButton } from "./DeleteButton";
+import { EditButton } from "./EditButton";
 
 export const PostDetails = () => {
   const {id: postId} = useParams()
@@ -177,7 +178,11 @@ export const PostDetails = () => {
                         fontSize={40} color="white" 
                         className="icon" onClick={() => handleSimilarPostClick()}/>
                 </div>
-                {post.appUser.username == user?.username && <DeleteButton type="post" contentId={post.id}/>}
+                {post.appUser.username == user?.username &&
+                <div>
+                    <EditButton type={"posts"} contentId={post.id}/>
+                    <DeleteButton type="post" contentId={post.id}/>
+                </div>}
                 <FollowButton user={post.appUser}/>
                 {successfullSessions && <div>
                     {successfullSessions.length > 0 ? 

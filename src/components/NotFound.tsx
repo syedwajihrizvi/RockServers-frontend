@@ -8,7 +8,7 @@ export const NotFound = () => {
   const { handleSetPost } = useQueryStore()
   useEffect(() => {
     const path = location.pathname
-    if (path.match(new RegExp("post", "i")))
+    if (path.match(new RegExp("post", "i"))) 
         handleSetPost("posts")
     else if (path.match(new RegExp("discuss", "i")))
         handleSetPost("discussions")
@@ -17,6 +17,6 @@ export const NotFound = () => {
 
   })
   return (
-    <h1>Not FOund</h1>
+    <h1>Not Found</h1>
   )
 }

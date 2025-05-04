@@ -1,32 +1,23 @@
-import { FaUpload } from "react-icons/fa6"
-import { IoMdCloseCircle, IoMdCheckmarkCircle } from "react-icons/io";
-import { MdCancel } from "react-icons/md";
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import { useGames } from "../hooks/useGames";
-import { IImage } from "../utils/interfaces/Interfaces";
+import { IImage, PostData } from "../utils/interfaces/Interfaces";
 import apiClient, { createDiscussion, createPost } from "../utils/services/dataServices"
-import { generateImageUrl, generateReadyImageUrl } from "../utils/helpers/helpers";
+import { fileIsVideo, generateImageUrl } from "../utils/helpers/helpers";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-
-interface PostData {
-  title?: string,
-  description?: string,
-  gameId?: number,
-  platformId?: number,
-  startTime?: string,
-  thumbnailSelected?: string,
-  thumbnailUploaded?: Blob | MediaSource,
-  otherMedia?: File[]
-}
+import { SingleFileUpload } from "./CustomFileUploads/SingleFileUpload";
+import { MultipleFileUpload } from "./CustomFileUploads/MultipleFileUpload";
+import { ChooseGame } from "./ChooseGame";
+import { ChoosePlatform } from "./ChoosePlatform";
+import { ReadyImages } from "./ReadyImages";
+import { UploadedImagePreview } from "./UploadedImagePreview";
+import { MultipleMediaPreview } from "./MultipleMediaPreview";
 
 export const Create = () => {
   const [creatingPost, setCreatingPost] = useState(false)
   const [choosingImage, setChoosingImage] = useState(false)
   const [postData, setPostData] = useState<PostData>({startTime: new Date().toISOString().slice(0, 16)})
   const [gameImages, setGameImages] = useState<IImage[]>([])
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const multipleFileInputRef = useRef<HTMLInputElement | null>(null);
   const navigate = useNavigate()
   const { data: games, isLoading: isLoadingGames } = useGames()
   
@@ -40,14 +31,12 @@ export const Create = () => {
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files)
-      return
+      return false
     const file = event.target.files[0]
     if (!file)
-      return
+      return false
     setPostData({...postData, thumbnailUploaded: file, thumbnailSelected: undefined})
-    // Reset the file input value so selecting the same file again will trigger a change
-    if (fileInputRef.current)
-      fileInputRef.current.value = ''
+    return true
   }
 
   const getGameTitle = (gameId: number) => {
@@ -61,13 +50,11 @@ export const Create = () => {
   const handleMultipleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files
     if (!files)
-      return
+      return false
 
     setPostData({...postData, otherMedia: [...postData.otherMedia ? postData.otherMedia : [], ...files]})
     // Reset the file input value so selecting the same file again will trigger onChange
-    if (multipleFileInputRef.current) {
-      multipleFileInputRef.current.value = '';
-    }
+    return true
   }
 
   const handleSubmitWrapper = () => {
@@ -76,9 +63,6 @@ export const Create = () => {
     else
       handleDiscussionCreationSubmit()
   }
-
-  const fileIsVideo = (file: File) => 
-    file && file.type.includes("video")
 
   const handleDiscussionCreationSubmit = () => {
     const { title, description:content, gameId, thumbnailSelected, thumbnailUploaded, otherMedia } = postData
@@ -141,110 +125,62 @@ export const Create = () => {
     }
   }
 
-  const renderUploadedImagePreview = () => {
-    if (postData && postData.thumbnailUploaded) {
-      const imageUrl = URL.createObjectURL(postData.thumbnailUploaded)
-      return (
-      <div className="create-post__img--selected__wrapper">
-        <MdCancel className="icon" onClick={() => setPostData({...postData, thumbnailUploaded: undefined})}/>
-        {fileIsVideo(postData.thumbnailUploaded as File) ? 
-        <video autoPlay={true} muted={true} controls={true}>
-          <source src={imageUrl} type="video/mp4"/>
-        </video> : <img src={imageUrl}/>}
-      </div>
-      )
-    }
-  }
-
-  const ChooseGame = () => {
-    return games && 
-            <select className="create-option" 
-                    value = {postData.gameId || ""}
-                    onChange={(event) => setPostData({...postData, gameId: parseInt(event.target.value)})}>
-              <option>Choose a Game</option>
-                {games.map(game => 
-              <option key={game.id} value={game.id}>{game.title}</option>)}
-            </select>
-  }
-
-  const OtherImages = () => {
-  
-    return (
-      <div className="create-discussion__other-images">
-        {postData && postData.otherMedia && postData.otherMedia.map(media => {
-          return (
-            <div className="create-discussion-other_images__wrapper">
-              <MdCancel className="icon" onClick={() => setPostData({...postData, otherMedia: postData.otherMedia?.filter((img) => img != media)})}/>
-              {fileIsVideo(media) ? 
-              <video autoPlay={true} loop={true} muted={true} controls={false}>
-                  <source src={URL.createObjectURL(media)} type="video/mp4"/>
-              </video>: 
-              <img src={URL.createObjectURL(media)} />}
-            </div>
-          )
-        })}
-      </div>
-    )
-  }
+  const handleImageSelectInReadyImages = (gameImage: IImage) =>
+    setPostData(
+      {...postData, thumbnailUploaded: undefined, 
+      thumbnailSelected: !postData ? gameImage.imagePath : 
+                        postData.thumbnailSelected == gameImage.imagePath ? 
+                        undefined :  gameImage.imagePath})
 
   return (
     <div className="create-container--wrapper">
       <ToastContainer position="top-center"/>
-      {choosingImage && <div className="create-choose-image">
-        <IoMdCloseCircle className="close-icon" onClick={() => setChoosingImage(false)}/>
-        {postData.gameId ? <h1>Showing images for {getGameTitle(postData.gameId)}.</h1> : <h1>Please choose a game first to view its images.</h1>}
-        <div className="create-choose-image__img">
-          {gameImages.map(gameImage => 
-            <div className="create-img__container">
-              {postData && postData.thumbnailSelected && 
-              postData.thumbnailSelected == gameImage.imagePath && <IoMdCheckmarkCircle className="icon"/>}
-              <img onClick={() => 
-                    setPostData({...postData, thumbnailUploaded: undefined, 
-                                 thumbnailSelected: !postData ? gameImage.imagePath : postData.thumbnailSelected == gameImage.imagePath ? undefined :  gameImage.imagePath})} 
-                   src={generateReadyImageUrl(gameImage.imagePath)}/>
-            </div>)}
-        </div>
-      </div>}
+      {choosingImage && 
+      <ReadyImages gameId={postData.gameId} gameImages={gameImages} 
+                   thumbnailSelected={postData.thumbnailSelected}
+                   handleCloseIcon={() => setChoosingImage(false)}
+                   handleImageClick={handleImageSelectInReadyImages}
+                   getGameTitle={getGameTitle}/>}
       <div className="create-container" style={{opacity: choosingImage ? 0.6 : 1}}>
           <div className="create-type">
-              <button className="btn btn--success btn--md" style={{opacity: creatingPost ? 1 : 0.6}} onClick={() => setCreatingPost(true)}>Post a session</button>
-              <button className="btn btn--success btn--md" style={{opacity: creatingPost ? 0.6 : 1}} onClick={() => setCreatingPost(false)}>Discuss Something</button>
+              <button className="btn btn--success btn--md" 
+                      style={{opacity: creatingPost ? 1 : 0.6}} 
+                      onClick={() => setCreatingPost(true)}>Post a session</button>
+              <button className="btn btn--success btn--md" 
+                      style={{opacity: creatingPost ? 0.6 : 1}} 
+                      onClick={() => setCreatingPost(false)}>Discuss Something</button>
           </div>
           {!isLoadingGames && games && <div className="create-post">
             <div className="create-type">
-              <ChooseGame/>
-              {creatingPost && 
-              <select className="create-option" 
-                      onChange={(event) => setPostData({...postData, platformId: parseInt(event.target.value)})}>
-                <option>What Platform</option>
-                <option value="2">Playstation</option>
-                <option value="0">XBox</option>
-                <option value="1">PC</option>
-              </select>}
+              {<ChooseGame value={postData.gameId} games={games} handleChange={(event: React.ChangeEvent<HTMLSelectElement>) => {setPostData({...postData, gameId: parseInt(event.target.value)})}}/>}
+              {creatingPost && <ChoosePlatform handleChange={(event) => setPostData({...postData, platformId: parseInt(event.target.value)})}/>}
             </div>
-            <input placeholder="Enter a Title" className="create-input" onChange={(event) => setPostData({...postData, title: event.target.value})}/>
-            <textarea placeholder="Enter a description" className="create-textarea" onChange={(event) => setPostData({...postData, description: event.target.value})}/>
+            <input placeholder="Enter a Title" 
+                   className="create-input" 
+                   onChange={(event) => setPostData({...postData, title: event.target.value})}/>
+            <textarea placeholder="Enter a description" className="create-textarea" 
+                      onChange={(event) => setPostData({...postData, description: event.target.value})}/>
             <h3 className="create-post-thumbnail-heading">Choose a Thumbnail</h3>
             <div className="create-upload-type">
-              <label className="file-upload-wrapper btn btn--success btn--md">
-                Upload Thumbnail <FaUpload className="icon"/>
-                <input ref={fileInputRef} type="file" onChange={handleFileUpload}/>
-              </label>
-              <button className="btn btn--success btn--sm" onClick={() => setChoosingImage(true)}>Choose Ready Image</button>
+              <SingleFileUpload label="Upload thumbnail" handleFileUpload={handleFileUpload}/>
+              <button className="btn btn--success btn--sm" 
+                      onClick={() => setChoosingImage(true)}>Choose Ready Image</button>
             </div>
             <div className="create-post__img--selected">
               {postData && postData.thumbnailSelected && 
               <div className="create-post__img--selected__wrapper">
-                <img src={generateImageUrl(postData.thumbnailSelected)} onClick={() => setChoosingImage(true)}/>
+                <img src={generateImageUrl(postData.thumbnailSelected)} 
+                     onClick={() => setChoosingImage(true)}/>
               </div>}
-              {postData && postData.thumbnailUploaded && renderUploadedImagePreview()}
+              {postData && !postData.thumbnailSelected && postData.thumbnailUploaded && 
+              <UploadedImagePreview thumbnail={postData.thumbnailUploaded} 
+                                    handleClick={() => setPostData({...postData, thumbnailUploaded: undefined})}/>}
             </div>
-            {!creatingPost &&
-              <label className="file-upload-wrapper btn btn--success btn--md">
-                Choose more media <FaUpload className="icon"/>
-                <input ref={multipleFileInputRef} type="file" multiple onChange={handleMultipleFileUpload}/>
-              </label>}
-            {!creatingPost && <OtherImages/>}
+            {!creatingPost && <MultipleFileUpload label="Choose more media" handleMultipleFileUpload={handleMultipleFileUpload}/>}
+            {!creatingPost && 
+            <>
+                {postData && postData.otherMedia && <MultipleMediaPreview medias={postData.otherMedia} handleClick={(media: File) => setPostData({...postData, otherMedia: postData.otherMedia?.filter((img) => img != media)})}/>}
+            </>}
             {creatingPost && 
             <>
               <label className="post-starting-time--label" htmlFor="post-starting-time">Choose a start time to let people know.</label>
