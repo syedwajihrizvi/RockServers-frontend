@@ -4,7 +4,7 @@ import { IDiscussion, IPost } from "../utils/interfaces/Interfaces"
 
 export const PreviewCard = ({preview, type}: {preview: IPost | IDiscussion, type: "discussions" | "posts"}) => {
   return (
-    <Link to={`/${type}/${preview.id}`}>
+    <Link to={`/${type}/${preview.id}`} style={{textDecoration: 'none'}}>
       <div className="preview-card">
         <div className="post-card__rating post-card__rating--green post-card__rating--sm">
             <h4>4.2</h4>

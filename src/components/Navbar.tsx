@@ -1,5 +1,5 @@
 import { SearchInput } from "./SearchInput";
-import { FaCirclePlus } from "react-icons/fa6";
+import { IoIosCreate } from "react-icons/io";
 import Dropdown from "./Dropdown";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -30,7 +30,9 @@ export const Navbar = () => {
         <div className="nav__options">
             {isLoggedIn && 
             <>
-            <Link to="/create"><FaCirclePlus className="create_icon" size={30}/></Link>
+            <Link to="/create">
+              <IoIosCreate className="create_icon" size={30}/>
+            </Link>
             <Dropdown/>
             </>}
             {!isLoggedIn && 
@@ -48,7 +50,7 @@ export const Navbar = () => {
         <div className="nav__options">
             {isLoggedIn && 
             <>
-            <Link to="/create"><FaCirclePlus className="create_icon" size={30}/></Link>
+            <Link to="/create"><IoIosCreate className="create_icon" size={30}/></Link>
             <Dropdown/>
             </>
             }

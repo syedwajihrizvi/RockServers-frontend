@@ -1,6 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query"
 import { ReactNode, useEffect, useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate, useLocation } from "react-router-dom"
 import { useGlobalContext } from "../providers/global-provider"
 import { Skeleton } from "./Skeleton"
 import { AllPosts } from "./AllPosts"
@@ -285,8 +285,10 @@ const Notifications = () => {
     </div> : <h2>You have no Notifications</h2>
 }
 
-export const Dashboard = ({renderComponent, navComponents, user}: {renderComponent: (viewComponent: string, user: IUser) => ReactNode, navComponents: string[], user: IUser}) => {
-  const [viewComponent, setViewComponent] = useState(navComponents[0])
+export const Dashboard = (
+    {renderComponent, navComponents, user, initialState}: 
+    {renderComponent: (viewComponent: string, user: IUser) => ReactNode, navComponents: string[], user: IUser, initialState?: string}) => {
+  const [viewComponent, setViewComponent] = useState(initialState ? initialState : navComponents[0])
   const [screenWidth, setScreenWidth] = useState(window.screen.width)
 
   useEffect(() => {
@@ -325,6 +327,20 @@ export const Dashboard = ({renderComponent, navComponents, user}: {renderCompone
 export const UserProfileDashboard = () => {
     const navComponents = ["Settings", "Followers", "Following", "My Posts", "Notifications"]
     const { isLoading, user } = useGlobalContext()
+    const {pathname} = useLocation()
+    
+    const getInitialState = () => {
+        if (pathname.includes("followers"))
+            return "Followers"
+        else if (pathname.includes("following"))
+            return "Following"
+        else if (pathname.includes("posts"))
+            return "My Posts"
+        else if (pathname.includes("notifications"))
+            return "Notifications"
+        return "Settings"
+    }
+
     const renderComponent = (viewComponent: string, user: IUser) => {
         switch (viewComponent) {
             case "Settings":
@@ -345,6 +361,6 @@ export const UserProfileDashboard = () => {
         <Skeleton/> :
         <>
             <Navbar/>
-            <Dashboard renderComponent={renderComponent} navComponents={navComponents} user={user as IUser}/>
+            <Dashboard renderComponent={renderComponent} navComponents={navComponents} user={user as IUser} initialState={getInitialState()}/>
         </>     
 }

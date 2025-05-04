@@ -14,27 +14,27 @@ const DropdownMenuDemo = () => {
 
 			<DropdownMenu.Portal>
 				<DropdownMenu.Content className="DropdownMenuContent" sideOffset={5}>
-					<Link to="/dashboard/account">
+					<Link to="/dashboard/settings" style={{textDecoration: 'none'}}>
 						<DropdownMenu.Item className="DropdownMenuItem">
-							My Account
+							Settings
 						</DropdownMenu.Item>
 					</Link>
-					<Link to="/dashboard/friends">
+					<Link to="/dashboard/followers" style={{textDecoration: 'none'}}>
 						<DropdownMenu.Item className="DropdownMenuItem">
-							My Friends
+							Followers
 						</DropdownMenu.Item>
 					</Link>
-					<Link to="/dashboard/posts">
+					<Link to="/dashboard/following" style={{textDecoration: 'none'}}>
+						<DropdownMenu.Item className="DropdownMenuItem">
+							Following
+						</DropdownMenu.Item>
+					</Link>
+					<Link to="/dashboard/posts" style={{textDecoration: 'none'}}>
 						<DropdownMenu.Item className="DropdownMenuItem">
 							My Posts
 						</DropdownMenu.Item>
 					</Link>
-					<Link to="/dashboard/discussions">
-						<DropdownMenu.Item className="DropdownMenuItem">
-							My Discussions
-						</DropdownMenu.Item>
-					</Link>
-					<Link to="dashboard/notifications">
+					<Link to="dashboard/notifications" style={{textDecoration: 'none'}}>
 						<DropdownMenu.Item className="DropdownMenuItem">
 							Notifications
 						</DropdownMenu.Item>

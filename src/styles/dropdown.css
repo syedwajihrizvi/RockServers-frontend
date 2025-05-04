@@ -47,7 +47,7 @@ button {
 .DropdownMenuSubTrigger {
 	font-size: 13px;
 	line-height: 1;
-	color: var(--violet-11);
+	color: white;
 	border-radius: 3px;
 	display: flex;
 	align-items: center;
@@ -57,7 +57,9 @@ button {
 	padding-left: 25px;
 	user-select: none;
 	outline: none;
+	text-decoration: none;
 }
+
 .DropdownMenuSubTrigger[data-state="open"] {
 	background-color: var(--violet-4);
 	color: var(--violet-11);
@@ -111,6 +113,7 @@ button {
 }
 .IconButton:hover {
 	background-color: var(--violet-3);
+	cursor: pointer;
 }
 .IconButton:focus {
 	box-shadow: 0 0 0 2px black;
