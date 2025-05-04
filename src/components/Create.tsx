@@ -12,6 +12,7 @@ import { ChoosePlatform } from "./ChoosePlatform";
 import { ReadyImages } from "./ReadyImages";
 import { UploadedImagePreview } from "./UploadedImagePreview";
 import { MultipleMediaPreview } from "./MultipleMediaPreview";
+import { CustomTimeInput } from "./CustomTimeInput";
 
 export const Create = () => {
   const [creatingPost, setCreatingPost] = useState(false)
@@ -152,8 +153,11 @@ export const Create = () => {
           </div>
           {!isLoadingGames && games && <div className="create-post">
             <div className="create-type">
-              {<ChooseGame value={postData.gameId} games={games} handleChange={(event: React.ChangeEvent<HTMLSelectElement>) => {setPostData({...postData, gameId: parseInt(event.target.value)})}}/>}
-              {creatingPost && <ChoosePlatform handleChange={(event) => setPostData({...postData, platformId: parseInt(event.target.value)})}/>}
+              {<ChooseGame value={postData.gameId} 
+                          games={games} 
+                          handleChange={(event: React.ChangeEvent<HTMLSelectElement>) => {setPostData({...postData, gameId: parseInt(event.target.value)})}}/>}
+              {creatingPost && 
+              <ChoosePlatform handleChange={(event) => setPostData({...postData, platformId: parseInt(event.target.value)})}/>}
             </div>
             <input placeholder="Enter a Title" 
                    className="create-input" 
@@ -182,12 +186,9 @@ export const Create = () => {
                 {postData && postData.otherMedia && <MultipleMediaPreview medias={postData.otherMedia} handleClick={(media: File) => setPostData({...postData, otherMedia: postData.otherMedia?.filter((img) => img != media)})}/>}
             </>}
             {creatingPost && 
-            <>
-              <label className="post-starting-time--label" htmlFor="post-starting-time">Choose a start time to let people know.</label>
-              <input id="posts-starting-time" type="datetime-local" value={postData.startTime} 
-                    className="create-input"
-                    onChange={(event) => setPostData({...postData, startTime: event.target.value})}/>
-            </>}
+              <CustomTimeInput label="Choose a start time to let people know." startTime={postData.startTime} 
+                               handleChange={(event) => setPostData({...postData, startTime: event.target.value})}/>
+            }
             <div className="create-options">
               <button className="btn btn--md btn--success" onClick={handleSubmitWrapper}>Post</button>
               <button className="btn btn--md btn--secondary">Cancel</button>

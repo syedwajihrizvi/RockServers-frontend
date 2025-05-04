@@ -32,6 +32,7 @@ export interface IPost {
     postedAt: string,
     gameId: number,
     gameName: string,
+    startTime: string,
     appUser: IUser,
     platformName: string,
     comments: IComment[],
@@ -145,7 +146,7 @@ export interface PatchDataForPost {
     description?: string,
     gameId?: number,
     platformId?: string,
-    startTime?: string,
-    thumbnailSelected?: string,
-    thumbnailType?: string,
+    startTime?: string | undefined,
+    thumbnailPath?: string,
+    thumbnailType?: ThumbnailType,
 }

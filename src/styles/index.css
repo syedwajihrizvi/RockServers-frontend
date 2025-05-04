@@ -2038,3 +2038,28 @@ html, body, #root {
   margin: 0;
   margin-top: 0.5rem;
 }
+
+/* Edit */
+.current-thumbnail {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.current-thumbnail__heading {
+  color: white;
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.current-thumbnail__icon {
+  color: white;
+  font-size: 1.8rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.current-thumbnail__icon:hover {
+  scale: 1.05;
+  opacity: 1;
+}
