@@ -482,6 +482,13 @@ html, body, #root {
   font-size: 1.6rem;
 }
 
+.btn--delete {
+  margin-top: 1rem;
+  color: white;
+  border-radius: 2rem;
+  font-weight: bold;
+}
+
 .btn--follow {
   display: flex;
   align-items: center;
@@ -867,9 +874,9 @@ html, body, #root {
 }
 
 .comment__content {
+  width: 100%;
   display: flex;
   align-items: start;
-  width: 100%;
 }
 
 .comment__content__user-info {

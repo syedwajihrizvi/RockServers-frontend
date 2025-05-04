@@ -19,6 +19,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useSessions } from "../hooks/useSessions";
 import { useComment } from "../hooks/useComments";
 import { FollowButton } from "./FollowButton";
+import { DeleteButton } from "./DeleteButton";
 
 export const PostDetails = () => {
   const {id: postId} = useParams()
@@ -28,9 +29,8 @@ export const PostDetails = () => {
   const [isLoadingSimilarPosts, setIsLoadingSimilarPosts] = useState(false)
   const [similarPosts, setSimilarPosts] = useState<IPost[]>([])
   const { handleSetGameInfo, handleSetPost } = useQueryStore()
-  const { user } = useGlobalContext()
+  const { user, isLoggedIn } = useGlobalContext()
   const navigate = useNavigate()
-  const { isLoggedIn } = useGlobalContext()
   const queryClient = useQueryClient()
 
   useEffect(() => {
@@ -177,6 +177,7 @@ export const PostDetails = () => {
                         fontSize={40} color="white" 
                         className="icon" onClick={() => handleSimilarPostClick()}/>
                 </div>
+                {post.appUser.username == user?.username && <DeleteButton type="post" contentId={post.id}/>}
                 <FollowButton user={post.appUser}/>
                 {successfullSessions && <div>
                     {successfullSessions.length > 0 ? 

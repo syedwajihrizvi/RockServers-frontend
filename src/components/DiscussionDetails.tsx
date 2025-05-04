@@ -18,6 +18,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useDiscussionComment } from '../hooks/useComments'
 import { FollowButton } from './FollowButton'
 import Placeholder from "../assets/images/placeholder.webp"
+import { DeleteButton } from './DeleteButton'
 
 type Thumbnail = {
     urlPath: string,
@@ -204,6 +205,7 @@ export const DiscussionDetails = () => {
                         className="icon" onClick={() => handleSimilarDiscissionClick()}/>
                 </div>
             </div> 
+            {discussion.appUser.username == user?.username && <DeleteButton type="discussion" contentId={discussion.id}/> }
             <FollowButton user={discussion.appUser}/>
          </div>    
         </div>

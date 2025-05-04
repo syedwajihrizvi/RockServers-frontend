@@ -14,13 +14,24 @@ export const createPost = (formData: FormData): Promise<AxiosResponse> =>
               "Content-Type": 'multipart/form-data'}
         })
 
-export const createDiscussion = (formData: FormData): Promise<AxiosResponse> => {
-    return client.post(
-        'discussions', formData,
+export const createDiscussion = (formData: FormData): Promise<AxiosResponse> =>
+    client.post(
+        '/discussions', formData,
         {headers: 
             {"Authorization": `Bearer ${localStorage.getItem('x-auth-token')}`, 
              "Content-Type": "multipart/form-data"}})  
-}
+
+export const deletePost = (postId: number): Promise<AxiosResponse> =>
+    client.delete(
+        `/posts/${postId}`,
+        {headers: {"Authorization": `Bearer ${localStorage.getItem('x-auth-token')}`}}
+    )
+
+export const deleteDiscussion = (discussionId: number): Promise<AxiosResponse> =>
+    client.delete(
+        `/discussions/${discussionId}`,
+        {headers: {"Authorization": `Bearer ${localStorage.getItem('x-auth-token')}`}}
+    )
 
 export const updateUserSettings = (formData: FormData, field: string): Promise<AxiosResponse> => {
     return client.patch(
