@@ -19,6 +19,7 @@ import { useDiscussionComment } from '../hooks/useComments'
 import { FollowButton } from './FollowButton'
 import Placeholder from "../assets/images/placeholder.webp"
 import { DeleteButton } from './DeleteButton'
+import { EditButton } from './EditButton'
 
 type Thumbnail = {
     urlPath: string,
@@ -205,7 +206,12 @@ export const DiscussionDetails = () => {
                         className="icon" onClick={() => handleSimilarDiscissionClick()}/>
                 </div>
             </div> 
-            {discussion.appUser.username == user?.username && <DeleteButton type="discussion" contentId={discussion.id}/> }
+            {
+            discussion.appUser.username == user?.username && 
+            <div>
+                <EditButton type={"discussions"} contentId={discussion.id}/>
+                <DeleteButton type="discussion" contentId={discussion.id}/>
+            </div> }
             <FollowButton user={discussion.appUser}/>
          </div>    
         </div>

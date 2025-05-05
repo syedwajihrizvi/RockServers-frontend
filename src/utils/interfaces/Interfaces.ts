@@ -149,4 +149,18 @@ export interface PatchDataForPost {
     startTime?: string | undefined,
     thumbnailPath?: string,
     thumbnailType?: ThumbnailType,
+    thumbnailSelected?: string,
+    thumbnailUploaded?: Blob | MediaSource
+}
+
+export interface PatchDataForDiscussion {
+    title?: string,
+    content?: string,
+    gameId?: number,
+    thumbnailPath?: string,
+    thumbnailType?: ThumbnailType,
+    thumbnailSelected?: string,
+    thumbnailUploaded?: Blob | MediaSource,
+    otherImages?: string[],
+    videoPaths?: string[],
 }

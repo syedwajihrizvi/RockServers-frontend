@@ -1,18 +1,16 @@
 import { useEffect, useState } from "react"
-import { useGames } from "../hooks/useGames";
 import { IImage, PostData } from "../utils/interfaces/Interfaces";
 import apiClient, { createDiscussion, createPost } from "../utils/services/dataServices"
-import { fileIsVideo, generateImageUrl } from "../utils/helpers/helpers";
+import { fileIsVideo } from "../utils/helpers/helpers";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { SingleFileUpload } from "./CustomFileUploads/SingleFileUpload";
 import { MultipleFileUpload } from "./CustomFileUploads/MultipleFileUpload";
 import { ChooseGame } from "./ChooseGame";
 import { ChoosePlatform } from "./ChoosePlatform";
 import { ReadyImages } from "./ReadyImages";
-import { UploadedImagePreview } from "./UploadedImagePreview";
 import { MultipleMediaPreview } from "./MultipleMediaPreview";
 import { CustomTimeInput } from "./CustomTimeInput";
+import { ChooseThumbnail } from "./ChooseThumbnail";
 
 export const Create = () => {
   const [creatingPost, setCreatingPost] = useState(false)
@@ -20,7 +18,6 @@ export const Create = () => {
   const [postData, setPostData] = useState<PostData>({startTime: new Date().toISOString().slice(0, 16)})
   const [gameImages, setGameImages] = useState<IImage[]>([])
   const navigate = useNavigate()
-  const { data: games, isLoading: isLoadingGames } = useGames()
   
   useEffect(() => {
     if (postData.gameId) {
@@ -38,14 +35,6 @@ export const Create = () => {
       return false
     setPostData({...postData, thumbnailUploaded: file, thumbnailSelected: undefined})
     return true
-  }
-
-  const getGameTitle = (gameId: number) => {
-    if (games) {
-      const game = games.find((g) => g.id == gameId)
-      return game ? game.title : ""
-    }
-    return ""
   }
 
   const handleMultipleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -140,8 +129,7 @@ export const Create = () => {
       <ReadyImages gameId={postData.gameId} gameImages={gameImages} 
                    thumbnailSelected={postData.thumbnailSelected}
                    handleCloseIcon={() => setChoosingImage(false)}
-                   handleImageClick={handleImageSelectInReadyImages}
-                   getGameTitle={getGameTitle}/>}
+                   handleImageClick={handleImageSelectInReadyImages}/>}
       <div className="create-container" style={{opacity: choosingImage ? 0.6 : 1}}>
           <div className="create-type">
               <button className="btn btn--success btn--md" 
@@ -151,11 +139,11 @@ export const Create = () => {
                       style={{opacity: creatingPost ? 0.6 : 1}} 
                       onClick={() => setCreatingPost(false)}>Discuss Something</button>
           </div>
-          {!isLoadingGames && games && <div className="create-post">
+          <div className="create-post">
             <div className="create-type">
-              {<ChooseGame value={postData.gameId} 
-                          games={games} 
-                          handleChange={(event: React.ChangeEvent<HTMLSelectElement>) => {setPostData({...postData, gameId: parseInt(event.target.value)})}}/>}
+              {<ChooseGame 
+                value={postData.gameId} 
+                handleChange={(event: React.ChangeEvent<HTMLSelectElement>) => {setPostData({...postData, gameId: parseInt(event.target.value)})}}/>}
               {creatingPost && 
               <ChoosePlatform handleChange={(event) => setPostData({...postData, platformId: parseInt(event.target.value)})}/>}
             </div>
@@ -164,22 +152,11 @@ export const Create = () => {
                    onChange={(event) => setPostData({...postData, title: event.target.value})}/>
             <textarea placeholder="Enter a description" className="create-textarea" 
                       onChange={(event) => setPostData({...postData, description: event.target.value})}/>
-            <h3 className="create-post-thumbnail-heading">Choose a Thumbnail</h3>
-            <div className="create-upload-type">
-              <SingleFileUpload label="Upload thumbnail" handleFileUpload={handleFileUpload}/>
-              <button className="btn btn--success btn--sm" 
-                      onClick={() => setChoosingImage(true)}>Choose Ready Image</button>
-            </div>
-            <div className="create-post__img--selected">
-              {postData && postData.thumbnailSelected && 
-              <div className="create-post__img--selected__wrapper">
-                <img src={generateImageUrl(postData.thumbnailSelected)} 
-                     onClick={() => setChoosingImage(true)}/>
-              </div>}
-              {postData && !postData.thumbnailSelected && postData.thumbnailUploaded && 
-              <UploadedImagePreview thumbnail={postData.thumbnailUploaded} 
-                                    handleClick={() => setPostData({...postData, thumbnailUploaded: undefined})}/>}
-            </div>
+            <ChooseThumbnail thumbnailSelected={postData.thumbnailSelected} 
+                             thumbnailUploaded={postData.thumbnailUploaded} 
+                             handleFileUpload={handleFileUpload}
+                             handleChoosingImage={() => setChoosingImage(true)}
+                             handleUploadedImagePreviewClick={() => setPostData({...postData, thumbnailUploaded: undefined})}/>
             {!creatingPost && <MultipleFileUpload label="Choose more media" handleMultipleFileUpload={handleMultipleFileUpload}/>}
             {!creatingPost && 
             <>
@@ -193,7 +170,7 @@ export const Create = () => {
               <button className="btn btn--md btn--success" onClick={handleSubmitWrapper}>Post</button>
               <button className="btn btn--md btn--secondary">Cancel</button>
             </div>
-          </div>}
+          </div>
     </div>
     </div>
   )
