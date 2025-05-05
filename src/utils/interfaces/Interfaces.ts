@@ -163,4 +163,5 @@ export interface PatchDataForDiscussion {
     thumbnailUploaded?: Blob | MediaSource,
     otherImages?: string[],
     videoPaths?: string[],
+    otherMedia?: File[]
 }

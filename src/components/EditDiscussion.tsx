@@ -9,18 +9,21 @@ import { FaEdit } from "react-icons/fa"
 import { ChooseThumbnail } from "./ChooseThumbnail"
 import { ThumbnailImagePreviewViewPath } from "./UploadedImagePreview"
 import { Skeleton } from "./Skeleton"
+import { MultipleFileUpload } from "./CustomFileUploads/MultipleFileUpload"
+import { EditOtherImagePreviewPath } from "./MultipleMediaPreview"
 
 export const EditDiscussion = () => {
   const { id: discussionId } = useParams()
   const [requestData, setRequestData] = useState<PatchDataForDiscussion>({})
   const [editingThumbnail, setIsEditingThumbnail] = useState(false)
+  const [editingOtherMedia, setEditingOtherMedia] = useState(false)
   const [gameImages, setGameImages] = useState<IImage[]>([])
   const [choosingImage, setChoosingImage] = useState(false)
-  const {data: postData, isLoading } = useDiscussion(parseInt(discussionId as string))
+  const {data: discussionData, isLoading } = useDiscussion(parseInt(discussionId as string))
 
   useEffect(() => {
-    if (!isLoading && postData) {
-      const {title, content, gameId, thumbnailPath, thumbnailType} = postData
+    if (!isLoading && discussionData) {
+      const {title, content, gameId, thumbnailPath, thumbnailType} = discussionData
       setRequestData({
         title,
         content,
@@ -29,15 +32,15 @@ export const EditDiscussion = () => {
         thumbnailType,
       })
     }
-  }, [isLoading, postData])
+  }, [isLoading, discussionData])
 
   useEffect(() => {
-    if (postData) {
-      apiClient.get(`/images?gameId=${postData.gameId}`)
+    if (discussionData) {
+      apiClient.get(`/images?gameId=${discussionData.gameId}`)
       .then(res => setGameImages([...res.data]))
       .catch(() => console.log("An Error occured"))
     }
-  }, [postData, isLoading])
+  }, [discussionData, isLoading])
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files)
@@ -46,6 +49,18 @@ export const EditDiscussion = () => {
     if (!file)
       return false
     setRequestData({...requestData, thumbnailUploaded: file, thumbnailSelected: undefined})
+    return true
+  }
+
+  const handleMultipleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files
+    if (!files)
+      return false
+
+    setRequestData(
+      {...discussionData, 
+       otherMedia: [...requestData.otherMedia ? requestData.otherMedia : [], ...files]})
+    // Reset the file input value so selecting the same file again will trigger onChange
     return true
   }
 
@@ -98,10 +113,20 @@ export const EditDiscussion = () => {
           thumbnailType={requestData.thumbnailType}/> :
         <Skeleton/>
         }
+        <div className="current-thumbnail__header">
+          <h3 className="current-thumbnail__heading">Other Media</h3>
+          <FaEdit className="current-thumbnail__icon" onClick={() => setEditingOtherMedia(true)}/>
+        </div>
+        {discussionData && <EditOtherImagePreviewPath discussion={discussionData} isEditing={editingOtherMedia}/>}
+        {editingOtherMedia &&
+        <div className="edit-options--x">
+          <button className="btn btn--md btn--danger" onClick={() => setEditingOtherMedia(false)}>Cancel</button>
+          <MultipleFileUpload label="Upload new media" handleMultipleFileUpload={handleMultipleFileUpload}/>
+        </div>}
       </div>
-      <div className="edit-options">
+      <div className="edit-options--y">
         <button className="btn btn--md btn--success">Update</button>
-        <button className="btn btn--md btn--secondary">Cancel</button>
+        <button className="btn btn--md btn--danger">Back</button>
       </div>
     </div>)
 }

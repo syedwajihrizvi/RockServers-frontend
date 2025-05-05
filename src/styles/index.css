@@ -2089,12 +2089,25 @@ html, body, #root {
   opacity: 1;
 }
 
-.edit-options {
+.edit-options--y {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.edit-options .btn {
+.edit-options--x {
+  display: flex;
+  gap: 1rem;
+}
+
+.edit-options--y .btn, .edit-options--x .btn {
   text-align: center;
+}
+
+.edit--other-images {
+  gap: 0.5rem
+}
+
+.edit--other-images img, .edit--other-images video {
+  border-radius: 0;
 }
