@@ -17,13 +17,17 @@ export const UploadedImagePreview = (
 }
 
 export const ThumbnailImagePreviewViewPath = (
-  {thumbnailPath, thumbnailType}: {thumbnailPath: string, thumbnailType: ThumbnailType}) => {
+  {thumbnailPath, thumbnailType}: 
+  {thumbnailPath: string, thumbnailType: ThumbnailType}) => {
     return (
-      thumbnailType == ThumbnailType.Video ?
-      <video autoPlay={true} muted={true} controls={true}>
-        <source src={generateVideoUrl(thumbnailPath)} type="video/mp4"/>
-      </video> :
-      <img src={generateImageUrl(thumbnailPath)}/>
+      <div className="create-post__img--selected__wrapper">
+        {thumbnailType == ThumbnailType.Video ?
+        <video autoPlay={true} muted={true} controls={true}>
+          <source src={generateVideoUrl(thumbnailPath)} type="video/mp4"/>
+        </video> :
+        <img src={generateImageUrl(thumbnailPath)}/>
+        }
+      </div>
       )
 
 }

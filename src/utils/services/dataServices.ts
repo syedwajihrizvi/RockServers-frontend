@@ -27,12 +27,25 @@ export const deletePost = (postId: number): Promise<AxiosResponse> =>
         {headers: {"Authorization": `Bearer ${localStorage.getItem('x-auth-token')}`}}
     )
 
+export const updatePost = (postId: number, formData: FormData): Promise<AxiosResponse> =>
+    client.patch(
+        `/posts/${postId}`,
+        formData,
+        {headers: {"Authorization": `Bearer ${localStorage.getItem('x-auth-token')}`}}
+    )
+
 export const deleteDiscussion = (discussionId: number): Promise<AxiosResponse> =>
     client.delete(
         `/discussions/${discussionId}`,
         {headers: {"Authorization": `Bearer ${localStorage.getItem('x-auth-token')}`}}
     )
 
+export const updateDiscussion = (discussionId: number, formData: FormData): Promise<AxiosResponse> =>
+    client.patch(
+        `/discussions/${discussionId}`,
+        formData,
+        {headers: {"Authorization": `Bearer ${localStorage.getItem('x-auth-token')}`}}
+    )
 export const updateUserSettings = (formData: FormData, field: string): Promise<AxiosResponse> => {
     return client.patch(
         `/accounts/update/${field}`, 

@@ -5,10 +5,14 @@ import { usePost } from "../hooks/usePosts"
 import { ThumbnailImagePreviewViewPath } from "./UploadedImagePreview"
 import { FaEdit } from "react-icons/fa";
 import { Skeleton } from "./Skeleton"
-import { CustomInput, CustomTextArea, CustomTimeInput } from "./CustomTimeInput"
+import { CustomInput, CustomTextArea, CustomTimeInput } from "./CustomInputs"
 import { ChooseThumbnail } from "./ChooseThumbnail"
 import { ReadyImages } from "./ReadyImages"
-import apiClient from "../utils/services/dataServices"
+import apiClient, { updatePost } from "../utils/services/dataServices"
+import { ChooseGame } from "./ChooseGame"
+import { ChoosePlatform } from "./ChoosePlatform"
+import { ToastContainer, toast } from "react-toastify"
+import { useQueryClient } from "@tanstack/react-query"
 
 export const EditPost = () => {
   const { id: postId } = useParams()
@@ -16,14 +20,17 @@ export const EditPost = () => {
   const [editingThumbnail, setIsEditingThumbnail] = useState(false)
   const [gameImages, setGameImages] = useState<IImage[]>([])
   const [choosingImage, setChoosingImage] = useState(false)
-  const {data: postData, isLoading } = usePost(parseInt(postId as string))  
+  const {data: postData, isLoading } = usePost(parseInt(postId as string))
+  const queryClient = useQueryClient()
+
   useEffect(() => {
     if (!isLoading && postData) {
-      const {title, description, gameId, startTime, thumbnailPath, thumbnailType} = postData
+      const {title, description, gameId, platformId, startTime, thumbnailPath, thumbnailType} = postData
       setRequestData({
         title,
         description,
         gameId,
+        platformId,
         thumbnailPath,
         thumbnailType,
         startTime
@@ -56,16 +63,69 @@ export const EditPost = () => {
                         requestData.thumbnailSelected == gameImage.imagePath ? 
                         undefined :  gameImage.imagePath})
   
-  console.log(requestData)
+  const handleUpdate = () => {
+    // Find out which fields updated
+    const {title, description, startTime, gameId, platformId, thumbnailSelected, thumbnailUploaded} = requestData
+    const gameChanged = gameId != postData?.gameId
+    const platformChanged = platformId != postData?.platformId
+    const titleChanged = title != postData?.title
+    const descriptionChanged = description != postData?.description
+    const startTimeChanged = startTime != postData?.startTime
+    // Determine if the thumbnail changed
+    const thumbnailChanged = requestData.thumbnailType || requestData.thumbnailUploaded || requestData.thumbnailSelected
+    const formData = new FormData()
+    if (gameChanged)
+      formData.append("gameId", `${gameId}` as string)
+    if (platformChanged)
+      formData.append("platformId", `${platformId}` as string)
+    if (titleChanged)
+      formData.append("title", title as string)
+    if (descriptionChanged)
+      formData.append("description", description as string)
+    if (startTimeChanged)
+      formData.append("startTime", startTime as string)
+    
+    if (thumbnailChanged) {
+      if (thumbnailUploaded)
+        formData.append("thumbnailFile", thumbnailUploaded as Blob)
+      else
+      formData.append("thumbnailPath", thumbnailSelected as string)
+    }
+
+    if (postData && postData.id)
+      toast.promise(
+        updatePost(postData?.id, formData)
+                  .then(() => {
+                    toast.dismiss()
+                    setIsEditingThumbnail(false)
+                    queryClient.invalidateQueries({queryKey: ["posts", postData.id]})
+                  }),
+        {
+          pending: "Updating Post...",
+          success: "Post Updated Successfully!",
+          error: "Error updating post"
+        }
+      )
+  }
+
   return (
     <div className="create-container--wrapper edit-container">
+      <ToastContainer position="top-center"/>
       {choosingImage && 
       <ReadyImages 
         gameId={requestData.gameId} gameImages={gameImages} 
         thumbnailSelected={requestData.thumbnailSelected}
         handleCloseIcon={() => setChoosingImage(false)}
         handleImageClick={handleImageSelectInReadyImages}/>}
-      {requestData.title && 
+       <div className="create-type">
+        <ChooseGame 
+          value={requestData.gameId} 
+          handleChange={(event: React.ChangeEvent<HTMLSelectElement>) => {setRequestData({...requestData, gameId: parseInt(event.target.value)})}}/>
+        <ChoosePlatform 
+          value={requestData.platformId}
+          handleChange={(event) => setRequestData({...requestData, platformId: parseInt(event.target.value)})}/>
+      </div>
+      {requestData.title &&
       <CustomInput 
         label="Current Title" 
         placeholder={requestData.title}
@@ -109,7 +169,7 @@ export const EditPost = () => {
       </div>
       }
       <div className="edit-options">
-        <button className="btn btn--md btn--success">Update</button>
+        <button className="btn btn--md btn--success" onClick={handleUpdate}>Update</button>
         <button className="btn btn--md btn--secondary">Cancel</button>
       </div>
     </div>)

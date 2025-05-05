@@ -24,7 +24,9 @@ export const CustomInput = (
     <div>
       <div className="custom-input__label">
         <label className="post-starting-time--label">
-          <h3 className="current-thumbnail__heading">{label}</h3>
+          <h3 className="current-thumbnail__heading">
+            {!isEditing ? label : "Stop Editing."}
+          </h3>
         </label>
         {!isEditing && <FaEdit className="current-thumbnail__icon" onClick={() => setIsEditing(true)}/>}
         {isEditing && <MdEditOff className="current-thumbnail__icon" style={{color: 'red'}} onClick={() => setIsEditing(false)}/>}
@@ -46,7 +48,9 @@ export const CustomTextArea = (
     <div>
       <div className="custom-input__label">
         <label>
-          <h3 className="current-thumbnail__heading">{label}</h3>
+          <h3 className="current-thumbnail__heading">
+            {!isEditing ? label : "Stop Editing."}
+          </h3>
         </label>
         {!isEditing && <FaEdit className="current-thumbnail__icon"  onClick={() => setIsEditing(true)}/>}
         {isEditing && <MdEditOff className="current-thumbnail__icon" style={{color: 'red'}} onClick={() => setIsEditing(false)}/>}

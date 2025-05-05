@@ -9,7 +9,7 @@ import { ChooseGame } from "./ChooseGame";
 import { ChoosePlatform } from "./ChoosePlatform";
 import { ReadyImages } from "./ReadyImages";
 import { MultipleMediaPreview } from "./MultipleMediaPreview";
-import { CustomTimeInput } from "./CustomTimeInput";
+import { CustomTimeInput } from "./CustomInputs";
 import { ChooseThumbnail } from "./ChooseThumbnail";
 
 export const Create = () => {
@@ -145,7 +145,9 @@ export const Create = () => {
                 value={postData.gameId} 
                 handleChange={(event: React.ChangeEvent<HTMLSelectElement>) => {setPostData({...postData, gameId: parseInt(event.target.value)})}}/>}
               {creatingPost && 
-              <ChoosePlatform handleChange={(event) => setPostData({...postData, platformId: parseInt(event.target.value)})}/>}
+              <ChoosePlatform 
+                value={postData.platformId}
+                handleChange={(event) => setPostData({...postData, platformId: parseInt(event.target.value)})}/>}
             </div>
             <input placeholder="Enter a Title" 
                    className="create-input" 

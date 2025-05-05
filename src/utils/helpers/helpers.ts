@@ -59,3 +59,15 @@ export const userDidLike = (likes: number[] | undefined, target: number) => {
 
 export const fileIsVideo = (file: File) => 
     file && file.type.includes("video")
+
+export const stringArraysEqual = (arr1: string[] | undefined, arr2: string[] | undefined) : boolean => {
+    if ((!arr1 && arr2) || (!arr2 && arr1))
+        return false
+    if (arr1?.length != arr2?.length)
+        return false
+    for (let index = 0; index < arr1!.length; index++) {
+        if (arr1![index] != arr2![index])
+            return false
+    }
+    return true
+}
