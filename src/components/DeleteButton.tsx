@@ -24,7 +24,7 @@ export const DeleteButton = ({type, contentId}: {type: "discussion" | "post", co
   return (
     <>
         <ToastContainer position="top-center"/>
-        <button className="btn btn--danger btn--md btn--delete" onClick={deleteContent}>
+        <button className="btn btn--danger btn--sm btn--delete" onClick={deleteContent}>
             Delete your {type == "discussion" ? "Discussion" : "Post"}
         </button>
     </>

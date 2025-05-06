@@ -4,7 +4,7 @@ export const EditButton = ({type, contentId}: {type : 'discussions' | 'posts', c
   const navigate = useNavigate()
   return (
     <>
-    <button className="btn btn--success btn--md btn--delete" 
+    <button className="btn btn--success btn--sm btn--delete" 
             onClick={() => navigate(`/edit/${type}/${contentId}`)}>
         Edit {type == 'posts' ? 'Post' : 'Discussion' }
     </button>

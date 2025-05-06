@@ -147,9 +147,9 @@ export const PostDetails = () => {
                         <p>{post.description}</p>
                         <Link to={`/profile/${post.appUser.username}`}>
                             <div className="card__user-info">
-                                <img className="card__avatar" src={generateProfileImageUrl(post.appUser)} 
-                                    alt="Avatar"/>
-                                <p>Posted by <span style={{fontWeight:'bold'}}>{post.appUser.username}</span> {formatStringDate(post.postedAt)}</p>
+                            <img className="card__avatar" src={generateProfileImageUrl(post.appUser)} 
+                                alt="Avatar"/>
+                            <p>Posted by <span style={{fontWeight:'bold'}}>{post.appUser.username}</span> {formatStringDate(post.postedAt)}</p>
                             </div>
                         </Link>
                     </div>
@@ -179,7 +179,7 @@ export const PostDetails = () => {
                         className="icon" onClick={() => handleSimilarPostClick()}/>
                 </div>
                 {post.appUser.username == user?.username &&
-                <div>
+                <div className="detail-options__logged-in-user-container">
                     <EditButton type={"posts"} contentId={post.id}/>
                     <DeleteButton type="post" contentId={post.id}/>
                 </div>}

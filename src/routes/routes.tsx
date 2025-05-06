@@ -14,6 +14,7 @@ import { ViewProfile } from "../components/ViewProfile";
 import { EditPost } from "../components/EditPost";
 import { EditDiscussion } from "../components/EditDiscussion";
 import { Edit } from "../components/Edit";
+import { Countdown } from "../components/Countdown";
 
 const router = createBrowserRouter([
     {
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
                 ]
             }
         ]
+    },
+    {
+        path: '/countdown',
+        element: <Countdown displayTrailers={true}/>
     },
     {
         path: '/account',

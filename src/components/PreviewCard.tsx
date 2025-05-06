@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
-import { generateImageUrl, generateProfileImageUrl } from "../utils/helpers/helpers"
-import { IDiscussion, IPost } from "../utils/interfaces/Interfaces"
+import { generateImageUrl, generateProfileImageUrl, generateVideoUrl } from "../utils/helpers/helpers"
+import { IDiscussion, IPost, ThumbnailType } from "../utils/interfaces/Interfaces"
 
 export const PreviewCard = ({preview, type}: {preview: IPost | IDiscussion, type: "discussions" | "posts"}) => {
   return (
@@ -12,7 +12,13 @@ export const PreviewCard = ({preview, type}: {preview: IPost | IDiscussion, type
         <div className="preview-card__user-info">
             <img src={generateProfileImageUrl(preview.appUser)} alt="User Info" />
         </div>
-        <img src={generateImageUrl(preview.thumbnailPath)}/>
+        {
+        preview.thumbnailType == ThumbnailType.Image ?  
+        <img src={generateImageUrl(preview.thumbnailPath)}/> :
+         <video autoPlay={true} loop={true} muted={true} disablePictureInPicture >
+              <source src={generateVideoUrl(preview.thumbnailPath)} type="video/mp4"/>
+          </video>
+        }
         <div className="preview-card__title">
             <h3>{preview.title}</h3>
         </div>

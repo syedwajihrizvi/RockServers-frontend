@@ -11,6 +11,7 @@ import { formatStringDate, generateProfileImageUrl } from "../utils/helpers/help
 import { useNotifications } from "../hooks/useNotifications"
 import { FollowButton } from "./FollowButton"
 import { Navbar } from "./Navbar"
+import { MiniCountdown } from "./Countdown"
 
 const CustomChangeInput = ({label, placeholder, type, field, password}: 
     {label: string, placeholder: string, type: string, field: string, password: string}) => {
@@ -365,6 +366,7 @@ export const UserProfileDashboard = () => {
       return isLoading ? 
         <Skeleton/> :
         <>
+            <MiniCountdown/>
             <Navbar/>
             <Dashboard renderComponent={renderComponent} navComponents={navComponents} user={user as IUser} initialState={getInitialState()}/>
         </>     
