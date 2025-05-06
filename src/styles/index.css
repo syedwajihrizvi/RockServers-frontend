@@ -1738,6 +1738,7 @@ html, body, #root {
 
 .create-discussion-other_images__wrapper {
   position: relative;
+  margin-top: 2rem;
 }
 
 .create-discussion-other_images__wrapper img, .create-discussion-other_images__wrapper video{
@@ -1941,6 +1942,12 @@ html, body, #root {
   display: flex;
   flex-direction: column;
   gap: 1rem;  
+}
+
+.notifications__no-notificatons--heading {
+  color: white;
+  font-size: 2rem;
+  margin: 0;
 }
 
 .btn--delete {

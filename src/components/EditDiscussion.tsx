@@ -130,9 +130,6 @@ export const EditDiscussion = () => {
          })     
     }
 
-    console.log(requestData.otherImages)
-    console.log(discussionData?.otherImages)
-    formData.forEach((val, key) => console.log(`UPDATED --> ${key}: ${val}`))
     if (discussionData && discussionData.id)
       toast.promise(
         updateDiscussion(discussionData.id, formData)

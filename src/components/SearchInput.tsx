@@ -10,6 +10,7 @@ export const SearchInput = () => {
   const inputElement = useRef<HTMLInputElement>(null)
 
   const { handleSearch } = useQueryStore()
+
   useEffect(() => {
     if (searchDiv && searchDiv.current) {
       searchDiv.current.addEventListener('mouseenter', () => {

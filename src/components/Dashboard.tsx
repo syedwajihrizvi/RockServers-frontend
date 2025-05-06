@@ -282,7 +282,7 @@ const Notifications = () => {
     <div className="notifications">
         <button className="btn btn--md btn--success btn--delete" onClick={handleDelete}>Clear All</button>
         {notifications.map(notification => (renderNotification(notification)))}
-    </div> : <h2>You have no Notifications</h2>
+    </div> : <h2 className="notifications__no-notificatons--heading">You have no Notifications</h2>
 }
 
 export const Dashboard = (
@@ -305,15 +305,20 @@ export const Dashboard = (
         {screenWidth < 768 && 
         <div className="dashboard__header">
             {navComponents.map(comp => 
-                <h3 className={`${comp == viewComponent ? "active" : ""}`} 
-                    onClick={() => setViewComponent(comp)}>{`${comp[0].toUpperCase()}${comp.substring(1)}`}</h3>
+                <h3 
+                    className={`${comp == viewComponent ? "active" : ""}`} 
+                    onClick={() => setViewComponent(comp)}>
+                        {`${comp[0].toUpperCase()}${comp.substring(1)}`}
+                </h3>
             )}
         </div>}
         {screenWidth >= 768 && 
         <div className="dashboard__sidebar">
             {navComponents.map(comp => 
-                <h3 className={`${comp == viewComponent ? "active" : ""}`} onClick={() => setViewComponent(comp)}>
-                    {`${comp[0].toUpperCase()}${comp.substring(1)}`}</h3>
+                <h3 className={`${comp == viewComponent ? "active" : ""}`} 
+                    onClick={() => setViewComponent(comp)}>
+                    {`${comp[0].toUpperCase()}${comp.substring(1)}`}
+                </h3>
             )}
         </div>}
         <div className="dashboard__content">
