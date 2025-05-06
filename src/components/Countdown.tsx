@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react"
 import Bg1 from "../assets/images/countdown-bg.webp"
+import Bg2 from "../assets/images/countdown-bg-2.jpg"
 import { Link } from "react-router-dom"
 import { FaChevronCircleDown, FaChevronCircleUp } from "react-icons/fa";
 
-const NumberWrapper = ({number, type, customClass}: {number: number, type:string, customClass: string}) => {
+const NumberWrapper = (
+    {number, type, customClass}: 
+    {number: number, type:string, customClass: string}) => {
     const numberString = number.toString()
     return (
         <div className="letter-wrapper__wrapper">
@@ -11,12 +14,12 @@ const NumberWrapper = ({number, type, customClass}: {number: number, type:string
                 <div className={`letters letters--${customClass}`}>
                     {
                         (type == "hours" || type == "seconds" || type == "minutes") && numberString.length < 2 &&
-                        <div className={`letter-wrapper letter-wrapper--${customClass}`}>
+                        <div className={`letter-wrapper letter-wrapper--${customClass}`} >
                          <h1 className={`countdown__time countdown__time--${customClass}`}>0</h1>
                         </div>
                     }
-                    {numberString.split('').map((letter) => (
-                        <div className={`letter-wrapper letter-wrapper--${customClass}`}>
+                    {numberString.split('').map((letter, index) => (
+                        <div key={index} className={`letter-wrapper letter-wrapper--${customClass}`} >
                             <h1 className={`countdown__time countdown__time--${customClass}`}>{letter}</h1>
                         </div>
                     ))}
@@ -32,6 +35,7 @@ export const Countdown = ({displayTrailers}: {displayTrailers: boolean}) => {
     "https://www.youtube.com/embed/QdBZY2fkU-0?autoplay=1&loop=1&playlist=QdBZY2fkU-0&controls=0&showinfo=0" ,
     "https://www.youtube.com/embed/VQRLujxTm3c?autoplay=1&loop=1&playlist=VQRLujxTm3c&controls=0&showinfo=0"
   ]
+  const bgImages = [Bg1, Bg2]
   const [currentTrailerIndex, setCurrentTrailerIndex] = useState(0)
   const [timeToReleaseDate, setTimeToReleaseDate] = useState(
     {
@@ -62,18 +66,18 @@ export const Countdown = ({displayTrailers}: {displayTrailers: boolean}) => {
 
         // what's left is seconds
         const seconds = Math.round(delta % 60);
-        setTimeToReleaseDate({
-            ...timeToReleaseDate,
+        setTimeToReleaseDate(prev => ({
+            ...prev,
             days, hours, minutes, seconds,
             ready: true
-        })       
+          }))      
     }, 1000)
     return () => clearInterval(updateTime)
   })
 
   return (
     <div className="countdown__container__wrapper" style={{
-        backgroundImage: `url(${Bg1})`,
+        backgroundImage: `url(${bgImages[currentTrailerIndex]})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
@@ -87,8 +91,8 @@ export const Countdown = ({displayTrailers}: {displayTrailers: boolean}) => {
         </div>}
         {displayTrailers && <div className="trailers">
             <div className="trailers__buttons">
-                <button className={`btn btn--md btn--pink${currentTrailerIndex == 0 ? '--active' : ''}`} onClick={() => setCurrentTrailerIndex(0)}>Trailer 1</button>
-                <button className={`btn btn--md btn--pink${currentTrailerIndex == 1 ? '--active' : ''}`} onClick={() => setCurrentTrailerIndex(1)}>Trailer 2</button>
+                <button className={`btn btn--md btn--pink`} onClick={() => setCurrentTrailerIndex(0)}>Trailer 1</button>
+                <button className={`btn btn--md btn--blue`} onClick={() => setCurrentTrailerIndex(1)}>Trailer 2</button>
             </div>
             <iframe 
                 width="100%" 
@@ -114,7 +118,10 @@ export const MiniCountdown = () => {
             ready: false
         }
       )
+      const bgImages = [Bg1, Bg2]
       const [hidden, setHidden] = useState(false)
+      const [currentIndex, setCurrentIndex] = useState(0)
+    
       const gta6ReleaseDate = new Date("2026-05-26T00:00:00").getTime()
 
       useEffect(() => {
@@ -140,13 +147,23 @@ export const MiniCountdown = () => {
         return () => clearInterval(updateTime)
       })   
       
+      useEffect(() => {
+        const updateBgImage = setInterval(() => {
+            if (currentIndex == 0)
+                setCurrentIndex(1)
+            else
+                setCurrentIndex(0)
+        }, 3500)
+        return () => clearInterval(updateBgImage)
+      }, [])
+
       return (
         <div className={`countdown--display countdown--display--${hidden ? "hidden" : "active"}`}>
             {!hidden && <FaChevronCircleDown className="icon" fontSize={40} onClick={() => setHidden(true)}/>}
             {hidden && <FaChevronCircleUp className="icon" fontSize={40} onClick={() => setHidden(false)}/>}
             <Link to="/countdown" style={{textDecoration: 'none'}}>
             <div className="countdown__container__wrapper countdown__container__wrapper--sm" style={{
-                backgroundImage: `url(${Bg1})`,
+                backgroundImage: `url(${bgImages[currentIndex]})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",

@@ -516,6 +516,11 @@ html, body, #root {
   color: white
 }
 
+.btn--blue {
+  background-color: #00CFFF;
+  color: white
+}
+
 .btn--pink--active {
   background-color: #98005e;
   color: white
@@ -2268,11 +2273,10 @@ html, body, #root {
 }
 
 .letter-wrapper__container--sm {
-  gap: 0.4rem;
+  gap: 0.1rem;
 }
 
 .letter-wrapper {
-  background-color: #FF2AAF;
   justify-content: center;
   align-items: center;
   display: flex;
@@ -2287,7 +2291,6 @@ html, body, #root {
 .letter-wrapper--sm {
   height: 1.6rem;
   border-radius: 0.2rem;
-  padding: 0.5rem;
 }
 
 .letter-wrapper__wrapper {
@@ -2319,7 +2322,7 @@ html, body, #root {
 }
 
 .letters--sm {
-  gap: 0.2rem
+  gap: 0.1rem
 }
 
 .trailers {
