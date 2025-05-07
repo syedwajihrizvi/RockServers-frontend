@@ -150,11 +150,8 @@ export const MiniCountdown = () => {
       
       useEffect(() => {
         const updateBgImage = setInterval(() => {
-            if (currentIndex == 0)
-                setCurrentIndex(1)
-            else
-                setCurrentIndex(0)
-        }, 3500)
+            setCurrentIndex(prev => (prev === 0 ? 1 : 0))
+          }, 3500)
         return () => clearInterval(updateBgImage)
       }, [])
 
@@ -166,7 +163,6 @@ export const MiniCountdown = () => {
         return () => window.removeEventListener('resize', handleResize)
       }, [])
       
-      console.log(screenWidth)
       return (
         <div className={`countdown--display countdown--display--${hidden ? "hidden" : "active"}`}>
 
