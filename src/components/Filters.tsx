@@ -47,8 +47,8 @@ export const Filters = () => {
         {postType == 'posts' && 
         <select onChange={(event) => handleSetSessionType(event.target.value)}>
             <option value="all">All Sessions</option>
-            <option value="active">Sessions currently active</option>
-            <option value="joinable">Open Sessions</option>
+            <option value="active">Active Sessions</option>
+            <option value="joinable">Soon to start Sessions</option>
         </select>}
         <div className="post-type-filter">
           <span className={`post-type-filter__span post-type-filter__span${postType == 'posts' ? '-white': '-dark'}`}

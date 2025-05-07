@@ -4,6 +4,9 @@ import Bg2 from "../assets/images/countdown-bg-2.jpg"
 import { Link } from "react-router-dom"
 import { FaChevronCircleDown, FaChevronCircleUp } from "react-icons/fa";
 import { FaChevronCircleRight, FaChevronCircleLeft } from "react-icons/fa";
+import { Dots } from "react-activity";
+import "react-activity/dist/library.css";
+import { Navbar } from "./Navbar";
 
 const NumberWrapper = (
     {number, type, customClass}: 
@@ -84,12 +87,16 @@ export const Countdown = ({displayTrailers}: {displayTrailers: boolean}) => {
         backgroundRepeat: "no-repeat",
         backgroundColor: '#cccccc'
       }}>
+        <div style={{position: 'fixed', top: 5, width: '100%'}}>
+            <Navbar/>
+        </div>
         {timeToReleaseDate.ready && <div className="countdown__container countdown__container--lg">
             <NumberWrapper number={timeToReleaseDate.days} type="days" customClass="lg"/> 
             <NumberWrapper number={timeToReleaseDate.hours} type="hours" customClass="lg"/> 
             <NumberWrapper number={timeToReleaseDate.minutes} type="minutes" customClass="lg"/> 
             <NumberWrapper number={timeToReleaseDate.seconds} type="seconds" customClass="lg"/>
         </div>}
+        {!timeToReleaseDate.ready && <Dots color="white"/> }
         {displayTrailers && <div className="trailers">
             <div className="trailers__buttons">
                 <button className={`btn btn--md btn--pink`} onClick={() => setCurrentTrailerIndex(0)}>Trailer 1</button>
@@ -191,6 +198,7 @@ export const MiniCountdown = () => {
                 opacity: hidden ? 0 : 1
             }}>
                 <div className="countdown__container countdown__container--sm" style={{padding: '0.5rem'}}>
+                    {!timeToReleaseDate.ready && <Dots color="white"/> }
                     {!hidden && timeToReleaseDate.ready && 
                     <>
                         <NumberWrapper number={timeToReleaseDate.days} type="days" customClass="sm"/> 

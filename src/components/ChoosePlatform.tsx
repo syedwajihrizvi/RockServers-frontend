@@ -8,9 +8,9 @@ export const ChoosePlatform = (
             value = {value || ""}
             onChange={(event) => handleChange(event)}>
             <option>What Platform</option>
-            <option value="2">Playstation</option>
-            <option value="0">XBox</option>
-            <option value="1">PC</option>
+            <option value="1">Playstation</option>
+            <option value="2">XBox</option>
+            <option value="3">PC</option>
         </select>
     ) 
 }

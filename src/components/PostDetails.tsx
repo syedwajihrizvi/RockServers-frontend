@@ -5,7 +5,7 @@ import { CiCirclePlus } from "react-icons/ci";
 import { ToastContainer, toast } from 'react-toastify'
 
 import { IComment, IPost, ThumbnailType } from "../utils/interfaces/Interfaces"
-import { formatStringDate, generateProfileImageUrl, generateImageUrl, getDateDifference, userDidLike, generateVideoUrl } from "../utils/helpers/helpers";
+import { formatStringDate, generateProfileImageUrl, generateImageUrl,userDidLike, generateVideoUrl } from "../utils/helpers/helpers";
 import useQueryStore from "../stores/useQueryStore"
 import { Engagements } from "./Engagements"
 import { Skeleton } from "./Skeleton"
@@ -16,7 +16,6 @@ import { Comments } from "./Comments";
 import { useGlobalContext } from "../providers/global-provider";
 import { LoginToastComponent } from "./CustomToasts/LoginToastComponent";
 import { useQueryClient } from "@tanstack/react-query";
-import { useSessions } from "../hooks/useSessions";
 import { useComment } from "../hooks/useComments";
 import { FollowButton } from "./FollowButton";
 import { DeleteButton } from "./DeleteButton";
@@ -25,7 +24,6 @@ import { EditButton } from "./EditButton";
 export const PostDetails = () => {
   const {id: postId} = useParams()
   const {data:post, isLoading} = usePost(parseInt(postId as string))
-  const {data: successfullSessions } = useSessions(parseInt(postId as string), true, false)
   const {data: postComments} = useComment(parseInt(postId as string))
   const [isLoadingSimilarPosts, setIsLoadingSimilarPosts] = useState(false)
   const [similarPosts, setSimilarPosts] = useState<IPost[]>([])
@@ -54,13 +52,6 @@ export const PostDetails = () => {
     navigate('/')
   }
   
-  const renderJoinButton = () => {
-    if (post)
-        return post.activeSession ? 
-            <button className="session-option btn btn--success btn--md">Join</button> : 
-            <button className="session-option btn btn--danger btn--md">Join Queue</button>
-  }
-
   const handleSimilarPostClick = () => {
     if (post) {
         handleSetGameInfo(post.gameId, post.gameName)
@@ -138,7 +129,6 @@ export const PostDetails = () => {
                     <div className="card-details__platform">
                         {toPlatformIcon(post.platformName, 30, "white")}
                     </div>
-                    {renderJoinButton()}
                     {renderPostCardThumbnail(post)}
                 </div>
                 <div className="card-details-card__content">
@@ -184,35 +174,6 @@ export const PostDetails = () => {
                     <DeleteButton type="post" contentId={post.id}/>
                 </div>}
                 <FollowButton user={post.appUser}/>
-                {successfullSessions && <div>
-                    {successfullSessions.length > 0 ? 
-                    <div className="post-session-history">
-                        <h3 className="session-table__title">Session History</h3>
-                        <h5 className="session-table__subtitle">{`This post has had ${successfullSessions.length}`} completed sessions.</h5>
-                        <table className="session-table">
-                            <thead>
-                                <tr className="session-table__header">
-                                    <th>Start</th>
-                                    <th>Duration</th>
-                                    <th>Player Count</th>
-                                    <th>Rating</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {successfullSessions.map(session => {
-                                    return (
-                                    <tr key={session.id} className="session-table__data">
-                                        <td>{formatStringDate(session.startTime)}</td>
-                                        <td>{getDateDifference(session.startTime, session.endTime!)}</td>
-                                        <td>{session.users.length}</td>
-                                        <td>4.3</td>
-                                    </tr>)
-                                })}
-                            </tbody>
-                        </table>
-                    </div> : 
-                    <h3>This post has not had any previous sessions.</h3>}
-                </div>}
             </div>
         </div>}
     </div>

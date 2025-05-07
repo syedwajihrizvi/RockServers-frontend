@@ -186,6 +186,11 @@ html, body, #root {
   font-size: 3rem;
 }
 
+.post-grid__no-results {
+  color: white;
+  font-size: 2rem;
+}
+
 .grid {
   display: flex;
   flex-direction: column;

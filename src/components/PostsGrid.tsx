@@ -9,7 +9,7 @@ export const PostsGrid = ({userId}: {userId: string | undefined}) => {
   const {data: posts, isLoading: isLoadingPosts} = usePosts({userId})
   const {data: discussions, isLoading: isLoadingDiscussions} = useDiscussions({userId})
 
-  const {gameName, postType} = useQueryStore()
+  const {gameName, postType, platformName} = useQueryStore()
   const renderPosts = () => {
     if (isLoadingPosts || isLoadingDiscussions) {
       return [...Array(12).keys()].map((key) => <Skeleton key={key} customClass='skeleton--md'/>)
@@ -27,7 +27,14 @@ export const PostsGrid = ({userId}: {userId: string | undefined}) => {
 
   return (
     <div className='posts-grid'>
-      {gameName && <h1 className='post-grid__title'>Posts for {gameName}</h1>}
+      {gameName && postType == 'posts' && 
+      <h1 className='post-grid__title'>Sessions for {gameName ? ` for ${gameName}` : ""} {platformName ? ` on ${platformName}.` : '.'}</h1>}
+      {gameName && postType == 'discussions' && 
+      <h1 className='post-grid__title'>Discussions for {gameName ? ` for ${gameName}.` : "."}</h1>}
+      {postType == 'posts' && posts?.length == 0 && 
+      <h1 className='post-grid__no-results'>No Sessions found{gameName ? ` for ${gameName}` : ""} {platformName ? ` on ${platformName}.` : '.'}</h1>}
+      {postType == 'discussions' && discussions?.length == 0 && 
+      <h1 className='post-grid__no-results'>No Discussions found{gameName ? ` for ${gameName}.` : "."}</h1>}
       <div className="grid">
           {renderPosts()}
       </div>

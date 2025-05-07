@@ -88,7 +88,7 @@ export const Create = () => {
   }
 
   const handlePostCreationSubmit = () => {
-    // Some basic front end validatin and Toat Container with message
+    // Some basic front end validation and Toast Container with message
     const { title, description, startTime, gameId, platformId, thumbnailSelected: imageSelected, thumbnailUploaded: imageUploaded} = postData  
     if (!title || !description || !startTime || !gameId || !platformId || (!imageSelected && !imageUploaded))
       toast.error("Please fill in all information")
@@ -100,6 +100,7 @@ export const Create = () => {
         formData.append("description", description as string)
         formData.append("gameId", `${gameId}` as string)
         formData.append("platformId", `${platformId}` as string)
+        formData.append("startTime", startTime as string)
         if (thumbnailUploaded)
           formData.append("thumbnailFile", thumbnailUploaded as Blob)
         else
