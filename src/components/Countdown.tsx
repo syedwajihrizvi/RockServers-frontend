@@ -3,6 +3,7 @@ import Bg1 from "../assets/images/countdown-bg.webp"
 import Bg2 from "../assets/images/countdown-bg-2.jpg"
 import { Link } from "react-router-dom"
 import { FaChevronCircleDown, FaChevronCircleUp } from "react-icons/fa";
+import { FaChevronCircleRight, FaChevronCircleLeft } from "react-icons/fa";
 
 const NumberWrapper = (
     {number, type, customClass}: 
@@ -99,7 +100,6 @@ export const Countdown = ({displayTrailers}: {displayTrailers: boolean}) => {
                 height="100%" 
                 src={trailerUrls[currentTrailerIndex]}
                 title="GTA 6 Trailer"
-                frameBorder="0"
                 allow="autoplay; encrypted-media"
                 allowFullScreen
                 ></iframe>
@@ -121,6 +121,7 @@ export const MiniCountdown = () => {
       const bgImages = [Bg1, Bg2]
       const [hidden, setHidden] = useState(false)
       const [currentIndex, setCurrentIndex] = useState(0)
+      const [screenWidth, setScreenWidth] = useState(window.innerWidth)
     
       const gta6ReleaseDate = new Date("2026-05-26T00:00:00").getTime()
 
@@ -157,10 +158,31 @@ export const MiniCountdown = () => {
         return () => clearInterval(updateBgImage)
       }, [])
 
+      useEffect(() => {
+        const handleResize = () => {
+            setScreenWidth(window.innerWidth)
+        }
+        window.addEventListener('resize', handleResize)
+        return () => window.removeEventListener('resize', handleResize)
+      }, [])
+      
+      console.log(screenWidth)
       return (
         <div className={`countdown--display countdown--display--${hidden ? "hidden" : "active"}`}>
-            {!hidden && <FaChevronCircleDown className="icon" fontSize={40} onClick={() => setHidden(true)}/>}
-            {hidden && <FaChevronCircleUp className="icon" fontSize={40} onClick={() => setHidden(false)}/>}
+
+            {!hidden ? (
+            screenWidth > 768 ? (
+                <FaChevronCircleDown className="icon icon--y" fontSize={40} onClick={() => setHidden(true)} />
+            ) : (
+                <FaChevronCircleRight className="icon icon--x" fontSize={40} onClick={() => setHidden(true)} />
+            )
+            ) : (
+            screenWidth > 768 ? (
+                <FaChevronCircleUp className="icon icon--y" fontSize={40} onClick={() => setHidden(false)} />
+            ) : (
+                <FaChevronCircleLeft className="icon icon--x" fontSize={40} onClick={() => setHidden(false)} />
+            )
+            )}
             <Link to="/countdown" style={{textDecoration: 'none'}}>
             <div className="countdown__container__wrapper countdown__container__wrapper--sm" style={{
                 backgroundImage: `url(${bgImages[currentIndex]})`,
@@ -169,7 +191,8 @@ export const MiniCountdown = () => {
                 backgroundRepeat: "no-repeat",
                 backgroundColor: '#cccccc',
                 borderRadius: '2rem',
-                overflow: 'hidden'
+                overflow: 'hidden',
+                opacity: hidden ? 0 : 1
             }}>
                 <div className="countdown__container countdown__container--sm" style={{padding: '0.5rem'}}>
                     {!hidden && timeToReleaseDate.ready && 

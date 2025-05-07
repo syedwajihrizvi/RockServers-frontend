@@ -41,11 +41,13 @@ html, body, #root {
 }
 
 .countdown--display--active {
+  width: 25rem;
   height: 20rem;
 }
 
 .countdown--display--hidden {
-  height: 1rem;
+  width:1rem;
+  height: 20rem;
 }
 
 .countdown--display:hover {
@@ -56,24 +58,31 @@ html, body, #root {
   .main-content {
     padding: 2rem;
   }
+  .countdown--display--active {
+    height: 20rem;
+  }
+  
+  .countdown--display--hidden {
+    height: 1rem;
+  }
 }
 
-.countdown--display--active .icon {
+.countdown--display .icon {
   position: absolute;
-  top: -2rem;
-  right: 0;
   color: #FF2AAF;
   z-index: 500;
 }
 
-.countdown--display--hidden .icon {
-  position: absolute;
+.countdown--display .icon--y {
   top: -2rem;
   right: 0;
-  color: #FF2AAF;
-  z-index: 500;
 }
 
+.countdown--display .icon--x {
+  position: absolute;
+  top: 50%;
+  left: -5%
+}
 /* Queries */
 .queries {
   display: flex;
