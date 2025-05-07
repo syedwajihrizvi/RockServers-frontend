@@ -1645,25 +1645,36 @@ html, body, #root {
 
 .create-container {
   padding: 2rem;
-  overflow: hidden;
+  overflow: scroll;
 }
 
-.create-choose-image__img {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
+.masonry-grid {
+  margin-top: 2rem;
+  column-count: 3;
+  column-gap: 0.5rem;
+  width: 100%;
 }
 
-.create-img__container {
-  width: 40%;
+.masonry-item {
+  break-inside: avoid;
+  margin-bottom: 0.5rem;
   position: relative;
 }
 
-.create-img__container .icon {
+.masonry-item img {
+  width: 100%;
+  display: block;
+  border-radius: 0.5rem;
+  object-fit: cover;
+}
+
+.masonry-item .icon {
   position: absolute;
-  top: -10%;
-  right: -5%;
-  z-index: 1;
+  top: 8px;
+  right: 8px;
+  color: limegreen;
+  background: black;
+  border-radius: 50%;
 }
 
 .create-container--wrapper img {
@@ -1690,6 +1701,7 @@ html, body, #root {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  overflow: scroll;
 }
 
 .create-img__container .icon {

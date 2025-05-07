@@ -19,14 +19,19 @@ export const ReadyImages = (
       <div className="create-choose-image">
         <IoMdCloseCircle className="close-icon" onClick={handleCloseIcon}/>
         {gameId ? <h1>Showing images for {getGameTitle(gameId)}.</h1> : <h1>Please choose a game first to view its images.</h1>}
-        <div className="create-choose-image__img">
+        <div className="masonry-grid">
           {gameImages.map(gameImage => 
-            <div className="create-img__container">
-              {thumbnailSelected && 
-              thumbnailSelected == gameImage.imagePath && <IoMdCheckmarkCircle className="icon"/>}
-              <img onClick={() => handleImageClick(gameImage)} 
-                  src={generateReadyImageUrl(gameImage.imagePath)}/>
-            </div>)}
+            <div className="masonry-item" key={gameImage.imagePath}>
+              {thumbnailSelected === gameImage.imagePath && (
+                <IoMdCheckmarkCircle className="icon" />
+              )}
+              <img 
+                onClick={() => handleImageClick(gameImage)} 
+                src={generateReadyImageUrl(gameImage.imagePath)}
+                alt=""
+              />
+            </div>
+          )}
         </div>
       </div>
     )
