@@ -46,14 +46,14 @@ export const Filters = () => {
         </select>
         {postType == 'posts' && 
         <select onChange={(event) => handleSetSessionType(event.target.value)}>
-            <option value="all">All Posts</option>
-            <option value="active">Posts currently active</option>
-            <option value="joinable">Open Posts</option>
+            <option value="all">All Sessions</option>
+            <option value="active">Sessions currently active</option>
+            <option value="joinable">Open Sessions</option>
         </select>}
         <div className="post-type-filter">
           <span className={`post-type-filter__span post-type-filter__span${postType == 'posts' ? '-white': '-dark'}`}
                 onClick={() => handleSetPost('posts')}>
-            Posts
+            Sessions
           </span>
           <span className={`post-type-filter__span post-type-filter__span${postType == 'discussions' ? '-white': '-dark'}`}
                 onClick={() => handleSetPost('discussions')}>

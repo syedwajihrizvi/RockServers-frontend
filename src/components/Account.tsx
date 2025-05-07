@@ -9,7 +9,6 @@ import Sadie from "../assets/images/rockstart-games-wp-6.webp"
 import Michael from "../assets/images/rockstart-games-wp-7.webp"
 import { ReactNode, useEffect, useState, useRef } from "react"
 import { Outlet } from "react-router-dom"
-import { MiniCountdown } from "./Countdown"
 
 interface WallpaperProps {
   location: string,
@@ -57,7 +56,6 @@ export const Account = () => {
 
   return (
   <div className="account-container">
-    <MiniCountdown/>
     <div>
       {imageNodes}
     </div>

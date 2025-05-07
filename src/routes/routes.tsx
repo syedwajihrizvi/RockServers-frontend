@@ -50,42 +50,42 @@ const router = createBrowserRouter([
                         element: <EditDiscussion/>
                     }
                 ]
+            },
+            {
+                path: '/account',
+                element: <Account/>,
+                children: [
+                    {
+                        path: '',
+                        element: <AccountSettings/>
+                    },
+                    {
+                        path: 'login',
+                        element: <Login/>
+                    },
+                    {
+                        path: 'register',
+                        element: <Register/>
+                    }
+                ]
+            },
+            {
+                path: "/dashboard/*",
+                element: <UserProfileDashboard/>
+            },
+            {
+                path: "/profile/:username",
+                element: <ViewProfile/>
+            },
+            {
+                path: "*",
+                element: <NotFound/>
             }
         ]
     },
     {
         path: '/countdown',
         element: <Countdown displayTrailers={true}/>
-    },
-    {
-        path: '/account',
-        element: <Account/>,
-        children: [
-            {
-                path: '',
-                element: <AccountSettings/>
-            },
-            {
-                path: 'login',
-                element: <Login/>
-            },
-            {
-                path: 'register',
-                element: <Register/>
-            }
-        ]
-    },
-    {
-        path: "/dashboard/*",
-        element: <UserProfileDashboard/>
-    },
-    {
-        path: "/profile/:username",
-        element: <ViewProfile/>
-    },
-    {
-        path: "*",
-        element: <NotFound/>
     }
 ])
 
