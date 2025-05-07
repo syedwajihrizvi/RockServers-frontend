@@ -5,7 +5,7 @@ import { CiCirclePlus } from "react-icons/ci";
 import { ToastContainer, toast } from 'react-toastify'
 
 import { IComment, IPost, ThumbnailType } from "../utils/interfaces/Interfaces"
-import { formatStringDate, generateProfileImageUrl, generateImageUrl,userDidLike, generateVideoUrl } from "../utils/helpers/helpers";
+import { formatStringDate, userDidLike } from "../utils/helpers/helpers";
 import useQueryStore from "../stores/useQueryStore"
 import { Engagements } from "./Engagements"
 import { Skeleton } from "./Skeleton"
@@ -20,6 +20,9 @@ import { useComment } from "../hooks/useComments";
 import { FollowButton } from "./FollowButton";
 import { DeleteButton } from "./DeleteButton";
 import { EditButton } from "./EditButton";
+import { ProfileImage } from "./ProfileImage";
+import { ImageViaUrl } from "./ImageViaUrl";
+import { VideoViaUrl } from "./VideoViaUrl";
 
 export const PostDetails = () => {
   const {id: postId} = useParams()
@@ -110,10 +113,8 @@ export const PostDetails = () => {
 
     const renderPostCardThumbnail = (post: IPost) =>
       post.thumbnailType == ThumbnailType.Image ?
-                            <img className="post-details__img" src={generateImageUrl(post.thumbnailPath)}/> :
-                            <video className="post-details__video" autoPlay={true} loop={true} controls={true}>
-                                <source src={generateVideoUrl(post.thumbnailPath)} type="video/mp4"/>
-                              </video>
+                            <ImageViaUrl customClass="post-details__img" src={post.thumbnailPath}/> :
+                            <VideoViaUrl backupClass="post-details__img" customClass="post-details__video" url={post.thumbnailPath}/>
 
   return (
     <div className="card-details__container">
@@ -137,8 +138,7 @@ export const PostDetails = () => {
                         <p>{post.description}</p>
                         <Link to={`/profile/${post.appUser.username}`}>
                             <div className="card__user-info">
-                            <img className="card__avatar" src={generateProfileImageUrl(post.appUser)} 
-                                alt="Avatar"/>
+                            <ProfileImage customClass="card__avatar" user={post.appUser}/>
                             <p>Posted by <span style={{fontWeight:'bold'}}>{post.appUser.username}</span> {formatStringDate(post.postedAt)}</p>
                             </div>
                         </Link>

@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../providers/global-provider";
 import apiClient from "../utils/services/dataServices"
 import { useQueryClient } from "@tanstack/react-query";
-import { generateProfileImageUrl } from '../utils/helpers/helpers';
 import { IUser } from '../utils/interfaces/Interfaces';
+import { ProfileImage } from "./ProfileImage";
 
 export const FollowButton = ({user, removeImage}: 
   {user: IUser, removeImage?: boolean}) => {
@@ -47,7 +47,7 @@ export const FollowButton = ({user, removeImage}:
   const renderWithProfileImage = () => {
     return (
       <>
-        <img className="btn--follow__img--md" src={generateProfileImageUrl(user)}/> {renderFollowString()} {user.username}
+        <ProfileImage customClass="btn--follow__img--md" user={user}/> {renderFollowString()} {user.username}
       </>
     )
   }

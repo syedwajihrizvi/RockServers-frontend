@@ -6,7 +6,7 @@ export const SearchInput = () => {
   const navigate = useNavigate()
   const [searchInput, setSearchInput] = useState("")
   const searchDiv = useRef<HTMLDivElement>(null)
-  const searchIcon = useRef<HTMLElement>(null)
+  const searchIcon = useRef<HTMLSpanElement>(null)
   const inputElement = useRef<HTMLInputElement>(null)
 
   const { handleSearch } = useQueryStore()
@@ -16,12 +16,18 @@ export const SearchInput = () => {
       searchDiv.current.addEventListener('mouseenter', () => {
         if (searchDiv.current) searchDiv.current.style.backgroundColor = 'white'
         if (inputElement.current) inputElement.current.style.color = '#202020'
-        if (searchIcon.current) searchIcon.current.style.color = '#202020'
+        if (searchIcon.current) {
+          searchIcon.current.classList.remove('search-input__icon-wrapper--not-enter')
+          searchIcon.current.classList.add('search-input__icon-wrapper--enter')
+        }
       })
       searchDiv.current.addEventListener('mouseleave', () => {
         if (searchDiv.current) searchDiv.current.style.backgroundColor = '#202020'
         if (inputElement.current) inputElement.current.style.color = 'white'
-        if (searchIcon.current) searchIcon.current.style.color = 'white'
+        if (searchIcon.current) {
+          searchIcon.current.classList.remove('search-input__icon-wrapper--enter')
+          searchIcon.current.classList.add('search-input__icon-wrapper--not-enter')
+        }
       })
     }
   }, [])
@@ -36,7 +42,9 @@ export const SearchInput = () => {
 
   return (
     <div className="search-input" ref={searchDiv}>
-        <FaSearch className="icon" ref={searchIcon}/>
+        <span className="search-input__icon-wrapper--not-enter" ref={searchIcon}>
+          <FaSearch className="icon"/>
+        </span>
         <input type="text" placeholder="Search"
                onChange={(event) => setSearchInput(event.target.value)}
                ref={inputElement} onKeyDown={(event) => handleKeyDown(event)}/>

@@ -7,9 +7,10 @@ import { AllPosts } from "./AllPosts"
 import { ToastContainer, toast } from "react-toastify"
 import { INotification, IUser, Notification} from "../utils/interfaces/Interfaces"
 import apiClient, { updateUserSettings } from "../utils/services/dataServices"
-import { formatStringDate, generateProfileImageUrl } from "../utils/helpers/helpers"
+import { formatStringDate } from "../utils/helpers/helpers"
 import { useNotifications } from "../hooks/useNotifications"
 import { FollowButton } from "./FollowButton"
+import { ProfileImage } from "./ProfileImage"
 
 const CustomChangeInput = ({label, placeholder, type, field, password}: 
     {label: string, placeholder: string, type: string, field: string, password: string}) => {
@@ -61,7 +62,7 @@ export const Profile = ({user}: {user: IUser}) => {
     return (
         <div className="profile">
             <div className="profile__header">
-                <img className="profile__img" src={generateProfileImageUrl(user)}/>
+                <ProfileImage customClass="profile__img" user={user}/>
                 <div className="profile__actions">
                     <h3 className="profile__username">{user?.username}</h3>
                     <FollowButton user={user} removeImage={true}/>
@@ -179,7 +180,7 @@ export const UserList = ({type, profileUser, authenticated}:
                 <div className="friend">
                     <Link to={renderLink(user)}>
                         <div className="friend__info">
-                            <img src={generateProfileImageUrl(user)}/>
+                        <ProfileImage user={user}/>
                             <h3>{user.username}</h3>
                         </div>
                     </Link>
@@ -260,7 +261,7 @@ const Notifications = () => {
                 <div className="notification">
                     {!notification.isRead && <div className="notification__read"/>}
                     <div className="notification__content">
-                        <img src={generateProfileImageUrl(notification.engager)} />
+                        <ProfileImage user={notification.engager}/>
                         <p className="notification__content__msg">
                             {`@${notification.engager.username} ${renderContentType(notification.type, notification.entityContent)}`}
                         </p>

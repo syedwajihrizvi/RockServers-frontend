@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { useDiscussion } from '../hooks/useDiscussions'
 import { Skeleton } from './Skeleton'
-import { formatStringDate, generateImageUrl, userDidLike, generateProfileImageUrl, generateVideoUrl } from '../utils/helpers/helpers'
+import { formatStringDate, userDidLike } from '../utils/helpers/helpers'
 import { ToastContainer, toast } from 'react-toastify'
 
 import { Comments } from './Comments'
@@ -20,6 +20,9 @@ import { FollowButton } from './FollowButton'
 import Placeholder from "../assets/images/placeholder.webp"
 import { DeleteButton } from './DeleteButton'
 import { EditButton } from './EditButton'
+import { ProfileImage } from './ProfileImage'
+import { ImageViaUrl } from './ImageViaUrl'
+import { VideoViaUrl } from './VideoViaUrl'
 
 type Thumbnail = {
     urlPath: string,
@@ -134,10 +137,8 @@ export const DiscussionDetails = () => {
   const renderDiscussionThumbnail = () => {
     if (thumbImage) {
         if (thumbImage?.type == ThumbnailType.Image)
-            return <img className="post-card__img" src={generateImageUrl(thumbImage.urlPath)}/>
-          return <video className="post-card__video" autoPlay={true} controls>
-                  <source src={generateVideoUrl(thumbImage.urlPath)} type="video/mp4"/>
-                </video>
+            return  <ImageViaUrl customClass='post-card__img' src={thumbImage.urlPath}/>
+          return <VideoViaUrl backupClass="post-card__video" customClass='post-card__video' url={thumbImage.urlPath}/>
     }
     return <img className='post-card__img' src={Placeholder}/>
   }
@@ -159,15 +160,11 @@ export const DiscussionDetails = () => {
                     <div className='discussion-details__other-images'>
                         {otherImages && otherImages.length > 0 
                         && otherImages.filter((img) => img != thumbImage?.urlPath).map(image => (
-                            <img key={image} src={generateImageUrl(image)} 
-                                 onClick={() => setThumbImage({urlPath: image, type: ThumbnailType.Image})}/>
+                            <ImageViaUrl key={image} src={image} handleClick={() => setThumbImage({urlPath: image, type: ThumbnailType.Image})}/>
                         ))}
                         {videoPaths && videoPaths.length > 0 
                         && videoPaths.filter((vid) => vid != thumbImage?.urlPath).map(video => (
-                            <video autoPlay={true} loop={true} muted={true} controls={false}
-                                  onClick={() => setThumbImage({urlPath: video, type: ThumbnailType.Video})}>
-                                <source src={generateVideoUrl(video)} type="video/mp4"/>
-                            </video>
+                            <VideoViaUrl backupClass="" url={video} handleClick={() => setThumbImage({urlPath: video, type: ThumbnailType.Video})}/>
                         ))}
                     </div>
                     <div className="card-details-card__content">
@@ -175,8 +172,7 @@ export const DiscussionDetails = () => {
                             <h3>{discussion.title}</h3>
                             <p>{discussion.content}</p>
                             <div className="card__user-info">
-                                <img className="card__avatar" src={generateProfileImageUrl(discussion.appUser)} 
-                                    alt="Avatar"/>
+                                <ProfileImage customClass="card__avatar" user={discussion.appUser}/>
                                 <p>Posted by <span style={{fontWeight:'bold'}}>{discussion.appUser.username}</span> {formatStringDate(discussion.postedAt)}</p>
                             </div>
                         </div>

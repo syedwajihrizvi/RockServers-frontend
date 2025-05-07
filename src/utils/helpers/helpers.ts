@@ -13,7 +13,7 @@ export const generateProfileImageUrl = (user: IUser) =>
         `http://localhost:5191/uploads/profile_images/${user.profileImage}.webp`
 
 export const generateVideoUrl = (video: string) =>
-    `http://localhost:5191/uploads/videos/${video}`
+    `http://localhost:5191/uploads/vieos/${video}`
 
 export const generateAvatarImageUrl = (image: string) =>
     `http://localhost:5191/uploads/avatar_images/${image}.webp`

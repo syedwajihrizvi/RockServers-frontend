@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom"
-import { generateImageUrl, generateProfileImageUrl, generateVideoUrl } from "../utils/helpers/helpers"
 import { IDiscussion, IPost, ThumbnailType } from "../utils/interfaces/Interfaces"
+import { ProfileImage } from "./ProfileImage"
+import { ImageViaUrl } from "./ImageViaUrl"
+import { VideoViaUrl } from "./VideoViaUrl"
 
 export const PreviewCard = ({preview, type}: {preview: IPost | IDiscussion, type: "discussions" | "posts"}) => {
   return (
@@ -10,14 +12,12 @@ export const PreviewCard = ({preview, type}: {preview: IPost | IDiscussion, type
             <h4>4.2</h4>
         </div>
         <div className="preview-card__user-info">
-            <img src={generateProfileImageUrl(preview.appUser)} alt="User Info" />
+            <ProfileImage user={preview.appUser}/>
         </div>
         {
         preview.thumbnailType == ThumbnailType.Image ?  
-        <img src={generateImageUrl(preview.thumbnailPath)}/> :
-         <video autoPlay={true} loop={true} muted={true} disablePictureInPicture >
-              <source src={generateVideoUrl(preview.thumbnailPath)} type="video/mp4"/>
-          </video>
+        <ImageViaUrl src={preview.thumbnailPath}/> :
+        <VideoViaUrl backupClass="" url={preview.thumbnailPath}/>
         }
         <div className="preview-card__title">
             <h3>{preview.title}</h3>

@@ -1,9 +1,11 @@
 import { useNavigate } from "react-router-dom"
-import { formatStringDate, generateProfileImageUrl, generateImageUrl, renderPartialContent, generateVideoUrl } from '../utils/helpers/helpers'
+import { formatStringDate, renderPartialContent } from '../utils/helpers/helpers'
 import { IDiscussion, ThumbnailType } from '../utils/interfaces/Interfaces'
 import { Engagements } from "./Engagements"
 import { useGlobalContext } from "../providers/global-provider"
-import Placeholder from "../assets/images/placeholder.webp"
+import { ProfileImage } from "./ProfileImage"
+import { ImageViaUrl } from "./ImageViaUrl"
+import { VideoViaUrl } from "./VideoViaUrl"
 
 export const DiscussionCard = ({discussion}: {discussion: IDiscussion}) => {
   const navigate = useNavigate()
@@ -12,12 +14,9 @@ export const DiscussionCard = ({discussion}: {discussion: IDiscussion}) => {
   const renderDiscussionThumbnail = () => {
     if (discussion.thumbnailPath) {
       if (discussion.thumbnailType == ThumbnailType.Image)
-        return <img className="post-card__img" src={generateImageUrl(discussion.thumbnailPath)}/>
-      return <video className="post-card__video" autoPlay={true} loop={true} muted={true}>
-              <source src={generateVideoUrl(discussion.thumbnailPath)} type="video/mp4"/>
-            </video>
+        return <ImageViaUrl customClass="post-card__img" src={discussion.thumbnailPath}/>
+      return <VideoViaUrl backupClass="post-card__video" customClass="post-card__video" url={discussion.thumbnailPath}/>
     }
-    return <img className="post-card__img" src={Placeholder}/>
   }
 
   return (
@@ -35,7 +34,7 @@ export const DiscussionCard = ({discussion}: {discussion: IDiscussion}) => {
                 </p>
                 <div className="post-card__footer">
                   <div className="card__user-info">
-                    <img className="card__avatar" src={generateProfileImageUrl(discussion.appUser)} alt="Avatar"/>
+                    <ProfileImage customClass="card__avatar" user={discussion.appUser}/>
                     <p>Posted by <span style={{fontWeight:'bold'}}>{discussion.appUser.username}</span> {formatStringDate(discussion.postedAt)}</p>
                   </div>
                 </div>

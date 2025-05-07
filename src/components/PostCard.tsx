@@ -1,9 +1,12 @@
 import { IPost, ThumbnailType } from "../utils/interfaces/Interfaces";
 import { useNavigate } from "react-router-dom";
 import { Engagements } from "./Engagements";
-import { formatStringDate, generateProfileImageUrl, generateImageUrl,renderPartialContent, generateVideoUrl } from "../utils/helpers/helpers";
+import { formatStringDate, renderPartialContent } from "../utils/helpers/helpers";
 import { toPlatformIcon } from "../utils/helpers/mappers";
 import { useGlobalContext } from "../providers/global-provider";
+import { ProfileImage } from "./ProfileImage";
+import { ImageViaUrl } from "./ImageViaUrl";
+import { VideoViaUrl } from "./VideoViaUrl";
 
 export const PostCard = ({post}: {post: IPost}) => {
   // Check if post has an active session
@@ -12,11 +15,8 @@ export const PostCard = ({post}: {post: IPost}) => {
 
   const renderPostCardThumbnail = () =>
     post.thumbnailType == ThumbnailType.Image ?
-                          <img className="post-card__img" src={generateImageUrl(post.thumbnailPath)}/> :
-                          <video className="post-card__video" autoPlay={true} loop={true} muted={true}>
-                              <source src={generateVideoUrl(post.thumbnailPath)} type="video/mp4"/>
-                            </video>
-
+                          <ImageViaUrl customClass="post-card__img" src={post.thumbnailPath}/> :
+                          <VideoViaUrl backupClass="post-card__img" customClass="post-card__video" url={post.thumbnailPath}/>
 
   return (
     <div className="post-card__wrapper" onClick={() => navigate(`/posts/${post.id}`)}>
@@ -37,7 +37,7 @@ export const PostCard = ({post}: {post: IPost}) => {
                 </p>
                 <div className="post-card__footer">
                   <div className="card__user-info">
-                    <img className="card__avatar" src={generateProfileImageUrl(post.appUser)} alt="Avatar"/>
+                    <ProfileImage customClass="card__avatar" user={post.appUser}/>
                     <p>Posted by <span style={{fontWeight:'bold'}}>{post.appUser.username}</span> {formatStringDate(post.postedAt)}</p>
                   </div>
                   {toPlatformIcon(post.platformName, 16, 'white')}

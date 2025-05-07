@@ -456,11 +456,6 @@ html, body, #root {
   scale: 1.05;
 }
 
-.nav .icon {
-  font-size: 3rem;
-  color: var(--secondary);
-}
-
 .create_icon {
   color: #03fc98;
   transition: all 0.3s
@@ -682,8 +677,15 @@ html, body, #root {
 
 .search-input .icon {
   font-size: 2rem;
-  color: white;
   transition: all 0.3s;
+}
+
+.search-input__icon-wrapper--not-enter .icon {
+  color: #ffffff; 
+}
+
+.search-input__icon--wrapper--enter .icon {
+  color: var(--secondary);
 }
 
 @media screen and (min-width:768px){

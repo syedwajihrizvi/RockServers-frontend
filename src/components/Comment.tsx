@@ -4,8 +4,9 @@ import { useGlobalContext } from "../providers/global-provider"
 import apiClient from "../utils/services/dataServices"
 import { useQueryClient } from "@tanstack/react-query"
 import { useParams } from "react-router-dom"
-import { formatStringDate, generateProfileImageUrl } from "../utils/helpers/helpers"
+import { formatStringDate } from "../utils/helpers/helpers"
 import { useState } from "react"
+import { ProfileImage } from "./ProfileImage"
 
 export const Comment = ({comment, userLiked, commentType, handleLike, handleReplyClick}: 
 {comment: IComment, userLiked: boolean, commentType: "comments" | "discussionComments", 
@@ -68,7 +69,7 @@ export const Comment = ({comment, userLiked, commentType, handleLike, handleRepl
         {replies.map(reply => 
             <div className="reply__wrapper">
                 <div className="reply">
-                    <img className="reply__avatar" src={generateProfileImageUrl(reply.appUser)}/>
+                    <ProfileImage customClass="reply__avatar" user={reply.appUser}/>
                     <div className="reply__body">
                         <h3 className="comment__content__content__user">{reply.appUser.username}</h3>
                         <p className="comment__content__content__comment">{reply.content}</p>
@@ -94,7 +95,7 @@ export const Comment = ({comment, userLiked, commentType, handleLike, handleRepl
     <div className="comment">
         <div className="comment__content">
             <div className="comment__content__user-info">
-                <img src={generateProfileImageUrl(comment.appUser)} alt="Comment User Avatar"/>
+                <ProfileImage customClass="card__avatar" user={comment.appUser}/>
             </div>
             <div className="comment__content__content">
                 <h5 className="comment__content__content__user">{comment.commentedBy}</h5>
