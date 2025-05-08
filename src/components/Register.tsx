@@ -2,33 +2,23 @@ import { useState } from "react"
 import { registerUser } from "../utils/services/dataServices"
 import { useNavigate } from "react-router-dom"
 import { useAvatars } from "../hooks/useAvatars"
-import { generateAvatarImageUrl } from "../utils/helpers/helpers"
+import { generateAvatarImageUrl, validateUserRegister } from "../utils/helpers/helpers"
 import { IAvatar } from "../utils/interfaces/Interfaces"
 import { toast, ToastContainer } from "react-toastify"
-
 
 interface RegisterForm {
   email?: string,
   username?: string,
-  firstName?: string,
-  lastName?: string,
+  firstname?: string,
+  lastname?: string,
   password?: string,
-  confirmPassword?: string
-}
-
-interface Errors {
-  email?: string,
-  username?: string,
-  firstName?: string,
-  lastName?: string,
-  password?: string,
-  confirmPassword?: string
+  confirmPassword?: string,
+  avatarCreated?: string
 }
 
 
 export const Register = () => {
   const [register, setRegister] = useState<RegisterForm>({})
-  const [errors, setErrors] = useState<Errors>({})
   const [selectingAvatar, setSelectingAvatar] = useState(false)
   const [avatarSelected, setAvatarSelected] = useState("")
   const [imageUploaded, setImageUploaded] = useState<Blob | MediaSource | undefined>(undefined)
@@ -46,15 +36,16 @@ export const Register = () => {
   }
 
   const handleSubmit = () => {
-    const { email, username, firstName, lastName, password, confirmPassword } = register
+    const { email, username, firstname, lastname, password, confirmPassword } = register
     // Basic client side validation
     const newErrors = {
       email: email ? "" : "Email field must not be empty",
       username: username ? "" : "Username field must not be empty",
-      firstName: firstName ? "" : "Firstname field must not be empty",
-      lastName: lastName ? "" : "Lastname field must not be empty",
+      firstName: firstname ? "" : "Firstname field must not be empty",
+      lastName: lastname ? "" : "Lastname field must not be empty",
       password: password ? "" : "Password field must not be empty",
       confirmPassword: confirmPassword ? "" : "Please confirm your password",
+      avatarCreated: !avatarSelected && !imageUploaded ? "Please choose a profile picture." : ""
     }
   
     if (password && confirmPassword && password !== confirmPassword) {
@@ -62,15 +53,33 @@ export const Register = () => {
       newErrors.password = ""
     }
 
-    setErrors(newErrors)
+    const missingValues = Object.values(newErrors).some((msg) => msg != "")
+    if (missingValues) {
+      Object.values(newErrors).map((value) => {
+        if (value)
+          toast.error(`${value}`)
+      })
+      return
+    }
+    
+    const res = validateUserRegister({email: email!, username: username!, firstname: firstname!, lastname: lastname!, password: password!})
+    if (res) {
+      Object.keys(res).forEach(field => {newErrors[field as keyof typeof newErrors] = res[field]})
+    }
 
     const hasErrors = Object.values(newErrors).some((msg) => msg != "")
-    if (hasErrors) return
+    if (hasErrors) {
+      Object.values(newErrors).map((val) => {
+        if (val)
+          toast.error(`${val}`)
+      })
+      return
+    }
     
     // Send request to create user
     const formData = new FormData()
-    formData.append("firstName", firstName as string)
-    formData.append("lastname", lastName as string)
+    formData.append("firstName", firstname as string)
+    formData.append("lastname", lastname as string)
     formData.append("email", email as string)
     formData.append("username", username as string)
     formData.append("password", password as string)
@@ -133,31 +142,27 @@ export const Register = () => {
         </div>
         <div className="account-input__wrapper">
           <input onChange={(event) => {
-            setErrors({...errors, email: ""}) 
+            toast.dismiss()
             setRegister({...register, email: event.target.value})}} type="text" 
                 className="account-input__input account-input__input--fw" placeholder="Enter your Email"/>
-          {errors.email && <p className="account-input__error">{errors.email}</p>}
         </div>
         <div className="account-input__wrapper">
           <input onChange={(event) => {
-            setErrors({...errors, username: ""})
+            toast.dismiss()
             setRegister({...register, username: event.target.value})}} type="text" 
                   className="account-input__input account-input__input--fw" placeholder="Enter your Username"/>
-          {errors.username && <p className="account-input__error">{errors.username}</p>}
         </div>
         <div className="account-input__wrapper">
           <input onChange={(event) => {
-            setErrors({...errors, firstName: ""})
-            setRegister({...register, firstName: event.target.value})}} type="text" 
+            toast.dismiss()
+            setRegister({...register, firstname: event.target.value})}} type="text" 
                   className="account-input__input account-input__input--fw" placeholder="Enter your First Name"/>
-          {errors.firstName && <p className="account-input__error">{errors.firstName}</p>}
         </div>
         <div className="account-input__wrapper">
           <input onChange={(event) => {
-            setErrors({...errors, lastName: ""})
-            setRegister({...register, lastName: event.target.value})}} type="text" 
+            toast.dismiss()
+            setRegister({...register, lastname: event.target.value})}} type="text" 
                   className="account-input__input account-input__input--fw" placeholder="Enter your Last Name"/>
-          {errors.lastName && <p className="account-input__error">{errors.lastName}</p>}
         </div>
         {!avatarSelected && !imageUploaded && <div className="account-input__profile-pic-chooser">
           <div className="account-input__wrapper">
@@ -182,24 +187,22 @@ export const Register = () => {
         {imageUploaded && renderUploadedImagePreview()}
         <div className="account-input__wrapper">
           <input onChange={(event) => {
-            setErrors({...errors, password: ""})
+            toast.dismiss()
             setRegister({...register, password: event.target.value})}} 
                   className="account-input__input account-input__input--fw" 
                   type="password" placeholder="Enter Password"/>
-          {errors.password && <p className="account-input__error">{errors.password}</p>}
         </div>
         <div className="account-input__wrapper">
           <input onChange={(event) => {
-            setErrors({...errors, confirmPassword: ""})
+            toast.dismiss()
             setRegister({...register, confirmPassword: event.target.value})}} 
                   className="account-input__input account-input__input--fw" 
                   type="password" placeholder="Confirm Password"/>
-          {errors.confirmPassword && <p className="account-input__error">{errors.confirmPassword}</p>}
         </div>
         <div className="sign-up-actions-wrapper">
           <button className="account-input__btn" onClick={() => handleSubmit()}>Sign Up</button>
-          <span className="account-input__input account-input__input--fw">
-            Already have an account? <a href="/account/login">Sign In</a>
+          <span className="account-sign-in">
+            <p>Already have an account?</p> <a href="/account/login">Sign In</a>
           </span>
         </div>
       </div>

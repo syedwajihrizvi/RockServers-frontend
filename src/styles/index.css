@@ -1397,12 +1397,14 @@ html, body, #root {
   padding: 1rem;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 4px 12px rgba(0, 0, 0, 0.4);
   position: relative;
+  width: 100%;
 }
 
 .account-input__wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
 }
 
 .sign-up-actions-wrapper {
@@ -1413,6 +1415,21 @@ html, body, #root {
   text-align: center;
 }
 
+.account-sign-in {
+  color: white;
+  display: flex;
+  gap: 1rem;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.account-sign-in a {
+  color: white;
+}
+
+.account-sign-in p {
+  margin: 0;
+}
 .account-input__header {
   width: 80%;
   padding: 1rem;
@@ -1460,13 +1477,15 @@ html, body, #root {
   padding: 1rem;
   font-size: 2rem;
   margin-top: 0.5rem;
-  color: white
+  outline: none;
+  color: var(--secondary);
 }
 
 .account-input__error {
   color: red;
-  font-size: 1.6rem;
-  margin: 0;
+  font-size: 1.2rem;
+  margin-left: 2rem;
+  align-self: start;
 }
 
 .account-input__input--fw {
@@ -1585,6 +1604,10 @@ html, body, #root {
     top: 50%;
     left: 20%;
     transform: translate(-20%, -50%);
+  }
+
+  .account-input__input {
+    color: white;
   }
 
   .account-input input {

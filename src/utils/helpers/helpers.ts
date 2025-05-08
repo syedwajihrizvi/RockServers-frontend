@@ -1,5 +1,6 @@
 import { formatDistanceToNow } from 'date-fns'
 import { IPost, IUser } from "../interfaces/Interfaces"
+import { z, ZodError } from 'zod'
 
 export const generateReadyImageUrl = (image: string) =>
     `http://localhost:5191/ready_images/${image}.webp`
@@ -70,4 +71,34 @@ export const stringArraysEqual = (arr1: string[] | undefined, arr2: string[] | u
             return false
     }
     return true
+}
+
+// Register field validations
+// eslint-disable-next-line no-useless-escape
+const passwordRegex: RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#\$%^&*()_+=\-`~[\]{}|;':",.\/<>?]).{8,}$/;
+
+const User = z.object({
+    email: z.string().email("Please provide a valid email address."),
+    firstname: z.string().min(2, "Please enter a first name with at least 2 characters").max(255, "Please enter a first name with less than 255 characters"),
+    lastname: z.string().min(2, "Please enter a last name with at least 2 characters").max(255, "Please enter a last name with less than 255 characters"),
+    username: z.string().min(3, "Please enter a username with at least 3 characters").max(255, "Please enter a username with less than 255 characters"),
+    password: z.string().regex(passwordRegex, "Password must be at least 8 characters, 1 uppercase, 1 lowercase, 1 special character, and 1 number."),
+})
+
+type User = z.infer<typeof User>
+
+export const validateUserRegister = (user: User) => {
+    try {
+        User.parse(user)
+        return {}
+    } catch (error) {
+        if (error instanceof ZodError) {
+            const errors: Record<string, string> = {};
+            error.issues.forEach(issue => {
+              const field = issue.path.join(".");
+              errors[field] = issue.message;
+            });
+            return errors
+        }
+    }
 }

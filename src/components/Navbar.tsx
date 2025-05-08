@@ -55,7 +55,7 @@ export const Navbar = () => {
             </>
             }
             {!isLoggedIn && 
-            <button className="btn btn--secondary btn--md">
+            <button className="btn btn--secondary btn--md" onClick={() => navigate('/account/register')}>
               Sign Up
             </button>}
         </div>
