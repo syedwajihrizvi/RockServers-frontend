@@ -1666,15 +1666,22 @@ html, body, #root {
   display: block;
   border-radius: 0.5rem;
   object-fit: cover;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.masonry-item img:hover {
+  scale: 1.05
 }
 
 .masonry-item .icon {
   position: absolute;
-  top: 8px;
-  right: 8px;
+  top: 1%;
+  right: 1%;
   color: limegreen;
-  background: black;
   border-radius: 50%;
+  font-size: 1.2rem;
+  z-index: 100;
 }
 
 .create-container--wrapper img {
@@ -1685,22 +1692,28 @@ html, body, #root {
 .create-choose-image .close-icon {
   color: red;
   font-size: 3rem;
-  position: absolute;
+  position: fixed;
+  top: 0;
   right: 1rem;
   cursor: pointer;
+  z-index: 100;
+}
+
+.create-choose-image__container {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  overflow: scroll;
 }
 
 .create-choose-image {
-  position: absolute;
   background-color: white;
   border-radius: 2rem;
   padding: 1rem;
   width: 40rem;
   height: 50rem;
-  z-index: 1;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   overflow: scroll;
 }
 

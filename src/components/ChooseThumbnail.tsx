@@ -1,4 +1,4 @@
-import { generateImageUrl } from "../utils/helpers/helpers"
+import { generateReadyImageUrl } from "../utils/helpers/helpers"
 import { SingleFileUpload } from "./CustomFileUploads/SingleFileUpload"
 import { UploadedImagePreview } from "./UploadedImagePreview"
 
@@ -23,7 +23,7 @@ export const ChooseThumbnail = (
     <div className="create-post__img--selected">
         {thumbnailSelected && 
         <div className="create-post__img--selected__wrapper">
-        <img src={generateImageUrl(thumbnailSelected)} 
+        <img src={generateReadyImageUrl(thumbnailSelected)} 
             onClick={handleChoosingImage}/>
         </div>}
         {thumbnailUploaded && 
