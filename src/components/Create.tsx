@@ -9,16 +9,16 @@ import { ChooseGame } from "./ChooseGame";
 import { ChoosePlatform } from "./ChoosePlatform";
 import { ReadyImages } from "./ReadyImages";
 import { MultipleMediaPreview } from "./MultipleMediaPreview";
-import { CustomTimeInput } from "./CustomInputs";
 import { ChooseThumbnail } from "./ChooseThumbnail";
 
 export const Create = () => {
   const [creatingPost, setCreatingPost] = useState(false)
   const [choosingImage, setChoosingImage] = useState(false)
-  const [postData, setPostData] = useState<PostData>({startTime: new Date().toISOString().slice(0, 16)})
+  const [postData, setPostData] = useState<PostData>({platformId: 4})
   const [gameImages, setGameImages] = useState<IImage[]>([])
   const navigate = useNavigate()
   
+  console.log(postData)
   useEffect(() => {
     if (postData.gameId) {
       apiClient.get(`/images?gameId=${postData.gameId}`)
@@ -89,8 +89,9 @@ export const Create = () => {
 
   const handlePostCreationSubmit = () => {
     // Some basic front end validation and Toast Container with message
-    const { title, description, startTime, gameId, platformId, thumbnailSelected: imageSelected, thumbnailUploaded: imageUploaded} = postData  
-    if (!title || !description || !startTime || !gameId || !platformId || (!imageSelected && !imageUploaded))
+    const { title, description, gameId, platformId, thumbnailSelected: imageSelected, thumbnailUploaded: imageUploaded} = postData
+    console.log(postData)
+    if (!title || !description || !gameId || !platformId || (!imageSelected && !imageUploaded))
       toast.error("Please fill in all information")
     else {
       // Depends what type of request we are making
@@ -100,7 +101,6 @@ export const Create = () => {
         formData.append("description", description as string)
         formData.append("gameId", `${gameId}` as string)
         formData.append("platformId", `${platformId}` as string)
-        formData.append("startTime", startTime as string)
         if (thumbnailUploaded)
           formData.append("thumbnailFile", thumbnailUploaded as Blob)
         else
@@ -165,10 +165,6 @@ export const Create = () => {
             <>
                 {postData && postData.otherMedia && <MultipleMediaPreview medias={postData.otherMedia} handleClick={(media: File) => setPostData({...postData, otherMedia: postData.otherMedia?.filter((img) => img != media)})}/>}
             </>}
-            {creatingPost && 
-              <CustomTimeInput label="Choose a start time to let people know." startTime={postData.startTime} 
-                               handleChange={(event) => setPostData({...postData, startTime: event.target.value})}/>
-            }
             <div className="create-options">
               <button className="btn btn--md btn--success" onClick={handleSubmitWrapper}>Post</button>
               <button className="btn btn--md btn--secondary">Cancel</button>

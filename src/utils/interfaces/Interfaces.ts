@@ -21,7 +21,6 @@ export interface ISession {
     id: number,
     active: boolean,
     endTime: string | null,
-    startTime: string,
     users: string[]
 }
 
@@ -32,7 +31,6 @@ export interface IPost {
     postedAt: string,
     gameId: number,
     gameName: string,
-    startTime: string,
     appUser: IUser,
     platformId: number,
     platformName: string,
@@ -136,7 +134,6 @@ export interface PostData {
   description?: string;
   gameId?: number;
   platformId?: number;
-  startTime?: string;
   thumbnailSelected?: string;
   thumbnailUploaded?: Blob | MediaSource;
   otherMedia?: File[];
@@ -147,7 +144,6 @@ export interface PatchDataForPost {
     description?: string,
     gameId?: number,
     platformId?: number,
-    startTime?: string | undefined,
     thumbnailPath?: string,
     thumbnailType?: ThumbnailType,
     thumbnailSelected?: string,

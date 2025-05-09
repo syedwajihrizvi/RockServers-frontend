@@ -114,7 +114,7 @@ export const PostDetails = () => {
     const renderPostCardThumbnail = (post: IPost) =>
       post.thumbnailType == ThumbnailType.Image ?
                             <ImageViaUrl customClass="post-details__img" src={post.thumbnailPath}/> :
-                            <VideoViaUrl backupClass="post-details__img" customClass="post-details__video" url={post.thumbnailPath}/>
+                            <VideoViaUrl muted={false} controls={true} backupClass="post-details__img" customClass="post-details__video" url={post.thumbnailPath}/>
 
   return (
     <div className="card-details__container">

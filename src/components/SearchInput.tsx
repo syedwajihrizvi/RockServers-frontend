@@ -45,7 +45,7 @@ export const SearchInput = () => {
         <span className="search-input__icon-wrapper--not-enter" ref={searchIcon}>
           <FaSearch className="icon"/>
         </span>
-        <input type="text" placeholder="Search"
+        <input type="text" placeholder="Search for games, characters, RP Servers, anything"
                onChange={(event) => setSearchInput(event.target.value)}
                ref={inputElement} onKeyDown={(event) => handleKeyDown(event)}/>
     </div>

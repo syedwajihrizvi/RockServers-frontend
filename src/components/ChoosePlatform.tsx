@@ -7,7 +7,7 @@ export const ChoosePlatform = (
             className="create-option" 
             value = {value || ""}
             onChange={(event) => handleChange(event)}>
-            <option>What Platform</option>
+            <option value="4">Any Platform</option>
             <option value="1">Playstation</option>
             <option value="2">XBox</option>
             <option value="3">PC</option>

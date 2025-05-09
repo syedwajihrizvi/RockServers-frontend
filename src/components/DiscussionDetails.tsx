@@ -206,7 +206,7 @@ export const DiscussionDetails = () => {
             </div> 
             {
             discussion.appUser.username == user?.username && 
-            <div>
+            <div className='detail-options__logged-in-user-container'>
                 <EditButton type={"discussions"} contentId={discussion.id}/>
                 <DeleteButton type="discussion" contentId={discussion.id}/>
             </div> }

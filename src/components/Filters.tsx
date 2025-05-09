@@ -7,7 +7,7 @@ export const Filters = () => {
   const {data:games, isLoading: isLoadingGames} = useGames()
   const {data:platforms, isLoading: isLoadingPlatforms} = usePlatforms()
   const { gameId, handleSetGameInfo, handleSetPlatformInfo, 
-    handleSetPost, postType, platformId, handleSetSessionType: handleSetSessionType} = useQueryStore()
+    handleSetPost, postType, platformId } = useQueryStore()
 
   const handleGameOptionSelect = (gameInfo: string) => {
     // Get gameId and gameName
@@ -25,12 +25,8 @@ export const Filters = () => {
     // Get gameId and gameName
     const splitInfo = platformInfo.split(',')
     const platformId = parseInt(splitInfo[0])
-    if (platformId == -1)
-      handleSetPlatformInfo(undefined, undefined)
-    else {
-      const platformName = capitalize(splitInfo[1])
-      handleSetPlatformInfo(platformId, platformName)
-    }
+    const platformName = capitalize(splitInfo[1])
+    handleSetPlatformInfo(platformId, platformName)
   }
 
   return (
@@ -44,12 +40,6 @@ export const Filters = () => {
               {game.title}
             </option>)}
         </select>
-        {postType == 'posts' && 
-        <select onChange={(event) => handleSetSessionType(event.target.value)}>
-            <option value="all">All Sessions</option>
-            <option value="active">Active Sessions</option>
-            <option value="joinable">Soon to start Sessions</option>
-        </select>}
         <div className="post-type-filter">
           <span className={`post-type-filter__span post-type-filter__span${postType == 'posts' ? '-white': '-dark'}`}
                 onClick={() => handleSetPost('posts')}>
@@ -62,7 +52,6 @@ export const Filters = () => {
         </div>
         {postType == 'posts' && 
         <select onChange={(event) => handlePlatformOptionSelect(event.target.value)}>
-          <option value={-1}>All Platforms</option>
           {platforms.map(platform => 
           <option 
             key={platform.id} selected={platform.id == platformId} 

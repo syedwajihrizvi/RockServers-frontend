@@ -5,7 +5,7 @@ import { usePost } from "../hooks/usePosts"
 import { ThumbnailImagePreviewViewPath } from "./UploadedImagePreview"
 import { FaEdit } from "react-icons/fa";
 import { Skeleton } from "./Skeleton"
-import { CustomInput, CustomTextArea, CustomTimeInput } from "./CustomInputs"
+import { CustomInput, CustomTextArea } from "./CustomInputs"
 import { ChooseThumbnail } from "./ChooseThumbnail"
 import { ReadyImages } from "./ReadyImages"
 import apiClient, { updatePost } from "../utils/services/dataServices"
@@ -25,15 +25,14 @@ export const EditPost = () => {
 
   useEffect(() => {
     if (!isLoading && postData) {
-      const {title, description, gameId, platformId, startTime, thumbnailPath, thumbnailType} = postData
+      const {title, description, gameId, platformId, thumbnailPath, thumbnailType} = postData
       setRequestData({
         title,
         description,
         gameId,
         platformId,
         thumbnailPath,
-        thumbnailType,
-        startTime
+        thumbnailType
       })
     }
   }, [isLoading, postData])
@@ -65,12 +64,11 @@ export const EditPost = () => {
   
   const handleUpdate = () => {
     // Find out which fields updated
-    const {title, description, startTime, gameId, platformId, thumbnailSelected, thumbnailUploaded} = requestData
+    const {title, description, gameId, platformId, thumbnailSelected, thumbnailUploaded} = requestData
     const gameChanged = gameId != postData?.gameId
     const platformChanged = platformId != postData?.platformId
     const titleChanged = title != postData?.title
     const descriptionChanged = description != postData?.description
-    const startTimeChanged = startTime != postData?.startTime
     // Determine if the thumbnail changed
     const thumbnailChanged = requestData.thumbnailType || requestData.thumbnailUploaded || requestData.thumbnailSelected
     const formData = new FormData()
@@ -82,8 +80,6 @@ export const EditPost = () => {
       formData.append("title", title as string)
     if (descriptionChanged)
       formData.append("description", description as string)
-    if (startTimeChanged)
-      formData.append("startTime", startTime as string)
     
     if (thumbnailChanged) {
       if (thumbnailUploaded)
@@ -160,14 +156,6 @@ export const EditPost = () => {
         <Skeleton/>
         }
       </div>
-      {
-        <div className="current-startime">
-        <CustomTimeInput 
-          label="Current starting time of session"
-          startTime={requestData.startTime?.slice(0, 16)} 
-          handleChange={(event) => setRequestData({...requestData, startTime: event.target.value})}/>
-      </div>
-      }
       <div className="edit-options">
         <button className="btn btn--md btn--success" onClick={handleUpdate}>Update</button>
         <button className="btn btn--md btn--secondary">Cancel</button>
