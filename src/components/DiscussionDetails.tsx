@@ -53,12 +53,15 @@ export const DiscussionDetails = () => {
                 ...(thumbnailType == ThumbnailType.Image ? [thumbnailPath] : [])])
         }
         const videos = [...discussion.videoPaths ? discussion.videoPaths : []]
+        console.log(videoPaths)
         if (discussion.videoPaths && thumbnailType == ThumbnailType.Video)
-            setVideoPaths([...videos, thumbnailPath])
+            videos.push(thumbnailPath)
+        setVideoPaths([...videos])
         setThumbImage({urlPath: thumbnailPath, type: thumbnailType})
     }
   }, [isLoading, discussion])
 
+  console.log(videoPaths)
   useEffect(() => {
     if (discussion) {
         setIsLoadingSimilarDiscussions(true)

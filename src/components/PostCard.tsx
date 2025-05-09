@@ -16,7 +16,7 @@ export const PostCard = ({post}: {post: IPost}) => {
   const renderPostCardThumbnail = () =>
     post.thumbnailType == ThumbnailType.Image ?
                           <ImageViaUrl customClass="post-card__img" src={post.thumbnailPath}/> :
-                          <VideoViaUrl backupClass="post-card__img" customClass="post-card__video" url={post.thumbnailPath}/>
+                          <VideoViaUrl muted={true} controls={false} backupClass="post-card__img" customClass="post-card__video" url={post.thumbnailPath}/>
 
   return (
     <div className="post-card__wrapper" onClick={() => navigate(`/posts/${post.id}`)}>
