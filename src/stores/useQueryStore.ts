@@ -25,7 +25,7 @@ const defaulState = {
     platformId: undefined,
     platformName: undefined,
     gameName: undefined,
-    postType: 'posts',
+    postType: 'discussions',
     searchValue: undefined,
     sessionType: 'all',
     mostRecent: false,
@@ -33,7 +33,7 @@ const defaulState = {
 }
 
 const useQueryStore = create<QueryStore>((set) => ({
-    postType: 'posts',
+    postType: 'discussions',
     sessionType: 'all',
     mostRecent: false,
     handleSetGameInfo: (gameId?: number, gameName?: string) => {

@@ -6,6 +6,7 @@ export const ProfileImage = ({customClass, user}: {customClass?: string, user: I
   return (
     <img className={customClass ? customClass : ''} 
     src={generateProfileImageUrl(user)} alt="Avatar"
+    style={{objectFit: 'cover'}}
     onError={(e) => {
        e.currentTarget.onerror = null; // prevent infinite loop
        e.currentTarget.src = Avatar;

@@ -1757,6 +1757,9 @@ html, body, #root {
   cursor: pointer; 
 }
 
+.file-upload-wrapper.btn {
+  text-align: center;
+}
 .create-choose-image .icon:hover {
   scale: 1.05;
 }

@@ -15,7 +15,7 @@ export const DiscussionCard = ({discussion}: {discussion: IDiscussion}) => {
     if (discussion.thumbnailPath) {
       if (discussion.thumbnailType == ThumbnailType.Image)
         return <ImageViaUrl customClass="post-card__img" src={discussion.thumbnailPath}/>
-      return <VideoViaUrl backupClass="post-card__video" customClass="post-card__video" url={discussion.thumbnailPath}/>
+      return <VideoViaUrl muted={true} controls={false} backupClass="post-card__video" customClass="post-card__video" url={discussion.thumbnailPath}/>
     }
   }
 

@@ -14,7 +14,7 @@ export const ChooseThumbnail = (
     }) => {
   return (
    <>
-    <h3 className="create-post-thumbnail-heading">Choose a Thumbnail</h3>
+    <h3 className="create-post-thumbnail-heading">Choose video or image thumbnail</h3>
     <div className="create-upload-type">
         <SingleFileUpload label="Upload thumbnail" handleFileUpload={handleFileUpload}/>
         <button className="btn btn--success btn--sm" 

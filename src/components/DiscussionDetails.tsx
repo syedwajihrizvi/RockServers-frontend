@@ -52,15 +52,13 @@ export const DiscussionDetails = () => {
                 ...discussion.otherImages, 
                 ...(thumbnailType == ThumbnailType.Image ? [thumbnailPath] : [])])
         }
-        setVideoPaths([...discussion.videoPaths ? discussion.videoPaths : []])
+        const videos = [...discussion.videoPaths ? discussion.videoPaths : []]
         if (discussion.videoPaths && thumbnailType == ThumbnailType.Video)
-            setVideoPaths([...videoPaths, thumbnailPath])
+            setVideoPaths([...videos, thumbnailPath])
         setThumbImage({urlPath: thumbnailPath, type: thumbnailType})
     }
   }, [isLoading, discussion])
 
-  console.log(discussion?.otherImages)
-  console.log(otherImages)
   useEffect(() => {
     if (discussion) {
         setIsLoadingSimilarDiscussions(true)
@@ -137,8 +135,11 @@ export const DiscussionDetails = () => {
   const renderDiscussionThumbnail = () => {
     if (thumbImage) {
         if (thumbImage?.type == ThumbnailType.Image)
-            return  <ImageViaUrl customClass='post-card__img' src={thumbImage.urlPath}/>
-          return <VideoViaUrl backupClass="post-card__video" customClass='post-card__video' url={thumbImage.urlPath}/>
+            return <ImageViaUrl key={thumbImage.urlPath} customClass='post-card__img' src={thumbImage.urlPath}/>
+        else {
+            console.log("Called")
+            return <VideoViaUrl key={thumbImage.urlPath} backupClass="post-card__video" muted={false} controls={true} customClass='post-card__video' url={thumbImage.urlPath}/>
+        }
     }
     return <img className='post-card__img' src={Placeholder}/>
   }
@@ -164,7 +165,8 @@ export const DiscussionDetails = () => {
                         ))}
                         {videoPaths && videoPaths.length > 0 
                         && videoPaths.filter((vid) => vid != thumbImage?.urlPath).map(video => (
-                            <VideoViaUrl backupClass="" url={video} handleClick={() => setThumbImage({urlPath: video, type: ThumbnailType.Video})}/>
+                            <VideoViaUrl key={video} backupClass="" url={video} muted={true} controls={false} 
+                                         handleClick={() => setThumbImage({urlPath: video, type: ThumbnailType.Video})}/>
                         ))}
                     </div>
                     <div className="card-details-card__content">

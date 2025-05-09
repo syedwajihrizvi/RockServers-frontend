@@ -15,10 +15,12 @@ export const PostsGrid = ({userId}: {userId: string | undefined}) => {
       return [...Array(12).keys()].map((key) => <Skeleton key={key} customClass='skeleton--md'/>)
     } 
     else if (!isLoadingPosts && (postType == "posts")) {
-      return posts!.map((post) => <PostCard key={post.id} post={post}/>)
+      return [...posts!]
+      .sort(() => Math.random() - 0.5).map((post) => <PostCard key={post.id} post={post}/>)
     }
     else if (!isLoadingDiscussions && (postType == "discussions")) {
-      return discussions!.map((discussion) => <DiscussionCard key={discussion.id} discussion={discussion}/>)
+      return [...discussions!]
+      .sort(() => Math.random() - 0.5).map((discussion) => <DiscussionCard key={discussion.id} discussion={discussion}/>)
     } else {
       // Render an assorted version of all posts
       console.log("Invalid post type")

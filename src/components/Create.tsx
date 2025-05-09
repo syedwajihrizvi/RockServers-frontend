@@ -160,7 +160,7 @@ export const Create = () => {
                              handleFileUpload={handleFileUpload}
                              handleChoosingImage={() => setChoosingImage(true)}
                              handleUploadedImagePreviewClick={() => setPostData({...postData, thumbnailUploaded: undefined})}/>
-            {!creatingPost && <MultipleFileUpload label="Choose more media" handleMultipleFileUpload={handleMultipleFileUpload}/>}
+            {!creatingPost && <MultipleFileUpload label="Upload more images and videos" handleMultipleFileUpload={handleMultipleFileUpload}/>}
             {!creatingPost && 
             <>
                 {postData && postData.otherMedia && <MultipleMediaPreview medias={postData.otherMedia} handleClick={(media: File) => setPostData({...postData, otherMedia: postData.otherMedia?.filter((img) => img != media)})}/>}
