@@ -53,7 +53,6 @@ export const DiscussionDetails = () => {
                 ...(thumbnailType == ThumbnailType.Image ? [thumbnailPath] : [])])
         }
         const videos = [...discussion.videoPaths ? discussion.videoPaths : []]
-        console.log(videoPaths)
         if (discussion.videoPaths && thumbnailType == ThumbnailType.Video)
             videos.push(thumbnailPath)
         setVideoPaths([...videos])
@@ -61,7 +60,10 @@ export const DiscussionDetails = () => {
     }
   }, [isLoading, discussion])
 
-  console.log(videoPaths)
+  useEffect(() => {
+    apiClient.patch(`/discussions/${discussionId}/updateViews`)
+  }, [])
+
   useEffect(() => {
     if (discussion) {
         setIsLoadingSimilarDiscussions(true)
@@ -181,7 +183,7 @@ export const DiscussionDetails = () => {
                                 <p>Posted by <span style={{fontWeight:'bold'}}>{discussion.appUser.username}</span> {formatStringDate(discussion.postedAt)}</p>
                             </div>
                         </div>
-                        <Engagements comments={discussionComments} likes={discussion.likes} 
+                        <Engagements comments={discussionComments} likes={discussion.likes} views={discussion.views}
                                      handleLike={handleDiscussionLike}
                                      userLiked={userDidLike(user?.likedDiscussions, discussion.id)}/>
                     </div>

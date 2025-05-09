@@ -51,10 +51,15 @@ export const PostDetails = () => {
     }
   }, [post])
 
+
   if (!postId) {
     navigate('/')
   }
   
+  useEffect(() => {
+    apiClient.patch(`/posts/${postId}/updateViews`)
+  }, [])
+
   const handleSimilarPostClick = () => {
     if (post) {
         handleSetGameInfo(post.gameId, post.gameName)
@@ -143,7 +148,7 @@ export const PostDetails = () => {
                             </div>
                         </Link>
                     </div>
-                    <Engagements comments={postComments} likes={post.likes} 
+                    <Engagements comments={postComments} likes={post.likes} views={post.views}
                                  userLiked={userDidLike(user?.likedPosts, post.id)} handleLike={handlePostLike}/>
                 </div>
                 {

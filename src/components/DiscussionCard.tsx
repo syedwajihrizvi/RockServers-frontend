@@ -26,7 +26,7 @@ export const DiscussionCard = ({discussion}: {discussion: IDiscussion}) => {
             <div className="post-card__content">
                 <span className="post-card__heading">
                     <h1 className="post-card__heading__title">{discussion.title}</h1>
-                    <Engagements likes={discussion.likes} comments={discussion.comments}
+                    <Engagements likes={discussion.likes} comments={discussion.comments} views={discussion.views}
                                  userLiked={user ? user.likedDiscussions.includes(discussion.id) : false}/>
                 </span>
                 <p className="post-card__description">

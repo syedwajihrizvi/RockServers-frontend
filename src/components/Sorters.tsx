@@ -11,6 +11,7 @@ export const Sorters = () => {
         <select onChange={(event) => handleSetOrderBy(event.target.value == 'default' ? undefined : event.target.value)}>
             <option value='default'>Order By</option>
             <option value='likes'>Most Likes</option>
+            <option value='views'>Most Views</option>
             <option value='comments'>Most Comments</option>
             <option value='rating'>Rating</option>
         </select>

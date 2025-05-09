@@ -8,19 +8,21 @@ import { DiscussionCard } from './DiscussionCard'
 export const PostsGrid = ({userId}: {userId: string | undefined}) => {
   const {data: posts, isLoading: isLoadingPosts} = usePosts({userId})
   const {data: discussions, isLoading: isLoadingDiscussions} = useDiscussions({userId})
+  const { orderBy } = useQueryStore()
 
   const {gameName, postType, platformName} = useQueryStore()
   const renderPosts = () => {
+    console.log(orderBy)
     if (isLoadingPosts || isLoadingDiscussions) {
       return [...Array(12).keys()].map((key) => <Skeleton key={key} customClass='skeleton--md'/>)
     } 
     else if (!isLoadingPosts && (postType == "posts")) {
-      return [...posts!]
-      .sort(() => Math.random() - 0.5).map((post) => <PostCard key={post.id} post={post}/>)
+      const mappedPosts = (!orderBy || orderBy != "default") ? posts : [...posts!].sort(() => Math.random() - 0.5)
+      return mappedPosts!.map((post) => <PostCard key={post.id} post={post}/>)
     }
     else if (!isLoadingDiscussions && (postType == "discussions")) {
-      return [...discussions!]
-      .sort(() => Math.random() - 0.5).map((discussion) => <DiscussionCard key={discussion.id} discussion={discussion}/>)
+      const mappedDiscussion = (!orderBy || orderBy != "default") ? discussions : [...discussions!].sort(() => Math.random() - 0.5)
+      return mappedDiscussion!.map((discussion) => <DiscussionCard key={discussion.id} discussion={discussion}/>)
     } else {
       // Render an assorted version of all posts
       console.log("Invalid post type")

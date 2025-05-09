@@ -1,4 +1,4 @@
-import { FaComment, FaHeart, FaRegHeart } from 'react-icons/fa'
+import { FaComment, FaHeart, FaRegHeart, FaEye  } from 'react-icons/fa'
 import { IComment } from '../utils/interfaces/Interfaces';
 
 function formatLikes(likes: number) {
@@ -11,13 +11,17 @@ function formatLikes(likes: number) {
     }
 }
 
-export const Engagements = ({comments, likes, userLiked, handleLike}: 
-    {comments: IComment[] | undefined, likes: number, userLiked: boolean, handleLike?: () => void}) => {
+export const Engagements = ({comments, likes, userLiked, views, handleLike}: 
+    {comments: IComment[] | undefined, likes: number, views: number, userLiked: boolean, handleLike?: () => void}) => {
   
   const commentCount = Array.isArray(comments) ? comments && comments.length : typeof comments == 'number' ? comments : 0;
 
   return (
         <span className="post-card__engagements">
+            <span>
+                <FaEye className='icon'/>
+                <p>{views}</p>
+            </span>
             <span>
                 <FaComment className='icon'/>
                 <p>{commentCount}</p>
