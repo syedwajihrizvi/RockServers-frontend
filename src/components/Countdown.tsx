@@ -7,6 +7,8 @@ import { FaChevronCircleRight, FaChevronCircleLeft } from "react-icons/fa";
 import { Dots } from "react-activity";
 import "react-activity/dist/library.css";
 import { Navbar } from "./Navbar";
+import TrailerOne from "../assets/videos/trailerone.mp4"
+import TrailerTwo from "../assets/videos/trailertwo.mp4"
 
 const NumberWrapper = (
     {number, type, customClass}: 
@@ -35,10 +37,7 @@ const NumberWrapper = (
 }
 
 export const Countdown = ({displayTrailers}: {displayTrailers: boolean}) => {
-  const trailerUrls = [
-    "https://www.youtube.com/embed/QdBZY2fkU-0?autoplay=1&loop=1&playlist=QdBZY2fkU-0&controls=0&showinfo=0" ,
-    "https://www.youtube.com/embed/VQRLujxTm3c?autoplay=1&loop=1&playlist=VQRLujxTm3c&controls=0&showinfo=0"
-  ]
+  const trailerUrls = [TrailerOne, TrailerTwo]
   const bgImages = [Bg1, Bg2]
   const [currentTrailerIndex, setCurrentTrailerIndex] = useState(0)
   const [timeToReleaseDate, setTimeToReleaseDate] = useState(
@@ -97,19 +96,15 @@ export const Countdown = ({displayTrailers}: {displayTrailers: boolean}) => {
             <NumberWrapper number={timeToReleaseDate.seconds} type="seconds" customClass="lg"/>
         </div>}
         {!timeToReleaseDate.ready && <Dots color="white"/> }
-        {displayTrailers && <div className="trailers">
+        {displayTrailers && 
+        <div className="trailers">
             <div className="trailers__buttons">
                 <button className={`btn btn--md btn--pink`} onClick={() => setCurrentTrailerIndex(0)}>Trailer 1</button>
                 <button className={`btn btn--md btn--blue`} onClick={() => setCurrentTrailerIndex(1)}>Trailer 2</button>
             </div>
-            <iframe 
-                width="100%" 
-                height="100%" 
-                src={trailerUrls[currentTrailerIndex]}
-                title="GTA 6 Trailer"
-                allow="autoplay; encrypted-media"
-                allowFullScreen
-                ></iframe>
+            <video autoPlay={true} loop={true} controls={true}>
+            <source src={trailerUrls[currentTrailerIndex]} type="video/mp4"/>
+        </video>
         </div>}
     </div>
   )

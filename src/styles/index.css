@@ -2405,8 +2405,11 @@ html, body, #root {
   width: 90%;
 }
 
-.trailers iframe {
+.trailers video {
   border-radius: 1.5rem;
+  width: 100%;
+  object-fit: cover;
+  height: 30rem;
 }
 
 .trailers__buttons {
@@ -2421,6 +2424,10 @@ html, body, #root {
   .trailers {
     height: 40rem;
     width: 70rem;
+  }
+
+  .trailers video {
+    height: 50rem;
   }
 
   .letter-wrapper--lg {
@@ -2445,6 +2452,9 @@ html, body, #root {
     width: 80rem;
   }
 
+  .trailers {
+    height: 60rem;
+  }
   .letter-wrapper--lg {
     height: 9rem;
   }
