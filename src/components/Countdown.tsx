@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Bg1 from "../assets/images/countdown-bg.webp"
 import Bg2 from "../assets/images/countdown-bg-2.jpg"
 import { Link } from "react-router-dom"
@@ -39,6 +39,7 @@ const NumberWrapper = (
 export const Countdown = ({displayTrailers}: {displayTrailers: boolean}) => {
   const trailerUrls = [TrailerOne, TrailerTwo]
   const bgImages = [Bg1, Bg2]
+  const videoRef = useRef<HTMLVideoElement | null>(null)
   const [currentTrailerIndex, setCurrentTrailerIndex] = useState(0)
   const [timeToReleaseDate, setTimeToReleaseDate] = useState(
     {
@@ -49,7 +50,6 @@ export const Countdown = ({displayTrailers}: {displayTrailers: boolean}) => {
         ready: false
     }
   )
-
   const gta6ReleaseDate = new Date("2026-05-26T00:00:00").getTime()
   useEffect(() => {
     const updateTime = setInterval(() => {
@@ -78,6 +78,10 @@ export const Countdown = ({displayTrailers}: {displayTrailers: boolean}) => {
     return () => clearInterval(updateTime)
   })
 
+  useEffect(() => {
+    videoRef.current?.load()
+  }, [currentTrailerIndex])
+
   return (
     <div className="countdown__container__wrapper" style={{
         backgroundImage: `url(${bgImages[currentTrailerIndex]})`,
@@ -102,9 +106,9 @@ export const Countdown = ({displayTrailers}: {displayTrailers: boolean}) => {
                 <button className={`btn btn--md btn--pink`} onClick={() => setCurrentTrailerIndex(0)}>Trailer 1</button>
                 <button className={`btn btn--md btn--blue`} onClick={() => setCurrentTrailerIndex(1)}>Trailer 2</button>
             </div>
-            <video autoPlay={true} loop={true} controls={true}>
-            <source src={trailerUrls[currentTrailerIndex]} type="video/mp4"/>
-        </video>
+            <video ref={videoRef} autoPlay={true} loop={true} controls={true}>
+                <source src={trailerUrls[currentTrailerIndex]} type="video/mp4"/>
+            </video>
         </div>}
     </div>
   )
