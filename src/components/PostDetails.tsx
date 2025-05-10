@@ -154,7 +154,6 @@ export const PostDetails = () => {
                 {
                 postComments &&
                 <Comments comments={postComments} 
-                withViewAll={true} 
                 handleAddComment={handlePostComment} 
                 handleSubmitComment={handleSubmitComment}
                 commentType="comments"/>

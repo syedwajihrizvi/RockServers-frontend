@@ -136,11 +136,11 @@ html, body, #root {
 }
 
 .post-type-filter__span:hover {
-  background-color: var(--secondary-hover);
+  background-color: #01b66d;
 }
 
 .post-type-filter__span-white {
-  background-color: white;
+  background-color: #03fc98;
   color: var(--secondary);
 }
 
@@ -558,6 +558,10 @@ html, body, #root {
   font-size: 0.8rem;
 }
 
+.btn--dark {
+  background-color: #202020;
+}
+
 .btn--sm {
   padding: 0.8rem 1.6rem;
   font-size: 1.4rem;
@@ -571,7 +575,7 @@ html, body, #root {
 .btn--delete {
   margin-top: 1rem;
   color: white;
-  border-radius: 2rem;
+  border-radius: 1rem;
   font-weight: bold;
 }
 
@@ -852,7 +856,7 @@ html, body, #root {
 
 .card-details-card__comments {
   background-color: white;
-  padding: 0 1rem;
+  padding: 1rem;
 }
 
 .card-details-fixed__comments {
@@ -862,7 +866,7 @@ html, body, #root {
 }
 
 .card-details-fixed__comments__content {
-  max-height: 20rem;
+  max-height: 60rem;
   overflow-y: scroll;
   background-color: white;
   padding: 1rem;
@@ -980,7 +984,6 @@ html, body, #root {
 .comment {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 1rem;
 }
 
 .comment__content {

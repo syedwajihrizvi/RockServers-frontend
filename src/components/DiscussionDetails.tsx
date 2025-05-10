@@ -155,7 +155,6 @@ export const DiscussionDetails = () => {
             />
         {isLoading && <Skeleton customClass="skeleton--lg"/>}
         {!isLoading && discussion &&
-        <>
         <div className="card-details-card__wrapper post-details__wrapper">
             <div className="card-details-card">
                 <div>
@@ -189,7 +188,7 @@ export const DiscussionDetails = () => {
                 </div>
                 {discussionComments && 
                 <Comments comments={discussionComments} 
-                          withViewAll={false} handleAddComment={handleDiscussionComment}
+                          handleAddComment={handleDiscussionComment}
                           handleSubmitComment={handleSubmitComment}
                           commentType="discussionComments"/>}
             </div>
@@ -216,8 +215,7 @@ export const DiscussionDetails = () => {
             </div> }
             <FollowButton user={discussion.appUser}/>
          </div>    
-        </div>
-        </>}
+        </div>}
     </div>
   )
 }

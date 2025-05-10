@@ -23,14 +23,14 @@ export const Engagements = ({comments, likes, userLiked, views, handleLike}:
                 <p>{views}</p>
             </span>
             <span>
-                <FaComment className='icon'/>
-                <p>{commentCount}</p>
-            </span>
-            <span>
                 {userLiked ? 
                 <FaHeart className="icon icon--heart" onClick={handleLike}/> : 
                 <FaRegHeart className="icon icon--heart" onClick={handleLike}/>}
                 <p>{formatLikes(likes as number)}</p>
+            </span>
+            <span>
+                <FaComment className='icon'/>
+                <p>{commentCount}</p>
             </span>
         </span>
   )

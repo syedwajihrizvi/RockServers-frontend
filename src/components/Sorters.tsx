@@ -13,7 +13,6 @@ export const Sorters = () => {
             <option value='likes'>Most Likes</option>
             <option value='views'>Most Views</option>
             <option value='comments'>Most Comments</option>
-            <option value='rating'>Rating</option>
         </select>
     </div>
   )

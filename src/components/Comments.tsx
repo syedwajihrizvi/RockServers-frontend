@@ -71,8 +71,8 @@ export const AddComment = ({customClass, handleAddComment, handleSubmitComment, 
     )
 }
 
-export const Comments = ({comments, withViewAll, handleAddComment, handleSubmitComment, commentType}: 
-    {comments: IComment[], withViewAll: boolean, 
+export const Comments = ({comments, handleAddComment, handleSubmitComment, commentType}: 
+    {comments: IComment[], 
      handleAddComment: () => void, 
      handleSubmitComment: (commentContent: string | undefined, comment: IComment | null) => void,
      commentType: "comments" | "discussionComments"}) => {
@@ -82,9 +82,7 @@ export const Comments = ({comments, withViewAll, handleAddComment, handleSubmitC
     const queryClient = useQueryClient()
     const navigate = useNavigate()
     const renderComments = (comments: IComment[]) => {
-        if (withViewAll)
-            return comments.length < 2 || viewAll ? comments : comments.slice(0, 2)
-        return comments
+        return comments.length < 4 || viewAll ? comments : comments.slice(0, 4)
     }
 
     const handleToastButtonClick = () => {
@@ -111,41 +109,25 @@ export const Comments = ({comments, withViewAll, handleAddComment, handleSubmitC
         }
     }
 
-    return withViewAll ? 
+    return (
         <div className="card-details-card__comments">
-                    <ToastContainer
-            position="top-center"
-            />
+            <ToastContainer position="top-center"/>
             <h1>{comments ? `${comments.length} Comments` : 'No Comments'}</h1>
             {user && 
             <AddComment handleAddComment={handleAddComment} handleSubmitComment={handleSubmitComment} 
                         user={user} comment={replying} handleSetComment={() => setReplying(null)}/>}
             {comments && 
-                renderComments(comments).map(comment => (
-                    <Comment key={comment.id} comment={comment} 
-                             userLiked={user? userDidLike(user.likedComments, comment.id) : false}
-                             handleLike={handleCommentLike} commentType={commentType}
-                             handleReplyClick={handleReplyClick}/>
-            ))}
-            {comments && comments.length > 2 && 
+            <div style={{display: 'flex', gap: '0.5rem', flexDirection: 'column'}}>{renderComments(comments).map(comment => (
+                <Comment key={comment.id} comment={comment} 
+                            userLiked={user? userDidLike(user.likedComments, comment.id) : false}
+                            handleLike={handleCommentLike} commentType={commentType}
+                            handleReplyClick={handleReplyClick}/>))}</div>
+            }
+            {comments && comments.length > 4 && 
                 <div className="comment__view-all">
                     <p>{viewAll ? "Back" : "View All"}</p>
                     <MdFilterList className="icon" fontSize={20} onClick={() => setViewAll(!viewAll)}/>
                 </div>}          
-            </div> : 
-            <div className="card-details-fixed__comments">
-                <div className="card-details-fixed__comments__content">
-                <h1>{comments.length > 0 ? `${comments.length} Comments` : 'No Comments'}</h1>
-                {renderComments(comments).map(comment => (
-                    <Comment key={comment.id} comment={comment} 
-                             userLiked={user? userDidLike(commentType == 'comments' ? user.likedComments : user.likedDiscussionComments, comment.id) : false}
-                             handleLike={handleCommentLike} commentType={commentType}
-                             handleReplyClick={handleReplyClick}/>
-                ))}
-                </div>
-                {user && 
-                <AddComment customClass='with-x-padding' handleAddComment={handleAddComment} 
-                        handleSubmitComment={handleSubmitComment} 
-                        user={user} comment={replying} handleSetComment={() => setReplying(null)}/>}
-            </div>
+        </div>
+    )
 }
