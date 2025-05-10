@@ -31,6 +31,7 @@ export const Account = () => {
   ]
 
   const imageRefs = useRef<(HTMLImageElement | null)[]>([...new Array(images.length).fill(null)])
+  const intervalRef = useRef<number | null>(null);
 
   const imageNodes : ReactNode[] = images.map((image, idx) => 
     <img key={idx} ref={(element) => {imageRefs.current[idx] = element}} 
@@ -39,20 +40,47 @@ export const Account = () => {
   )
 
   useEffect(() => {
-    const handleImageChange = setInterval(() => {
-      const currentIndex = currentImageIndex
-      setCurrentImageIndex(currentImageIndex == images.length - 1 ? 0 : currentImageIndex + 1)
-      setPrevImageIndex(currentIndex)
-    }, 3000)
-    return () => clearInterval(handleImageChange)
-  })
+    const startSlideshow = () => {
+      if (!intervalRef.current) {
+        intervalRef.current = setInterval(() => {
+          setPrevImageIndex(() => currentImageIndex);
+          setCurrentImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+        }, 3000);
+      }
+    };
 
+    const stopSlideshow = () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        startSlideshow();
+      } else {
+        stopSlideshow();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    startSlideshow(); // start on mount
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      stopSlideshow(); // cleanup
+    };
+  }, [currentImageIndex, images.length]);
+
+  // ✨ Animate transitions
   useGSAP(() => {
-    const tl = gsap.timeline()
-    if (prevImageIndex != null)
-      tl.to(imageRefs.current[prevImageIndex], { opacity: 0, duration: 0.8})
-    tl.to(imageRefs.current[currentImageIndex], { opacity: 1, duration: 0.8})
-  }, [currentImageIndex])
+    const tl = gsap.timeline();
+    if (prevImageIndex !== null) {
+      tl.to(imageRefs.current[prevImageIndex], { opacity: 0, duration: 0.8 });
+    }
+    tl.to(imageRefs.current[currentImageIndex], { opacity: 1, duration: 0.8 });
+  }, [currentImageIndex]);
 
   return (
   <div className="account-container">
