@@ -104,10 +104,6 @@ export const EditDiscussion = () => {
     // OtherImages changed
     const otherImagesChanged = !stringArraysEqual(requestData.otherImages, discussionData?.otherImages)
     const videoPathsChanged = !stringArraysEqual(requestData.videoPaths, discussionData?.videoPaths)
-    console.log(videoPathsChanged)
-    console.log(requestData.videoPaths)
-    console.log(otherImagesChanged)
-    console.log(requestData.otherImages)
     if (otherImagesChanged) {
         if (requestData.otherImages && requestData.otherImages.length > 0)
           requestData.otherImages?.forEach((img) => formData.append("existingImages", img))

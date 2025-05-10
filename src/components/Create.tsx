@@ -18,7 +18,6 @@ export const Create = () => {
   const [gameImages, setGameImages] = useState<IImage[]>([])
   const navigate = useNavigate()
   
-  console.log(postData)
   useEffect(() => {
     if (postData.gameId) {
       apiClient.get(`/images?gameId=${postData.gameId}`)

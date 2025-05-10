@@ -461,6 +461,17 @@ html, body, #root {
   transition: all 0.3s
 }
 
+.icon--refresh {
+  color: white;
+  font-size: 3rem;
+  transition: all 0.3s;
+}
+
+.icon--refresh:hover {
+  scale: 1.05;
+  cursor: pointer;
+}
+
 .create_icon:hover {
   scale: 1.05;
   cursor: pointer;

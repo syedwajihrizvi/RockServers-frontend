@@ -142,7 +142,6 @@ export const DiscussionDetails = () => {
         if (thumbImage?.type == ThumbnailType.Image)
             return <ImageViaUrl key={thumbImage.urlPath} customClass='post-card__img' src={thumbImage.urlPath}/>
         else {
-            console.log("Called")
             return <VideoViaUrl key={thumbImage.urlPath} backupClass="post-card__video" muted={false} controls={true} customClass='post-card__video' url={thumbImage.urlPath}/>
         }
     }
