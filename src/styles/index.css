@@ -2194,6 +2194,16 @@ html, body, #root {
   justify-content: center;
 }
 
+.profile__actions .icon {
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-left: 0.5rem;
+}
+
+.profile__actions .icon:hover {
+  scale: 1.05;
+}
+
 .profile__img {
   object-fit: cover;
   width: 5rem;

@@ -1,4 +1,5 @@
 import { RiUserFollowFill, RiUserUnfollowFill } from "react-icons/ri";
+import { TiUserAdd } from "react-icons/ti";
 import { ToastContainer, toast } from 'react-toastify'
 import { LoginToastComponent } from "./CustomToasts/LoginToastComponent";
 import { useNavigate } from "react-router-dom";
@@ -39,9 +40,10 @@ export const FollowButton = ({user, removeImage}:
   }
 
   const renderIconOnly = () => {
+    console.log(userFollows)
     return userFollows ? 
-          <RiUserUnfollowFill color="red" fontSize={18}/> : 
-          <RiUserFollowFill color="#03fc98" fontSize={18}/>
+          <RiUserUnfollowFill onClick={handleClick} className="icon" color="red" fontSize={16}/> : 
+          <TiUserAdd onClick={handleClick} className="icon" color="#03fc98" fontSize={18}/>
   }
 
   const renderWithProfileImage = () => {
@@ -55,12 +57,10 @@ export const FollowButton = ({user, removeImage}:
     <>
       <ToastContainer position="top-center"/>
       {loggedInUser?.username!= user.username &&
-      <button className={`btn ${removeImage ? "btn--sm " : "btn--success btn--md "} ${removeImage ? "btn--follow--icon-only" : "btn--follow"}`} 
-              onClick={handleClick}>
-          {removeImage ? 
+          removeImage ? 
            renderIconOnly():
-           renderWithProfileImage()}      
-      </button>}
+           <button className={`btn ${removeImage ? "btn--sm " : "btn--success btn--md "} ${removeImage ? "btn--follow--icon-only" : "btn--follow"}`} 
+           onClick={handleClick}>{renderWithProfileImage()}</button>}      
     </>
   )
 }

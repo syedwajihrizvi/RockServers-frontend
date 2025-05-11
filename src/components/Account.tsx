@@ -65,7 +65,7 @@ export const Account = () => {
     };
 
     document.addEventListener("visibilitychange", handleVisibilityChange);
-    startSlideshow(); // start on mount
+    startSlideshow();
 
     return () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
@@ -73,7 +73,6 @@ export const Account = () => {
     };
   }, [currentImageIndex, images.length]);
 
-  // ✨ Animate transitions
   useGSAP(() => {
     const tl = gsap.timeline();
     if (prevImageIndex !== null) {

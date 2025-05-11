@@ -178,7 +178,7 @@ export const UserList = ({type, profileUser, authenticated}:
         <div className="friends">
             {userList.map((user) => (
                 <div className="friend">
-                    <Link to={renderLink(user)}>
+                    <Link to={renderLink(user)} style={{textDecoration: 'none'}}>
                         <div className="friend__info">
                         <ProfileImage user={user}/>
                             <h3>{user.username}</h3>
