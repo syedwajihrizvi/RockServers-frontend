@@ -200,11 +200,11 @@ export const Posts = ({user, viewingProfile}: {user: IUser, viewingProfile?: boo
         user.totalPostings > 0 ? <AllPosts userId={user.id}/> : 
         <div className="no-posts">
             <h2 className="no-posts__heading">
-                {!viewingProfile ? "You have no posts. Create one" : "No Posts."}
+                {!viewingProfile ? "You have no posts. Create one" : `${user.username} has no Posts.`}
             </h2>
-            <Link to="/create" className="no-posts__link">
+            {!viewingProfile && <Link to="/create" className="no-posts__link">
                 <button className="btn btn--success btn--md">Create</button>
-            </Link>
+            </Link>}
         </div>
     )
 }
