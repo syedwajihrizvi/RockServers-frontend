@@ -1,4 +1,4 @@
-import { RiUserFollowFill, RiUserUnfollowFill } from "react-icons/ri";
+import { RiUserUnfollowFill } from "react-icons/ri";
 import { TiUserAdd } from "react-icons/ti";
 import { ToastContainer, toast } from 'react-toastify'
 import { LoginToastComponent } from "./CustomToasts/LoginToastComponent";
