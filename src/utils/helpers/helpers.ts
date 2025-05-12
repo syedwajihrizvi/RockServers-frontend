@@ -3,12 +3,10 @@ import { IPost, IUser } from "../interfaces/Interfaces"
 import { z, ZodError } from 'zod'
 
 const production = import.meta.env.PROD
-const awsBucketUrl = import.meta.env.AWS_BUCKET_URL;
+const awsBucketUrl = import.meta.env.VITE_AWS_BUCKET_URL;
 const localUrl = "http://localhost:5191"
 const baseUrl = production ? awsBucketUrl : localUrl
 
-console.log(`Base URL: ${baseUrl}`)
-console.log(`AWS Bucket URL: ${awsBucketUrl}`)
 export const generateReadyImageUrl = (image: string) =>
     `${baseUrl}/ready_images/${image}.webp`
 
