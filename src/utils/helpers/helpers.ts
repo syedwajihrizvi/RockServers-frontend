@@ -8,6 +8,7 @@ const localUrl = "http://localhost:5191"
 const baseUrl = production ? awsBucketUrl : localUrl
 
 console.log(`Base URL: ${baseUrl}`)
+console.log(`AWS Bucket URL: ${awsBucketUrl}`)
 export const generateReadyImageUrl = (image: string) =>
     `${baseUrl}/ready_images/${image}.webp`
 

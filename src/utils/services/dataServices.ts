@@ -5,6 +5,7 @@ const baseUrl = "http://localhost:5191/api"
 const prodUrl = import.meta.env.VITE_API_URL;
 const url = production ? prodUrl : baseUrl
 
+console.log(`URL IS ${url}`)
 const client = axios.create({
     baseURL: url,
 })
