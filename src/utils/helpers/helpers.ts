@@ -2,22 +2,28 @@ import { formatDistanceToNow } from 'date-fns'
 import { IPost, IUser } from "../interfaces/Interfaces"
 import { z, ZodError } from 'zod'
 
+// const production = import.meta.env.PROD
+const production = false
+const awsBucketUrl = "https://rockserversbucket.s3.amazonaws.com"
+const localUrl = "http://localhost:5191"
+const baseUrl = production ? awsBucketUrl : localUrl
+
 export const generateReadyImageUrl = (image: string) =>
-    `http://localhost:5191/ready_images/${image}.webp`
+    `${baseUrl}/ready_images/${image}.webp`
 
 export const generateImageUrl = (image: string) => 
-    `http://localhost:5191/uploads/images/${image}.webp`
+    `${baseUrl}/uploads/images/${image}.webp`
 
 export const generateProfileImageUrl = (user: IUser) =>
     user.avatar ? 
-        `http://localhost:5191/uploads/avatar_images/${user.avatar}.webp` : 
-        `http://localhost:5191/uploads/profile_images/${user.profileImage}.webp`
+        `${baseUrl}/uploads/avatar_images/${user.avatar}.webp` : 
+        `${baseUrl}/uploads/profile_images/${user.profileImage}.webp`
 
 export const generateVideoUrl = (video: string) =>
-    `http://localhost:5191/uploads/videos/${video}`
+    `${baseUrl}/uploads/videos/${video}`
 
 export const generateAvatarImageUrl = (image: string) =>
-    `http://localhost:5191/uploads/avatar_images/${image}.webp`
+    `${baseUrl}/uploads/avatar_images/${image}.webp`
 
 export const capitalize = (word: string) =>
     `${word[0].toUpperCase()}${word.slice(1)}`

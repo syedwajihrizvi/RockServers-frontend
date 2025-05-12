@@ -1,8 +1,7 @@
 import useQueryStore from "../stores/useQueryStore"
 
 export const Sorters = () => {
-  const { mostRecent, handleSetMostRecent, orderBy, handleSetOrderBy } = useQueryStore()
-  console.log(`Ordering by: ${orderBy}`)
+  const { mostRecent, handleSetMostRecent, handleSetOrderBy } = useQueryStore()
   return (
     <div className="sorters">
         <button className={`btn btn--secondary${mostRecent ? '--active':''} btn--sm`} onClick={() => handleSetMostRecent()}>

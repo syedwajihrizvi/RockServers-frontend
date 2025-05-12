@@ -40,7 +40,6 @@ export const PostsGrid = ({userId}: {userId: string | undefined}) => {
   }
 
   const handleRefresh = () => {
-    console.log("HandleRefresh")
     queryClient.invalidateQueries({queryKey: ['posts'], refetchType: 'active'})
     queryClient.invalidateQueries({queryKey: ['discussions'], refetchType: 'active'})
     setShuffleKey((prev) => prev + 1)

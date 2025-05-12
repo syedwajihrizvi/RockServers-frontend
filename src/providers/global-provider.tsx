@@ -4,7 +4,7 @@ import { IUser } from "../utils/interfaces/Interfaces";
 
 interface GlobalContextType {
     isLoggedIn: boolean,
-    user: IUser | undefined,
+    user: IUser | undefined | null,
     isLoading: boolean
 }
 

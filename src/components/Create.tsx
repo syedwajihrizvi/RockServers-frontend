@@ -89,7 +89,6 @@ export const Create = () => {
   const handlePostCreationSubmit = () => {
     // Some basic front end validation and Toast Container with message
     const { title, description, gameId, platformId, thumbnailSelected: imageSelected, thumbnailUploaded: imageUploaded} = postData
-    console.log(postData)
     if (!title || !description || !gameId || !platformId || (!imageSelected && !imageUploaded))
       toast.error("Please fill in all information")
     else {

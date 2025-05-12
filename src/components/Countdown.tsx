@@ -9,6 +9,7 @@ import "react-activity/dist/library.css";
 import { Navbar } from "./Navbar";
 import TrailerOne from "../assets/videos/trailerone.mp4"
 import TrailerTwo from "../assets/videos/trailertwo.mp4"
+import { Skeleton } from "./Skeleton";
 
 const NumberWrapper = (
     {number, type, customClass}: 
