@@ -1,9 +1,7 @@
 import axios, { AxiosResponse } from "axios"
 
-// const production = import.meta.env.PROD
-const production = true
+const production = import.meta.env.PROD
 const baseUrl = "http://localhost:5191/api"
-// const prodUrl = "http://localhost:5191/api"
 const prodUrl = "https://rockservers-production.up.railway.app/api"
 const url = production ? prodUrl : baseUrl
 
