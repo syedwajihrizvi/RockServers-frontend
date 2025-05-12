@@ -1,8 +1,9 @@
 import axios, { AxiosResponse } from "axios"
 
 const production = import.meta.env.PROD
+console.log(`Production: ${production}`)
 const baseUrl = "http://localhost:5191/api"
-const prodUrl = "https://rockservers-production.up.railway.app/api"
+const prodUrl = import.meta.env.VITE_API_URL;
 const url = production ? prodUrl : baseUrl
 
 const client = axios.create({

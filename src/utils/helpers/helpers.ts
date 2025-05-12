@@ -3,7 +3,7 @@ import { IPost, IUser } from "../interfaces/Interfaces"
 import { z, ZodError } from 'zod'
 
 const production = import.meta.env.PROD
-const awsBucketUrl = "https://rockserversbucket.s3.amazonaws.com"
+const awsBucketUrl = import.meta.env.AWS_BUCKET_URL;
 const localUrl = "http://localhost:5191"
 const baseUrl = production ? awsBucketUrl : localUrl
 
