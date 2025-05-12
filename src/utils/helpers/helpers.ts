@@ -2,8 +2,7 @@ import { formatDistanceToNow } from 'date-fns'
 import { IPost, IUser } from "../interfaces/Interfaces"
 import { z, ZodError } from 'zod'
 
-// const production = import.meta.env.PROD
-const production = false
+const production = import.meta.env.PROD
 const awsBucketUrl = "https://rockserversbucket.s3.amazonaws.com"
 const localUrl = "http://localhost:5191"
 const baseUrl = production ? awsBucketUrl : localUrl
