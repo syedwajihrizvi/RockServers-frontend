@@ -162,3 +162,8 @@ export interface PatchDataForDiscussion {
     videoPaths?: string[],
     otherMedia?: File[]
 }
+
+export interface InfiniteQueryData<T> {
+    data: T[],
+    hasMore: boolean
+}

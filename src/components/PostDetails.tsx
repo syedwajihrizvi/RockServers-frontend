@@ -4,7 +4,7 @@ import apiClient from "../utils/services/dataServices"
 import { CiCirclePlus } from "react-icons/ci";
 import { ToastContainer, toast } from 'react-toastify'
 
-import { IComment, IPost, ThumbnailType } from "../utils/interfaces/Interfaces"
+import { IComment, InfiniteQueryData, IPost, ThumbnailType } from "../utils/interfaces/Interfaces"
 import { formatStringDate, userDidLike } from "../utils/helpers/helpers";
 import useQueryStore from "../stores/useQueryStore"
 import { Engagements } from "./Engagements"
@@ -37,15 +37,13 @@ export const PostDetails = () => {
 
   useEffect(() => {
     if (post) {
-        apiClient.get<IPost[]>(
+        apiClient.get<InfiniteQueryData<IPost>>(
             '/posts', 
             {params: {
                 gameId: post.gameId,
                 limit: 3,
                 postToRemoveId: post.id}})
-        .then(res => {
-            setSimilarPosts(res.data)
-        })
+        .then(res => setSimilarPosts(res.data.data))
         .catch(() => setSimilarPosts([...similarPosts]))
         .finally(() => setIsLoadingSimilarPosts(false))
     }

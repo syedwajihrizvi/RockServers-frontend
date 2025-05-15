@@ -7,7 +7,7 @@ import { ToastContainer, toast } from 'react-toastify'
 import { Comments } from './Comments'
 import { Engagements } from './Engagements'
 import { useEffect, useState } from 'react'
-import { IComment, IDiscussion, ThumbnailType } from '../utils/interfaces/Interfaces'
+import { IComment, IDiscussion, InfiniteQueryData, ThumbnailType } from '../utils/interfaces/Interfaces'
 import { CiCirclePlus } from 'react-icons/ci'
 import { PreviewCard } from './PreviewCard'
 import apiClient from "../utils/services/dataServices"
@@ -67,7 +67,7 @@ export const DiscussionDetails = () => {
   useEffect(() => {
     if (discussion) {
         setIsLoadingSimilarDiscussions(true)
-        apiClient.get<IDiscussion[]>(
+        apiClient.get<InfiniteQueryData<IDiscussion>>(
             '/discussions',
             {params: {
                 gameId: discussion.gameId,
@@ -75,7 +75,7 @@ export const DiscussionDetails = () => {
                 discussionToRemoveId: discussion.id
             }}
         )
-        .then(res => setSimilarDiscussions(res.data))
+        .then(res => setSimilarDiscussions(res.data.data))
         .catch(() => setSimilarDiscussions([...similarDiscussions]))
         .finally(() => setIsLoadingSimilarDiscussions(false))
 

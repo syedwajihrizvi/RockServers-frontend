@@ -1,6 +1,6 @@
-import { useQuery } from "@tanstack/react-query"
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import apiClient from "../utils/services/dataServices"
-import { IPost } from "../utils/interfaces/Interfaces"
+import { InfiniteQueryData, IPost } from "../utils/interfaces/Interfaces"
 import useQueryStore from "../stores/useQueryStore"
 
 type PostQueryParams = {
@@ -15,13 +15,23 @@ type PostQueryParams = {
 }
 
 export const usePosts = (queryParams: PostQueryParams = {}) => {
-    const { gameId, platformId, searchValue, sessionType, mostRecent, orderBy } = useQueryStore()
-    queryParams = {...queryParams, gameId, platformId, searchValue, sessionType, mostRecent, orderBy}
-    const fetchPosts = () =>
-        apiClient.get<IPost[]>('/posts', {params: queryParams}).then(res => res.data)
-    return useQuery<IPost[], Error>({
+    const { gameId, platformId, searchValue, sessionType, orderBy } = useQueryStore()
+    queryParams = {...queryParams, gameId, platformId, searchValue, sessionType, orderBy}
+
+    return useInfiniteQuery<InfiniteQueryData<IPost>, Error>({
         queryKey: ["posts", queryParams],
-        queryFn: fetchPosts
+        queryFn: ({ pageParam = 1 }) => (
+            apiClient.get<InfiniteQueryData<IPost>>(
+                `/posts?page=${pageParam}`, 
+                {params: queryParams})
+                .then(res => res.data)
+        ),
+        getNextPageParam: (lastPage, allPages) => {
+            if (lastPage.hasMore)
+                return allPages.length + 1
+            return undefined
+        },
+        initialPageParam: 1
     })
 }
 

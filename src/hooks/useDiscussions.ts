@@ -1,6 +1,6 @@
-import { useQuery } from "@tanstack/react-query"
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import apiClient from "../utils/services/dataServices"
-import { IDiscussion } from "../utils/interfaces/Interfaces"
+import { IDiscussion, InfiniteQueryData } from "../utils/interfaces/Interfaces"
 import useQueryStore from "../stores/useQueryStore"
 
 type DiscussionQueryParams = {
@@ -12,14 +12,24 @@ type DiscussionQueryParams = {
 }
 
 export const useDiscussions = (queryParams: DiscussionQueryParams = {}) => {
-    const { gameId, searchValue, mostRecent, orderBy } = useQueryStore()
-    queryParams = {...queryParams, gameId, searchValue, mostRecent, orderBy}
-    const fetchDiscussions = () =>
-        apiClient.get<IDiscussion[]>('/discussions', {params: queryParams} )
-                 .then(res => res.data)
-    return useQuery<IDiscussion[], Error>({
-        queryKey: ["discussions", queryParams],
-        queryFn: fetchDiscussions
+    const { gameId, searchValue, orderBy } = useQueryStore()
+    queryParams = {...queryParams, gameId, searchValue, orderBy}
+
+    return useInfiniteQuery<InfiniteQueryData<IDiscussion>, Error>({
+        queryKey: ['discussions', queryParams],
+        queryFn: ({pageParam = 1}) => (
+            apiClient.get<InfiniteQueryData<IDiscussion>>(
+                `/discussions?page=${pageParam}`, 
+                {params: queryParams} 
+                )
+                .then(res => res.data)
+        ),
+        getNextPageParam: (lastPage, allPages) => {
+            if (lastPage.hasMore)
+                return allPages.length + 1;
+            return undefined;
+        },
+        initialPageParam: 1
     })
 }
 

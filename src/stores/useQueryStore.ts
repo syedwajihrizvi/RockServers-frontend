@@ -8,14 +8,12 @@ interface QueryStore {
     postType?: string,
     searchValue?: string,
     sessionType?: string,
-    mostRecent: boolean,
     orderBy?: string,
     handleSetGameInfo: (gameId?: number, gameName?: string) => void
     handleSetPlatformInfo: (platformId?: number, platformName?: string) => void,
     handleSetPost: (postType: string) => void,
     handleSearch: (searchValue: string) => void,
     handleSetSessionType: (sessionType: string) => void,
-    handleSetMostRecent: () => void,
     handleSetOrderBy: (orderBy?: string) => void,
     handleResetAll: () => void
 }
@@ -28,14 +26,13 @@ const defaulState = {
     postType: 'discussions',
     searchValue: undefined,
     sessionType: 'all',
-    mostRecent: false,
-    orderBy: undefined,  
+    orderBy: 'recent',  
 }
 
 const useQueryStore = create<QueryStore>((set) => ({
     postType: 'discussions',
     sessionType: 'all',
-    mostRecent: false,
+    orderBy: 'recent',
     handleSetGameInfo: (gameId?: number, gameName?: string) => {
         set((state) => ({ ...state, gameId, gameName }))
     },
@@ -52,9 +49,6 @@ const useQueryStore = create<QueryStore>((set) => ({
     },
     handleSetSessionType: (sessionType?: string) => {
         set((state) => ({...state, sessionType}))
-    },
-    handleSetMostRecent: () => {
-        set((state) => ({...state, mostRecent: !state.mostRecent}))
     },
     handleSetOrderBy: (orderBy?: string) => {
         set((state) => ({...state, orderBy}))
